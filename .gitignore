@@ -17,6 +17,7 @@ out/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+src/module-info.java
 
 ### NetBeans ###
 /nbproject/private/
