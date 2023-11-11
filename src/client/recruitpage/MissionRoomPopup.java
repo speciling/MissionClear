@@ -1,4 +1,4 @@
-package client.mypage;
+package client.recruitpage;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

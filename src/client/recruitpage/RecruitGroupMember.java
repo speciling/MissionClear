@@ -1,4 +1,4 @@
-package client.mypage;
+package client.recruitpage;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
