@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -274,7 +276,19 @@ public class MissionRoomPopup {
     	textField_11.setBackground(new Color(237, 237, 237));
     	textField_11.setBounds(202, 617, 119, 32);
     	createPopup.add(textField_11);
-    }
+    	
+    	생성완료.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                AddMissionRoom addMissionRoom = new AddMissionRoom(); // AddMissionRoom 인스턴스 생성
+                addMissionRoom.initialize(); // AddMissionRoom 초기화
+
+                // RecruitGroupMember 클래스의 인스턴스를 가져오거나 생성
+                RecruitGroupMember recruitGroupMember = new RecruitGroupMember();
+
+                // AddMissionRoom의 패널을 RecruitGroupMember에 추가
+                recruitGroupMember.addToGroupRecruitment(addMissionRoom.getPanel());
+            }
+        });    }
 
 	public JFrame getFrame() {
 		return frame;

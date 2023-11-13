@@ -34,9 +34,10 @@ import javax.swing.DefaultComboBoxModel;
 
 
 public class RecruitGroupMember {
-
-	private JFrame frame;
+	
+	JFrame frame;
 	private JTextField textField;
+	ImagePanel groupRecruitment;
 
 	/**
 	 * Launch the application.
@@ -66,7 +67,7 @@ public class RecruitGroupMember {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		ImagePanel groupRecruitment = new ImagePanel(new ImageIcon("C://Users//jihwan//Desktop//ssd_호랑이양말//mypage/image/grouprecruitment.jpg").getImage());
+		groupRecruitment = new ImagePanel(new ImageIcon("C://Users//jihwan//Desktop//ssd_호랑이양말//mypage/image/grouprecruitment.jpg").getImage());
 		groupRecruitment.setBackground(new Color(169, 169, 169));
 		frame.setSize(1200, 850);
 		frame.getContentPane().add(groupRecruitment, BorderLayout.EAST);
@@ -137,7 +138,14 @@ public class RecruitGroupMember {
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
         comboBox.setBounds(180, 155, 121, 35);
         groupRecruitment.add(comboBox);
+        frame.setVisible(true);
 	}
+	public void addToGroupRecruitment(JPanel panel) {
+		panel.setBounds(50, 210, 406, 273);
+        groupRecruitment.add(panel);
+        groupRecruitment.revalidate();
+        groupRecruitment.repaint();
+    }
 }
 
 class ImagePanel extends JPanel{
