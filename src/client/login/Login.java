@@ -4,7 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
 
+import client.login.signUpPopUp;
 class Login extends JFrame{
 	
 	public static void main(String[] args) {
@@ -72,7 +74,8 @@ class Login extends JFrame{
 		idLabel.setBounds(405,445,22,31);
 		panel.add(idLabel);
 		
-		RoundCornerTextField idTextField=new RoundCornerTextField(20);
+		RoundCornerTextField idTextField = new RoundCornerTextField(20);
+        idTextField.setBackground(new Color(255, 255, 255));
         idTextField.setBounds(385, 489, 428, 54); // 아이디 입력 필드의 위치와 크기 설정
         panel.add(idTextField);
 
@@ -86,14 +89,17 @@ class Login extends JFrame{
         panel.add(passwordField);
         
         JButton signUpButton = new JButton("회원가입");
-        signUpButton.setBounds(572, 665, 56, 21); // 회원가입 버튼의 위치와 크기 설정
+        signUpButton.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 16));
+        signUpButton.setBounds(572, 665, 60, 21); // 회원가입 버튼의 위치와 크기 설정
         signUpButton.setMargin(new Insets(0, 0, 0, 0));
+        signUpButton.setContentAreaFilled(false);
+        signUpButton.setBorderPainted(false);
         signUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 버튼이 클릭되었을 때 수행할 동작
-                signUp su = new signUp(); // 팝업 다이얼로그 표시
-                su.signUp();
+                signUpPopUp su = new signUpPopUp(); // 팝업 다이얼로그 표시
+                su.signUpPopUp();
             }
         });
         
@@ -101,7 +107,6 @@ class Login extends JFrame{
         
         ImageIcon loginButtonImage = new ImageIcon("C:\\Users\\binwo\\Desktop\\jiwon\\2학년2학기\\소프트웨어시스템설계\\component\\로그인하기.png");
         JButton loginButton = new JButton(loginButtonImage);
-        
         loginButton.setContentAreaFilled(false);
         loginButton.setBorderPainted(false);
         loginButton.setBounds(386, 730, 428, 60); // 로그인 버튼의 위치와 크기 설정

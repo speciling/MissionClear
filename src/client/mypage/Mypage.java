@@ -17,6 +17,8 @@ import javax.swing.JSeparator;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 class RoundedPanel2 extends JPanel {
     private int radius;
@@ -86,10 +88,10 @@ public class Mypage {
         lblNewLabel_2_1.setBounds(147, 10, 137, 35);
         missionInProgress.add(lblNewLabel_2_1);
         
-        JSeparator separator = new JSeparator();
-       separator.setForeground(new Color(128, 128, 128));
-       separator.setBounds(23, 162, 374, 1); // 위치와 크기 설정
-       missionInProgress.add(separator);
+	    JSeparator separator = new JSeparator();
+	    separator.setForeground(new Color(128, 128, 128));
+	    separator.setBounds(23, 162, 374, 1); // 위치와 크기 설정
+	    missionInProgress.add(separator);
        
         RoundedPanel2 missionended = new RoundedPanel2(32); 
         missionended.setBounds(484, 343, 420, 462);
@@ -114,7 +116,11 @@ public class Mypage {
         missionended.add(separator2);
        
         JButton lblNewLabel = new JButton("");
-        lblNewLabel.setIcon(new ImageIcon("C:\\Users\\binwo\\Desktop\\jiwon\\2학년2학기\\소프트웨어시스템설계\\develop\\missionclear\\resource\\mypage\\tigerimage.png"));
+        lblNewLabel.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
+        lblNewLabel.setIcon(new ImageIcon(Mypage.class.getResource("/mypage/tigerimage.png")));
         lblNewLabel.setBounds(396, 104, 149, 149);
         lblNewLabel.setContentAreaFilled(false);
         lblNewLabel.setBorderPainted(false);
@@ -126,7 +132,7 @@ public class Mypage {
         mypagepanel.add(lblNewLabel_1);
         
         JButton btnNewButton = new JButton("");
-        btnNewButton.setIcon(new ImageIcon("C:\\Users\\binwo\\Desktop\\jiwon\\2학년2학기\\소프트웨어시스템설계\\develop\\missionclear\\resource\\mypage\\pencil.png"));
+        btnNewButton.setIcon(new ImageIcon(Mypage.class.getResource("/mypage/pencil.png")));
         btnNewButton.setBounds(525, 270, 25, 25);
         btnNewButton.setContentAreaFilled(false);
         btnNewButton.setBorderPainted(false);
