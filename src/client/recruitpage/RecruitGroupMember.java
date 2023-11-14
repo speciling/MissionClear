@@ -51,7 +51,7 @@ class RoundedPanel extends JPanel {
 }
 
 public class RecruitGroupMember {
-	
+	private static RecruitGroupMember instance;
 	JFrame frame;
 	private JTextField textField;
 	ImagePanel groupRecruitment;
@@ -59,6 +59,10 @@ public class RecruitGroupMember {
 	/**
 	 * Launch the application.
 	 */
+	public void setFrame(JFrame frame) {
+        this.frame = frame;
+        initialize();
+    }
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -75,15 +79,26 @@ public class RecruitGroupMember {
 	/**
 	 * Create the application.
 	 */
-	public RecruitGroupMember() {
+	private RecruitGroupMember() {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	public static synchronized RecruitGroupMember getInstance() {
+        if (instance == null) {
+            instance = new RecruitGroupMember();
+        }
+        return instance;
+    }
+	
 	private void initialize() {
-		frame = new JFrame();
+		if (frame == null) { // 프레임이 아직 생성되지 않았다면 새로 생성
+            frame = new JFrame();
+            frame.setSize(1200, 850);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		}
 		groupRecruitment = new ImagePanel(new ImageIcon("./resource/RecruitGroupMember/RecruitPageMain.jpg").getImage());
 		groupRecruitment.setBackground(new Color(169, 169, 169));
 		frame.setSize(1200, 850);
@@ -139,9 +154,8 @@ public class RecruitGroupMember {
         missionRoomCreate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	CreateNewGroupPopup cp = new CreateNewGroupPopup(); // CreateNewGroupPopup 인스턴스 생성
-                cp.initialize(); // CreateNewGroupPopup의 UI 초기화 및 프레임 표시
-                cp.getFrame().setVisible(true); // 창을 화면에 표시
+            	CreateNewGroupPopup cp = new CreateNewGroupPopup(RecruitGroupMember.this); // 수정됨
+                cp.getFrame().setVisible(true);
             }
         });
         groupRecruitment.add(missionRoomCreate);
@@ -150,7 +164,6 @@ public class RecruitGroupMember {
         lblNewLabel_1.setFont(new Font("\uB098\uB214\uACE0\uB515", lblNewLabel_1.getFont().getStyle() | Font.BOLD, lblNewLabel_1.getFont().getSize() + 6));
         lblNewLabel_1.setBounds(50, 155, 130, 35);
         groupRecruitment.add(lblNewLabel_1);
-        
         JComboBox comboBox = new JComboBox();
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
         comboBox.setBounds(180, 155, 121, 35);
