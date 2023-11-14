@@ -61,10 +61,11 @@ class RoundedPanel2 extends JPanel {
 
 public class Mypage extends MainPage{
 
-    JPanel box;
+	private JPanel box;
+    JPanel a;
     
     public JPanel get() {
-    	return box;
+    	return a;
     }
 	
     public Mypage(boolean vis) {
@@ -73,18 +74,20 @@ public class Mypage extends MainPage{
     }
     private void initializeMypage() {
 		// TODO Auto-generated method stub
-    	JPanel box = new JPanel();    	
+    	box = new JPanel();    	
         
-       
+        //JPanel mypagePanel = new JPanel();
         box.setBackground(new Color(246, 246, 246));
         box.setBounds(0,0,930,850);
+        //frame.setSize(1200, 850);
+        //frame.getContentPane().add(mypagePanel, BorderLayout.EAST);
         box.setLayout(null);
         
         RoundedPanel2 missionInProgress = new RoundedPanel2(32);
         missionInProgress.setBounds(29, 249, 420, 462);
         missionInProgress.setForeground(new Color(255, 255, 255));
         missionInProgress.setBackground(new Color(255, 255, 255));
-        box.add(missionInProgress);
+        box.add(missionInProgress); // Add missionInProgress to mypagepanel
         missionInProgress.setLayout(null);
         
         JLabel lblNewLabel_2_1 = new JLabel("진행중인 미션");
@@ -102,7 +105,7 @@ public class Mypage extends MainPage{
         missionended.setBounds(476, 249, 420, 462);
         missionended.setForeground(new Color(255, 255, 255));
         missionended.setBackground(new Color(255, 255, 255));
-        box.add(missionended); 
+        box.add(missionended); // Add missionInProgress to mypagepanel
         missionended.setLayout(null);
         
         JLabel lblNewLabel_2 = new JLabel("종료된 미션");
@@ -112,12 +115,12 @@ public class Mypage extends MainPage{
         
         JSeparator separator1 = new JSeparator();
         separator1.setForeground(new Color(128, 128, 128));
-        separator1.setBounds(23, 264, 374, 1); 
+        separator1.setBounds(23, 264, 374, 1); // 위치와 크기 설정
         missionended.add(separator1);
        
         JSeparator separator2 = new JSeparator();
         separator2.setForeground(new Color(128, 128, 128));
-        separator2.setBounds(23, 162, 374, 1); 
+        separator2.setBounds(23, 162, 374, 1); // 위치와 크기 설정
         missionended.add(separator2);
        
         JButton lblNewLabel = new JButton("");
@@ -145,12 +148,15 @@ public class Mypage extends MainPage{
         
         
         
-        //MainPage mp = new MainPage(true);
-        //JPanel a = mp.globPan;
-        box.setLayout(null);
+        MainPage mp = new MainPage(true);
+        JPanel a = mp.globPan;
+        a.setLayout(null);
+        a.add(box); 
         
-
+       // nav=mypagePanel;
         //setVisible(false);
+		
+        //frame.setVisible(true);
 	}
 	
     
