@@ -96,7 +96,7 @@ public class GroupDetailPopup {
 	        }
 	    });
 	    groupDetailPopupPanel.add(exitButton);
-	    exitButton.setIcon(new ImageIcon("C:\\Users\\jihwan\\Desktop\\Vector.png"));
+	    exitButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/exit.png"));
 	    exitButton.setBounds(351, 3, 50, 50);
 	    
 	 // 버튼 배경 투명 설정
@@ -118,7 +118,7 @@ public class GroupDetailPopup {
 	    	public void actionPerformed(ActionEvent e) {
 	    	}
 	    });
-	    enterButton.setIcon(new ImageIcon("C:\\Users\\jihwan\\Desktop\\참여하기.png"));
+	    enterButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/참여하기.png"));
 	    enterButton.setBounds(149, 334, 110, 38);
 	    enterButton.setBorderPainted(false);
 	    groupDetailPopupPanel.add(enterButton);
