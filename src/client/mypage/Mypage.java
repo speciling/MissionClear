@@ -61,11 +61,11 @@ class RoundedPanel2 extends JPanel {
 
 public class Mypage extends MainPage{
 
-	private JPanel box;
+	public JPanel box;
     JPanel a;
     
     public JPanel get() {
-    	return a;
+    	return error;
     }
 	
     public Mypage(boolean vis) {

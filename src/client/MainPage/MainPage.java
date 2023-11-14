@@ -207,10 +207,12 @@ public class MainPage extends JFrame {
          
       }
       else if (panelName.equals("mypage")) {
+    	  /*
          Mypage mp = new Mypage(true);
          JPanel p = mp.get();
          p = makePan(p);
-         globPan.add(p);
+         globPan.add(p);*/
+    	  Mypage m = new Mypage(true);
       }
    }
 }
