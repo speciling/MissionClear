@@ -78,13 +78,9 @@ public class Mypage extends MainPage{
         
         //JPanel mypagePanel = new JPanel();
         box.setBackground(new Color(246, 246, 246));
-<<<<<<< HEAD
+
         box.setBounds(0,0,943,781);
-=======
-        box.setBounds(0,0,930,850);
-        //frame.setSize(1200, 850);
-        //frame.getContentPane().add(mypagePanel, BorderLayout.EAST);
->>>>>>> e24a23c36ec11dc14b4e6a0105b0e877220182b0
+
         box.setLayout(null);
         
         RoundedPanel2 missionInProgress = new RoundedPanel2(32);
