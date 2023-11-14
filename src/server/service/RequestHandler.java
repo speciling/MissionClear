@@ -3,6 +3,7 @@ package server.service;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.db.DBManager;
+import server.db.ResultType;
 import server.db.ServerDBManager;
 import server.user.User;
 
@@ -18,16 +19,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class RequestHandler implements Handler{
     private static final int READING = 0, SENDING = 1;
 
-    private final Queue<ByteBuffer> writeQueue = new LinkedList<>();
+    private final BlockingQueue<ByteBuffer> writeQueue = new LinkedBlockingQueue<>();
     private final SocketChannel socketChannel;
     private final SelectionKey selectionKey;
-    private final ByteBuffer headerBuffer = ByteBuffer.allocate(5);
     private int state = READING;
-    private ByteBuffer bodyBuffer;
     private User user;
 
 
@@ -113,7 +114,7 @@ public class RequestHandler implements Handler{
     }
 
     private Request getRequest() {
-
+        ByteBuffer headerBuffer = ByteBuffer.allocate(5);
         try {
             int readCount = socketChannel.read(headerBuffer);
             if (readCount > 0) {
@@ -122,7 +123,7 @@ public class RequestHandler implements Handler{
                 byte type = headerBuffer.get();
                 int length = headerBuffer.getInt();
 
-                bodyBuffer = ByteBuffer.allocate(length);
+                ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
                 socketChannel.read(bodyBuffer);
                 bodyBuffer.flip();
                 String body = new String(bodyBuffer.array()).trim();
@@ -164,35 +165,30 @@ public class RequestHandler implements Handler{
 
     private void enterGroup(Request request) {
         int uid = 0, gid = 0;
-        DBManager.ResultType resultType = ServerDBManager.enterGroup(uid, gid);
+        ResultType resultType = ServerDBManager.enterGroup(uid, gid);
     }
 
     private void chat(Request request) {
-        int uid = 0, gid = 0;
-        String chatMsg = null;
-
-        int chatId = DBManager.saveChatMessage(uid, gid, chatMsg);
+        int chatId = DBManager.saveChatMessage(request.getData());
 
     }
 
     private void certifyMission(Request request) {
-        int uid = 0, gid = 0;
-        Path picture = null;
 
-        int chatID = DBManager.saveCertifyPicture(uid, gid, picture);
+        int chatID = DBManager.saveCertifyPicture(request.getData());
     }
 
     private void changePFP(Request request) {
         int uid = 0;
         Path picture = null;
 
-        DBManager.ResultType resultType = DBManager.changePFP(uid, picture);
+        ResultType resultType = DBManager.changePFP(uid, picture);
     }
 
     private void  changeNickname(Request request) {
         int uid = 0;
         String nickname = null;
 
-        DBManager.ResultType resultType = DBManager.changeNickname(uid, nickname);
+        ResultType resultType = DBManager.changeNickname(uid, nickname);
     }
 }

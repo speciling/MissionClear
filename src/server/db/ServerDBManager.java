@@ -13,7 +13,7 @@ public class ServerDBManager extends DBManager{
 
     public static void init() {
         try {
-            Path path = Path.of("./missioncleardata/server/pictures");
+            path = Path.of("./missioncleardata/server/pictures");
             try {
                 Files.createDirectories(path);
             } catch (IOException e) {
@@ -39,15 +39,15 @@ public class ServerDBManager extends DBManager{
     }
 
     // 성공시 SUCCESS, 이미 존재하는 아이디면 WARNING, 에러 발생시 FAILURE
-    // return: {"resultType": ResultType, "uid": uid (유저 생성 성공시) }
+    // return: {"resultType": ResultType.getCode(), "uid": uid (유저 생성 성공시) }
     public static JSONObject addUser(String id, String pw, String nickname) {
         JSONObject result = new JSONObject();
         String sql = String.format("""
                 INSERT INTO USER (id, password, nickname)
                 VALUES ('%s', '%s', '%s')""", id, pw, nickname);
 
-        result.put("resultType", executeSQL(sql));
-        if (result.get("resultType") == ResultType.SUCCESS) {
+        result.put("resultType", executeSQL(sql).getCode());
+        if ((Integer) result.get("resultType") == ResultType.SUCCESS.getCode()) {
             sql = "SELECT last_insert_rowid()";
             result.put("uid", executeQuery(sql).get("last_insert_rowid()"));
         }
@@ -62,7 +62,7 @@ public class ServerDBManager extends DBManager{
         JSONObject result = executeQuery(sql);
 
         if (result.isEmpty())
-            result.put("resultType", ResultType.WARNING);
+            result.put("resultType", ResultType.WARNING.getCode());
 
         return result;
     }
@@ -74,7 +74,7 @@ public class ServerDBManager extends DBManager{
         JSONObject result = executeQuery(sql);
 
         if (result.isEmpty())
-            result.put("resultType", ResultType.WARNING);
+            result.put("resultType", ResultType.WARNING.getCode());
 
         return result;
     }
@@ -130,8 +130,8 @@ public class ServerDBManager extends DBManager{
                 VALUES ('%s', '%s', '%s', %d, %d, '%s', '%s', '%s', '%s', '%s')""",
                 title, description, mission, capacity, category, deadline, startDate, endDate, password, uid+",");
 
-        result.put("resultType", executeSQL(sql));
-        if (result.get("resultType") == ResultType.SUCCESS) {
+        result.put("resultType", executeSQL(sql).getCode());
+        if ((Integer) result.get("resultType") == ResultType.SUCCESS.getCode()) {
             //gid 확인
             sql = "SELECT last_insert_rowid()";
             Integer gid = (Integer) executeQuery(sql).get("last_insert_rowid()");
