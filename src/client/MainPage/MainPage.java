@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class MainPage extends JFrame {
 
-	public JPanel changePanel;
+	public JPanel globPan;
 	public String userName = "호랑이양말";
 	public String userPic = "./resource/DetailMyGroup/Ellipse3.png";
 	// 사용자의 이름과 사진을 불러오는 함수를 작성
@@ -35,6 +35,7 @@ public class MainPage extends JFrame {
 		mainInfo.setLayout(new BorderLayout());
 		JPanel loc = new JPanel();
 		JLabel userNameInfo = new JLabel(userName+" 님");
+		userNameInfo.setFont(new Font("나눔고딕", Font.BOLD, 20));
 		ImageIcon userPicIcon = new ImageIcon(userPic);
 		JLabel userPicInfo = new JLabel(userPicIcon);
 		loc.add(userNameInfo);
@@ -54,10 +55,10 @@ public class MainPage extends JFrame {
 		
 		
 		
-		changePanel = new JPanel();
-		changePanel.setBackground(Color.gray);
-		changePanel.setBounds(257, 69, 930, 850);
-		main.add(changePanel);
+		globPan = new JPanel();
+		globPan.setBackground(Color.gray);
+		globPan.setBounds(257, 69, 930, 850);
+		main.add(globPan);
 		
 		
 		// 로고삽입
@@ -109,7 +110,7 @@ public class MainPage extends JFrame {
 		logout_panel.setBounds(0, 720, 257, 850 - 740);
 		main.add(logout_panel);
 
-		setVisible(false); // 화면에 프레임 출력
+		setVisible(true); // 화면에 프레임 출력
 
 		// 화면전환 버튼 클릭 이벤트
 		group.addActionListener(event -> {
@@ -164,4 +165,5 @@ public class MainPage extends JFrame {
 		else if (panelName.equals("mypage"))
 			;
 	}
+	//public void changePanel()
 }
