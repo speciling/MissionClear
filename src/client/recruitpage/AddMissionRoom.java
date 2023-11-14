@@ -67,16 +67,12 @@ public class AddMissionRoom {
 	 * Initialize the contents of the frame.
 	 */
 	void initialize() {
-		frame = new JFrame();
-		frame.setSize(433, 315);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		
 		
 		addMissionRoomPanel = new RoundedPanel(20); 
 		addMissionRoomPanel.setBounds(4, 1, 406, 273);
 		addMissionRoomPanel.setForeground(new Color(255, 255, 255));
 	    addMissionRoomPanel.setBackground(new Color(255, 255, 255));
-	    frame.getContentPane().add(addMissionRoomPanel);
 	    addMissionRoomPanel.setLayout(null);
 	    
 	    JLabel 방제목 = new JLabel("미라클 모닝 챌린지 할 사람 구합니다!");
