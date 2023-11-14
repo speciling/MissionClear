@@ -27,7 +27,13 @@ import javax.swing.ImageIcon;
 // 모서리가 둥근 JPanel을 생성하는 클래스
 
 public class CreateNewGroupPopup {
+	private RecruitGroupMember recruitGroupMember; // RecruitGroupMember 참조 추가
 
+    // 생성자 수정
+    public CreateNewGroupPopup(RecruitGroupMember recruitGroupMember) {
+        this.recruitGroupMember = recruitGroupMember;
+        initialize();
+    }
     private JFrame frame;
     private JTextField title;
     private JTextField description;
@@ -46,18 +52,7 @@ public class CreateNewGroupPopup {
     /**
      * Launch the application.
      */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                	CreateNewGroupPopup window = new CreateNewGroupPopup();
-                    window.getFrame().setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+
 
     /**
      * Create the application.
@@ -262,16 +257,13 @@ public class CreateNewGroupPopup {
     	
     	creationComplete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            
-                AddMissionRoom addMissionRoom = new AddMissionRoom(); // AddMissionRoom 인스턴스 생성
-                addMissionRoom.initialize(); // AddMissionRoom 초기화
+            	AddMissionRoom addMissionRoom = new AddMissionRoom();
+                addMissionRoom.initialize();
 
-                // RecruitGroupMember 클래스의 인스턴스를 가져오거나 생성
-                RecruitGroupMember recruitGroupMember = new RecruitGroupMember();
-
-                // AddMissionRoom의 패널을 RecruitGroupMember에 추가
+                // RecruitGroupMember의 frame에 패널 추가
                 recruitGroupMember.addToGroupRecruitment(addMissionRoom.getPanel());
-                frame.dispose();
+
+                frame.dispose(); // 현재 프레임 닫기
             }
         });    }
 
