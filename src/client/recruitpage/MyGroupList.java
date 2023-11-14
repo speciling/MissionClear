@@ -61,12 +61,12 @@ public class MyGroupList extends MainPage{
 		lblNewLabel_1.setBounds(26, 53, 352, 93);
 		panel.add(lblNewLabel_1);
 		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(0, 0, 932, 189);
-		btnNewButton.setBorderPainted(false);
-		btnNewButton.setContentAreaFilled(false);
-		btnNewButton.setFocusPainted(false);
-		panel.add(btnNewButton);
+		JButton enterDetailMyGroupButton = new JButton("");
+		enterDetailMyGroupButton.setBounds(0, 0, 932, 189);
+		enterDetailMyGroupButton.setBorderPainted(false);
+		enterDetailMyGroupButton.setContentAreaFilled(false);
+		enterDetailMyGroupButton.setFocusPainted(false);
+		panel.add(enterDetailMyGroupButton);
 		
 		
 		MainPage mp = new MainPage(true);
