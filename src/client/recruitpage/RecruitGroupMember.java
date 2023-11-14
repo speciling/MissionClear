@@ -54,10 +54,16 @@ class RoundedPanel extends JPanel {
 }
 
 public class RecruitGroupMember extends MainPage{
+	
 	private static RecruitGroupMember instance;
 	private JTextField textField;
 	private JPanel groupRecruitment;
 
+	JPanel a;
+	
+	public JPanel get() {
+	    return a;
+	}
 	/**
 	 * Launch the application.
 	 */
