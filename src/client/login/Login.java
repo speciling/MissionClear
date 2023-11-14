@@ -7,16 +7,16 @@ import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 
 import client.login.signUpPopUp;
-class Login extends JFrame{
+public class Login extends JFrame{
+	
+	private RoundCornerTextField idTextField;
+	private JPasswordField passwordField;
+	private JLabel loginWarning;
 	
 	public static void main(String[] args) {
 		Login login = new Login();
+		
 	}
-	
-	//폰트 설정
-	Font M = new Font("AppleSDGothicNeoM00",Font.PLAIN,32);
-	Font B = new Font("AppleSDGothicNeoB00",Font.PLAIN,32);
-	Font id = new Font("AppleSDGothicNeoM00",Font.PLAIN,24);
 	
 	public Login() {
 		/*
@@ -35,7 +35,7 @@ class Login extends JFrame{
 		/*
 		 이미지 추가
 		 */
-		ImageIcon image = new ImageIcon("C:\\Users\\binwo\\Desktop\\jiwon\\2학년2학기\\소프트웨어시스템설계\\로고.png");
+		ImageIcon image = new ImageIcon("./resource/login/로고.png");
 		
 		JLabel imageLabel = new JLabel(image);
 		imageLabel.setBounds(374,45,450,275);
@@ -48,22 +48,17 @@ class Login extends JFrame{
 		 */
 		JLabel textLabel=new JLabel("다같이 재밌게 하는 목표달성!");
 		textLabel.setBounds(416,305,400,90);
-		
-		textLabel.setFont(M);
+		textLabel.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN,32));
 		textLabel.setForeground(Color.white);
-		
 		textLabel.setOpaque(false);
-		
 		panel.add(textLabel);
+		
 		
 		JLabel login=new JLabel("로그인");
 		login.setBounds(553,365,95,90);
-		
-		login.setFont(B);
+		login.setFont(new Font("AppleSDGothicNeoB00", Font.PLAIN,32));
 		login.setForeground(Color.white);
-		
 		login.setOpaque(false);
-		
 		panel.add(login);
 		
 		/*
@@ -72,19 +67,23 @@ class Login extends JFrame{
 		
 		JLabel idLabel = new JLabel("ID");
 		idLabel.setBounds(405,445,22,31);
+		idLabel.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN,24));
+		idLabel.setForeground(Color.white);
 		panel.add(idLabel);
 		
-		RoundCornerTextField idTextField = new RoundCornerTextField(20);
+		idTextField = new RoundCornerTextField(20);
         idTextField.setBackground(new Color(255, 255, 255));
         idTextField.setBounds(385, 489, 428, 54); // 아이디 입력 필드의 위치와 크기 설정
         panel.add(idTextField);
 
         JLabel passwordLabel = new JLabel("PW");
         passwordLabel.setBounds(399, 556, 34, 31); // 비밀번호 레이블의 위치와 크기 설정
+        passwordLabel.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN,24));
+		passwordLabel.setForeground(Color.white);
         panel.add(passwordLabel);
 
         
-        JPasswordField passwordField = new JPasswordField(20);
+        passwordField = new JPasswordField(20);
         passwordField.setBounds(385, 600, 428, 54); // 비밀번호 입력 필드의 위치와 크기 설정
         panel.add(passwordField);
         
@@ -99,31 +98,75 @@ class Login extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 // 버튼이 클릭되었을 때 수행할 동작
                 signUpPopUp su = new signUpPopUp(); // 팝업 다이얼로그 표시
-                su.signUpPopUp();
+                su.createSignPopUp();
             }
         });
         
         panel.add(signUpButton);
         
-        ImageIcon loginButtonImage = new ImageIcon("C:\\Users\\binwo\\Desktop\\jiwon\\2학년2학기\\소프트웨어시스템설계\\component\\로그인하기.png");
+        /*
+         아이디 비밀번호 미입력시 경고 표시
+         */
+        loginWarning = new JLabel("아이디 또는 비밀번호를 입력해주세요");
+        loginWarning.setBounds(476,683,300,48);
+        loginWarning.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 18));
+        loginWarning.setForeground(Color.red);
+        loginWarning.setVisible(false);
+        panel.add(loginWarning);
+        
+        JLabel loginMatchWarning = new JLabel("아이디 또는 비밀번호가 틀렸습니다.%n 다시 입력해주세요.");
+        loginMatchWarning.setBounds(476,683,300,48);
+        loginMatchWarning.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 18));
+        loginMatchWarning.setForeground(Color.red);
+        loginMatchWarning.setVisible(false);
+        panel.add(loginMatchWarning);
+        
+        
+        
+        /*
+         로그인 버튼
+         */
+        ImageIcon loginButtonImage = new ImageIcon("./resource/login/로그인하기.png");
         JButton loginButton = new JButton(loginButtonImage);
         loginButton.setContentAreaFilled(false);
         loginButton.setBorderPainted(false);
         loginButton.setBounds(386, 730, 428, 60); // 로그인 버튼의 위치와 크기 설정
-        
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 로그인 버튼이 클릭되었을 때 수행할 동작
+            	String id=idTextField.getText();
+            	char[] password=passwordField.getPassword();
+            	String pw=new String(password);
+            	
+            	checkValid();
+            }
+        });
         panel.add(loginButton);
-        
-       
-		idLabel.setFont(id);
-		idLabel.setForeground(Color.white);
-		passwordLabel.setFont(id);
-		passwordLabel.setForeground(Color.white);
-		
-		
 		
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
+	
+	
+	private void checkValid() {
+		//아이디 비밀번호 입력 되었는지 확인하는 메소드
+		if(idTextField.getText().trim().length()==0||passwordField.getPassword().length==0) {
+			loginWarning.setVisible(true); 
+		}
+		else
+			loginWarning.setVisible(false); 
+	}
+	
+	private boolean login(String id, String pw) {
+		return false; //서버에서 로그인 성공 정보 받아오는메소드
+	}
+	/*
+	void acceptData(Hashmap <int, int>) {
+		;
+	}
+	*/
+	
 }
 

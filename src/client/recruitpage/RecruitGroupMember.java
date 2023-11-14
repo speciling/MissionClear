@@ -32,6 +32,9 @@ import javax.swing.JToggleButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+
+import client.MainPage.MainPage;
+
 class RoundedPanel extends JPanel {
     private int radius;
 
@@ -50,15 +53,21 @@ class RoundedPanel extends JPanel {
     }
 }
 
-public class RecruitGroupMember {
+public class RecruitGroupMember extends MainPage{
+	
 	private static RecruitGroupMember instance;
-	JFrame frame;
 	private JTextField textField;
-	ImagePanel groupRecruitment;
+	private JPanel groupRecruitment;
 
+	JPanel a;
+	
+	public JPanel get() {
+	    return a;
+	}
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public void setFrame(JFrame frame) {
         this.frame = frame;
         initialize();
@@ -75,54 +84,60 @@ public class RecruitGroupMember {
 			}
 		});
 	}
-
+*/
 	/**
 	 * Create the application.
 	 */
+	/*
 	private RecruitGroupMember() {
 		initialize();
 	}
-
+*/
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	public static synchronized RecruitGroupMember getInstance() {
-        if (instance == null) {
-            instance = new RecruitGroupMember();
-        }
-        return instance;
-    }
+//	public static synchronized RecruitGroupMember getInstance() {
+//        if (instance == null) {
+//            instance = new RecruitGroupMember(boolean vis);
+//        }
+//        return instance;
+//    }
 	
-	private void initialize() {
+	public RecruitGroupMember(boolean vis) {
+		/*
 		if (frame == null) { // 프레임이 아직 생성되지 않았다면 새로 생성
             frame = new JFrame();
             frame.setSize(1200, 850);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLayout(null);
 		}
-		groupRecruitment = new ImagePanel(new ImageIcon("./resource/RecruitGroupMember/RecruitPageMain.jpg").getImage());
-		groupRecruitment.setBackground(new Color(169, 169, 169));
-		frame.setSize(1200, 850);
-		frame.getContentPane().add(groupRecruitment, BorderLayout.EAST);
-		groupRecruitment.setLayout(null);
+		*/
+		super(vis);
+		initializeGroupRecruitment();
+	}
+	private void initializeGroupRecruitment() {
+        groupRecruitment = new JPanel();
+        groupRecruitment.setBackground(new Color(246, 246, 246));
+        groupRecruitment.setBounds(0, 0, 930, 850);
+        groupRecruitment.setLayout(null);
 		
-		JPanel 윗부분 = new JPanel();
-		윗부분.setBackground(new Color(255, 250, 250));
-		윗부분.setBounds(0, 0, 942, 69);
-		groupRecruitment.add(윗부분);
-		윗부분.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("호랑이양말 님");
-		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 18));
-		lblNewLabel.setBounds(732, 18, 119, 35);
-		윗부분.add(lblNewLabel);
-		
-		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("./resource/RecruitGroupMember/호랑이.png"));
-		lblNewLabel_2.setBounds(864, 8, 58, 58);
-		윗부분.add(lblNewLabel_2);
-		
-		// 미션 방 검색
-		textField = new JTextField() {
+        JButton missionRoomCreate = new JButton("");
+        missionRoomCreate.setBounds(707, 84, 189, 40);
+        missionRoomCreate.setBackground(new Color(255, 255, 255));
+        missionRoomCreate.setIcon(new ImageIcon("./resource/RecruitGroupMember/미션방생성.png"));
+        missionRoomCreate.setToolTipText("");
+        missionRoomCreate.setBorderPainted(false);
+        missionRoomCreate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	CreateNewGroupPopup cp = new CreateNewGroupPopup(RecruitGroupMember.this); // 수정됨
+                cp.getFrame().setVisible(true);
+            }
+        });
+        
+        
+        // 미션 방 검색
+        textField = new JTextField() {
             @Override
             protected void paintComponent(Graphics g) {
                 if (!isOpaque()) {
@@ -135,70 +150,43 @@ public class RecruitGroupMember {
                 super.paintComponent(g);
             }
         };
-		groupRecruitment.add(textField);
-
-        textField.setOpaque(false); // 배경을 투명하게 설정
-        textField.setText("          원하는 미션방을 검색할 수 있어요!");
-        textField.setForeground(SystemColor.controlShadow);
-        textField.setFont(new Font("나눔고딕", Font.BOLD, 18));
-        textField.setBorder(null);
-        textField.setBounds(39, 81, 866, 59);
-        textField.setColumns(10);
+        textField.setBounds(39, 12, 866, 59);
+        groupRecruitment.add(textField);
         
-        JButton missionRoomCreate = new JButton("");
-        missionRoomCreate.setBackground(new Color(255, 255, 255));
-        missionRoomCreate.setIcon(new ImageIcon("./resource/RecruitGroupMember/미션방생성.png"));
-        missionRoomCreate.setToolTipText("");
-        missionRoomCreate.setBounds(707, 155, 189, 35);
-        missionRoomCreate.setBorderPainted(false);
-        missionRoomCreate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	CreateNewGroupPopup cp = new CreateNewGroupPopup(RecruitGroupMember.this); // 수정됨
-                cp.getFrame().setVisible(true);
-            }
-        });
+                textField.setOpaque(false); // 배경을 투명하게 설정
+                textField.setText("          원하는 미션방을 검색할 수 있어요!");
+                textField.setForeground(SystemColor.controlShadow);
+                textField.setFont(new Font("나눔고딕", Font.BOLD, 18));
+                textField.setBorder(null);
+                textField.setColumns(10);
         groupRecruitment.add(missionRoomCreate);
         
         JLabel lblNewLabel_1 = new JLabel("카테고리 선택");
+        lblNewLabel_1.setBounds(50, 81, 110, 35);
         lblNewLabel_1.setFont(new Font("\uB098\uB214\uACE0\uB515", lblNewLabel_1.getFont().getStyle() | Font.BOLD, lblNewLabel_1.getFont().getSize() + 6));
-        lblNewLabel_1.setBounds(50, 155, 130, 35);
         groupRecruitment.add(lblNewLabel_1);
         JComboBox comboBox = new JComboBox();
+        comboBox.setBounds(180, 82, 121, 35);
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
-        comboBox.setBounds(180, 155, 121, 35);
         groupRecruitment.add(comboBox);
+        /*
         frame.setVisible(true);
+        frame.add(groupRecruitment); 
+        frame.setVisible(true);
+        */
+        MainPage mp = new MainPage(true);
+		JPanel a = mp.globPan;
+		a.setLayout(null);
+        a.add(groupRecruitment);
 	}
+   
 	public void addToGroupRecruitment(JPanel panel) {
-		panel.setBounds(50, 210, 406, 273);
-        groupRecruitment.add(panel);
-        groupRecruitment.revalidate();
-        groupRecruitment.repaint();	
+		if (groupRecruitment != null) {
+            panel.setBounds(50, 141, 406, 273);
+            groupRecruitment.add(panel);
+            groupRecruitment.revalidate();
+            groupRecruitment.repaint();
+        }
     }
-}
-
-class ImagePanel extends JPanel{
-	private Image img;
-	
-	public ImagePanel(Image img) {
-		this.img = img;
-		setSize(new Dimension(img.getWidth(null), img.getHeight(null)));
-		setPreferredSize(new Dimension(img.getWidth(null), img.getHeight(null)));
-		setLayout(null);
-	}
-	
-	public int getWidth() {
-		return img.getWidth(null);
-	}
-	
-	public int getHeight() {
-		return img.getHeight(null);
-	}	
-	
-	public void paintComponent(Graphics g) {
-		g.drawImage(img, 0, 0, null);
-	}
 	
 }
-

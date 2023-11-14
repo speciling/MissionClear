@@ -3,18 +3,15 @@ package server.group;
 import server.user.User;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Group {
     private static final ConcurrentHashMap<Integer, Group> groupMap = new ConcurrentHashMap<>();
-    private final int groupID;
-    private final List<User> userList;
+    private final List<User> connectedUserList;
 
     public Group(int groupID) {
-        this.groupID = groupID;
-        this.userList = new ArrayList<>();
+        this.connectedUserList = new ArrayList<>();
         groupMap.put(groupID, this);
     }
 
@@ -24,13 +21,13 @@ public class Group {
             return group;
         return new Group(gid);
     }
-    public List<User> getUserList() {
-        return this.userList;
+    public List<User> getConnectedUserList() {
+        return this.connectedUserList;
     }
 
-    public void registerUser(User user) { this.userList.add(user); }
+    public void registerUser(User user) { this.connectedUserList.add(user); }
 
-    public void unRegisterUser(User user) { this.userList.remove(user); }
+    public void unRegisterUser(User user) { this.connectedUserList.remove(user); }
 
 }
 

@@ -3,6 +3,8 @@ package server.service;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.db.DBManager;
+import server.db.ResultType;
+import server.db.ServerDBManager;
 import server.user.User;
 
 import java.io.File;
@@ -17,16 +19,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class RequestHandler implements Handler{
     private static final int READING = 0, SENDING = 1;
 
-    private final Queue<JSONObject> writeQueue = new LinkedList<>();
+    private final BlockingQueue<ByteBuffer> writeQueue = new LinkedBlockingQueue<>();
     private final SocketChannel socketChannel;
     private final SelectionKey selectionKey;
-    private final ByteBuffer headerBuffer = ByteBuffer.allocate(5);
     private int state = READING;
-    private ByteBuffer bodyBuffer;
     private User user;
 
 
@@ -79,7 +81,7 @@ public class RequestHandler implements Handler{
         }
     }
 
-    public void addTask(JSONObject data) {
+    public void addTask(ByteBuffer data) {
         writeQueue.add(data);
         selectionKey.interestOps(SelectionKey.OP_WRITE);
         state = SENDING;
@@ -91,13 +93,28 @@ public class RequestHandler implements Handler{
             state = READING;
         }
         else {
-            JSONObject data = writeQueue.poll();
-            // ... 구현
+            ByteBuffer data = writeQueue.poll();
+            data.flip();
+            try{
+                socketChannel.write(data);
+            } catch (IOException e) {
+                closeSocket();
+            }
+        }
+    }
+
+    private void closeSocket() {
+        this.user.disconnect();
+        this.selectionKey.cancel();
+        try {
+            this.socketChannel.close();
+        } catch (IOException e) {
+            System.out.println(e.toString());
         }
     }
 
     private Request getRequest() {
-
+        ByteBuffer headerBuffer = ByteBuffer.allocate(5);
         try {
             int readCount = socketChannel.read(headerBuffer);
             if (readCount > 0) {
@@ -106,7 +123,7 @@ public class RequestHandler implements Handler{
                 byte type = headerBuffer.get();
                 int length = headerBuffer.getInt();
 
-                bodyBuffer = ByteBuffer.allocate(length);
+                ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
                 socketChannel.read(bodyBuffer);
                 bodyBuffer.flip();
                 String body = new String(bodyBuffer.array()).trim();
@@ -116,80 +133,62 @@ public class RequestHandler implements Handler{
 
         } catch (IOException e) {
             e.printStackTrace();
-
         }
         return null;
     }
 
-    private User login(Request request) {
-        String id = null, password = null;
-        JSONArray userInfo = new JSONArray();
+    private void login(Request request) {
+        JSONObject requsetData = request.getData();
+        String id = (String)requsetData.get("id");
+        String password = (String)requsetData.get("password");
+        JSONObject userInfo = ServerDBManager.getUser(id, password);
         User user = null;
-        DBManager.ResultType resultType = DBManager.checkLogin(userInfo, id, password);
 
-        return user;
+        this.user = user;
     }
 
     private void signUp(Request request) {
         String id = null, password = null, nickname = null;
-        DBManager.ResultType resultType = DBManager.addUser(id, password, nickname);
+        JSONObject result = ServerDBManager.addUser(id, password, nickname);
     }
 
     private void sendData(Request request) {
-        JSONArray data = new JSONArray();
-        Map<Integer, Integer> req = new HashMap<>();
-        sendGoupsData(data, req);
-        sendChatData(data, req);
-        sendProfileData(data, req);
-    }
-
-    private void sendGoupsData(JSONArray data, Map<Integer, Integer> request) {
-        DBManager.ResultType resultType = DBManager.getGroupsData(data, request);
-    }
-
-    private void sendChatData(JSONArray data, Map<Integer, Integer> request) {
-        DBManager.ResultType resultType = DBManager.getChatData(data, request);
-    }
-
-    private void sendProfileData(JSONArray data, Map<Integer, Integer> request) {
-        DBManager.ResultType resultType = DBManager.getProfileData(data, request);
+        JSONObject GoupsData = ServerDBManager.getGroupsData();
+        JSONObject chatData = ServerDBManager.getChatData((JSONObject) request.getData().get("lastChatId"));
+        JSONObject ProfileData = ServerDBManager.getProfileData((JSONObject) request.getData().get("prfiles"));
     }
 
     private void  createNewGroup(Request request) {
-        DBManager.ResultType resultType = DBManager.createGroupTable();
+        ((JSONObject)request.getData().get("groupInfo")).put("users", user.userID);
+        JSONObject result = ServerDBManager.createGroup((JSONObject) request.getData().get("groupInfo"));
     }
 
     private void enterGroup(Request request) {
         int uid = 0, gid = 0;
-        DBManager.ResultType resultType = DBManager.enterGroup(uid, gid);
+        ResultType resultType = ServerDBManager.enterGroup(uid, gid);
     }
 
     private void chat(Request request) {
-        int uid = 0, gid = 0;
-        String chatMsg = null;
-
-        int chatId = DBManager.saveChatMessage(uid, gid, chatMsg);
+        int chatId = DBManager.saveChatMessage(request.getData());
 
     }
 
     private void certifyMission(Request request) {
-        int uid = 0, gid = 0;
-        Path picture = null;
 
-        int chatID = DBManager.saveCertifyPicture(uid, gid, picture);
+        int chatID = DBManager.saveCertifyPicture(request.getData());
     }
 
     private void changePFP(Request request) {
         int uid = 0;
         Path picture = null;
 
-        DBManager.ResultType resultType = DBManager.changePFP(uid, picture);
+        ResultType resultType = DBManager.changePFP(uid, picture);
     }
 
     private void  changeNickname(Request request) {
         int uid = 0;
         String nickname = null;
 
-        DBManager.ResultType resultType = DBManager.changeNickname(uid, nickname);
+        ResultType resultType = DBManager.changeNickname(uid, nickname);
     }
 }

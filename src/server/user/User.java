@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import server.group.Group;
 import server.service.RequestHandler;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class User {
 
     }
 
-    public void send(JSONObject data) {
+    public void send(ByteBuffer data) {
         requestHandler.addTask(data);
     }
 

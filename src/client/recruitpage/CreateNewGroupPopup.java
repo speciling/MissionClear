@@ -50,11 +50,6 @@ public class CreateNewGroupPopup {
     private JTextField roomPassword;
 
     /**
-     * Launch the application.
-     */
-
-
-    /**
      * Create the application.
      */
     public CreateNewGroupPopup() {
@@ -228,9 +223,9 @@ public class CreateNewGroupPopup {
     	createPopup.add(lblNewLabel_1_1_1_2_2_1);
     	
     	JButton creationComplete = new JButton("");
-    	creationComplete.setSelectedIcon(new ImageIcon("C:\\Users\\jihwan\\Desktop\\생성완료.png"));
+    	creationComplete.setSelectedIcon(new ImageIcon("./resource/RecruitGroupMember/생성완료.png"));
     	creationComplete.setBackground(new Color(255, 255, 255));
-    	creationComplete.setIcon(new ImageIcon("C:\\Users\\jihwan\\Desktop\\생성완료.png"));
+    	creationComplete.setIcon(new ImageIcon("./resource/RecruitGroupMember/생성완료.png"));
     	creationComplete.setBounds(279, 658, 133, 51);
     	creationComplete.setBorderPainted(false);
     	createPopup.add(creationComplete);
