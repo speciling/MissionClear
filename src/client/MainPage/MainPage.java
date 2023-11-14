@@ -206,7 +206,6 @@ public class MainPage extends JFrame {
          globPan.add(p);*/
          
       }
-         // add함수(True);
       else if (panelName.equals("mypage")) {
          Mypage mp = new Mypage(true);
          JPanel p = mp.get();
@@ -214,5 +213,4 @@ public class MainPage extends JFrame {
          globPan.add(p);
       }
    }
-   //public void changePanel()
 }
