@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import client.DetailMyGroup.DetailMyGroup;
+import DetailMyGroup.DetailMyGroup;
 import client.MainPage.MainPage;
 
 

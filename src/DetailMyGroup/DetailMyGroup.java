@@ -1,4 +1,4 @@
-package client.DetailMyGroup;
+package DetailMyGroup;
 
 import java.awt.*;
 import java.io.File;
