@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import DetailMyGroup.DetailMyGroup;
+import client.login.Login;
 import client.mypage.Mypage;
 import client.recruitpage.MyGroupList;
 import client.recruitpage.RecruitGroupMember;
@@ -40,8 +41,7 @@ public class MainPage extends JFrame {
       String logoPath = "./resource/MainPage/logo.png";
 
       main = getContentPane();
-      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //
-      //setSize(1200, 850); // 프레임 크기 설정
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
       setSize(new Dimension(1210,880));
       setBackground(Color.gray);
       main.setLayout(new BorderLayout());
@@ -62,6 +62,8 @@ public class MainPage extends JFrame {
       loc.add(userPicInfo);
       loc.setBackground(Color.white);
       mainInfo.add(loc,BorderLayout.EAST);
+      
+      
       // 사용자의 이름과 사진을 불러오기
       // 함수호출
       
@@ -147,15 +149,12 @@ public class MainPage extends JFrame {
 
       // 화면전환 버튼 클릭 이벤트
       bRecruit.addActionListener(event -> {
-         // 현재창을 false
          changePanel("group");
       });
       bMyGroup.addActionListener(event -> {
-         // 현재창을 false
          changePanel("mygroup");
       });
       bMyPage.addActionListener(event -> {
-         // 현재창을 false
          changePanel("mypage");
       });
 
@@ -165,10 +164,6 @@ public class MainPage extends JFrame {
       });
    }
 
-   /*private Dimension newDemension(int i, int j) {
-      // TODO Auto-generated method stub
-      return null;
-   }*/
 
    public void createLogoutPopup() {
       int answer = JOptionPane.showConfirmDialog(this, "로그아웃 하시겠습니까?", "", JOptionPane.YES_NO_OPTION);
@@ -182,21 +177,21 @@ public class MainPage extends JFrame {
    }
 
    public void logout(int check) {
-
+	   if (check==0) {
+		   Login l = new Login();
+	   }
    }
    
    
    
 
    public void changePanel(String panelName) {
-      // 모두 페이지가 존재한다고 가정하고 패널을 불러올 때 boolean 매개변수가 존재하는 함수호출을 통해 불러오기(현재 함수의
-      // setvisible은 false)
       if (panelName.equals("group")) {
          RecruitGroupMember r = new RecruitGroupMember(true);
          JPanel p = r.get();
          p = makePan(p);
          globPan.add(p);
-      }// add함수(True);
+      }
       
       else if (panelName.equals("mygroup")) {
     	  MyGroupList r = new MyGroupList(true);

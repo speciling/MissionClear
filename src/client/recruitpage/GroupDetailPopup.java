@@ -39,16 +39,11 @@ public class GroupDetailPopup {
 	 * Initialize the contents of the frame.
 	 */
 	void initialize() {
-		frame = new JFrame();
-		frame.setSize(422, 425);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
 		
 		groupDetailPopupPanel = new RoundedPanel(20); 
 		groupDetailPopupPanel.setBounds(0, 0, 406, 387);
 		groupDetailPopupPanel.setForeground(new Color(255, 255, 255));
 		groupDetailPopupPanel.setBackground(new Color(255, 255, 255));
-	    frame.getContentPane().add(groupDetailPopupPanel);
 	    groupDetailPopupPanel.setLayout(null);
 	    
 	    JLabel title = new JLabel("미라클모닝 챌린지 할 사람 구합니다!");
