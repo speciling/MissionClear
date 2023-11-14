@@ -12,6 +12,6 @@ import client.recruitpage.RecruitGroupMember;
 public class Client {
 	
 	  public static void main(String [] args) {
-	      RecruitGroupMember m = new RecruitGroupMember(true);
+		  RecruitGroupMember m = new RecruitGroupMember(true);
 	   }
 }
