@@ -105,21 +105,21 @@ public class RecruitGroupMember {
 		frame.getContentPane().add(groupRecruitment, BorderLayout.EAST);
 		groupRecruitment.setLayout(null);
 		
-		JPanel 윗부분 = new JPanel();
-		윗부분.setBackground(new Color(255, 250, 250));
-		윗부분.setBounds(0, 0, 942, 69);
-		groupRecruitment.add(윗부분);
-		윗부분.setLayout(null);
+//		JPanel 윗부분 = new JPanel();
+//		윗부분.setBackground(new Color(255, 250, 250));
+//		윗부분.setBounds(0, 0, 942, 69);
+//		groupRecruitment.add(윗부분);
+//		윗부분.setLayout(null);
+//		
+//		JLabel lblNewLabel = new JLabel("호랑이양말 님");
+//		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 18));
+//		lblNewLabel.setBounds(732, 18, 119, 35);
+//		윗부분.add(lblNewLabel);
 		
-		JLabel lblNewLabel = new JLabel("호랑이양말 님");
-		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 18));
-		lblNewLabel.setBounds(732, 18, 119, 35);
-		윗부분.add(lblNewLabel);
-		
-		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("./resource/RecruitGroupMember/호랑이.png"));
-		lblNewLabel_2.setBounds(864, 8, 58, 58);
-		윗부분.add(lblNewLabel_2);
+//		JLabel lblNewLabel_2 = new JLabel("New label");
+//		lblNewLabel_2.setIcon(new ImageIcon("./resource/RecruitGroupMember/호랑이.png"));
+//		lblNewLabel_2.setBounds(864, 8, 58, 58);
+//		윗부분.add(lblNewLabel_2);
 		
 		// 미션 방 검색
 		textField = new JTextField() {
