@@ -2,62 +2,35 @@ package server.group;
 
 import server.user.User;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class Group {
+public class Group {
+    private static final ConcurrentHashMap<Integer, Group> groupMap = new ConcurrentHashMap<>();
     private final int groupID;
-    private String title;
-    private String description;
-    private String mission;
-    private int categoryID;
-    private Calendar startDate;
-    private Calendar endDate;
     private final List<User> userList;
 
-    public Group(int groupID, String title, String description, String mission, int categoryID, Calendar startDate, Calendar endDate, List<User> users) {
+    public Group(int groupID) {
         this.groupID = groupID;
-        this.title = title;
-        this.description = description;
-        this.mission = mission;
-        this.categoryID = categoryID;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.userList = users;
+        this.userList = new ArrayList<>();
+        groupMap.put(groupID, this);
     }
 
-    public int getGroupID() {
-        return this.groupID;
+    public static Group get(int gid) {
+        Group group = groupMap.get(gid);
+        if (group != null)
+            return group;
+        return new Group(gid);
     }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getMission() {
-        return this.mission;
-    }
-
-    public int getCategoryID() {
-        return this.categoryID;
-    }
-
-    public Calendar getStartDate() {
-        return this.startDate;
-    }
-
-    public Calendar getEndDate() {
-        return this.endDate;
-    }
-
     public List<User> getUserList() {
         return this.userList;
     }
+
+    public void registerUser(User user) { this.userList.add(user); }
+
+    public void unRegisterUser(User user) { this.userList.remove(user); }
 
 }
 

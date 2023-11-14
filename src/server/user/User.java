@@ -1,40 +1,37 @@
 package server.user;
 
-
+import org.json.simple.JSONObject;
 import server.group.Group;
+import server.service.RequestHandler;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class User {
-    private static final ConcurrentHashMap<Integer, User> connectedUsers = new ConcurrentHashMap<>();
     public int userID;
-    public String Nickname;
+    RequestHandler requestHandler;
     private List<Group> groupList;
 
-    public User() {
-    }
-
-    public User(int userID) {
-
-    }
-
-    public void setUserID(int userID) {
+    public User(int userID, RequestHandler requestHandler, List<Integer> gidList) {
         this.userID = userID;
+        this.requestHandler = requestHandler;
+        this.groupList = new ArrayList<>();
+        for (int gid : gidList)
+            groupList.add(Group.get(gid));
+        connect();
     }
 
-    public void register() {
-        connectedUsers.put(this.userID, this);
+    public void connect() {
+
     }
 
-    public void unregister() {
-        connectedUsers.remove(this.userID);
+    public void send(JSONObject data) {
+        requestHandler.addTask(data);
     }
 
-    public static User getConnectedUser(int userID) {
-        return connectedUsers.get(userID);
-    }
+    public void disconnect() {
 
+    }
 }
 
 

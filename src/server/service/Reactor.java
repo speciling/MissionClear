@@ -8,10 +8,10 @@ import java.nio.channels.ServerSocketChannel;
 import java.util.Set;
 
 public class Reactor {
-    final Selector selector;
-    final ServerSocketChannel serverSocketChannel;
+    private final Selector selector;
+    private final ServerSocketChannel serverSocketChannel;
 
-    Reactor(int port) throws IOException {
+    public Reactor(int port) throws IOException {
         selector = Selector.open();
 
         serverSocketChannel = ServerSocketChannel.open();

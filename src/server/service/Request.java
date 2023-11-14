@@ -1,5 +1,9 @@
 package server.service;
 
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Map;
@@ -8,13 +12,22 @@ import java.util.stream.Stream;
 
 public class Request {
     public RequestType type;
-    public ByteBuffer bodyBuffer;
-    public String body;
+    public String bodyString;
+    public JSONArray data;
 
-    public Request(byte type, ByteBuffer bodyBuffer) {
+    public Request(byte type, String body) {
         this.type = RequestType.of(type);
-        this.bodyBuffer = bodyBuffer;
-        this.body = new String(bodyBuffer.array()).trim();
+        this.bodyString = body;
+        JSONParser parser = new JSONParser();
+        try {
+            parser.parse(bodyString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ByteBuffer getPacket(RequestType type, JSONArray data) {
+        return null;
     }
 
     public enum RequestType {
