@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.Insets;
 import java.awt.Component;
@@ -118,15 +120,24 @@ public class AddMissionRoom {
 	    category.setBorder(new RoundedBorder(10, customColor));
 	    addMissionRoomPanel.add(category);
 	    
-	    JButton btnNewButton = new JButton("");
-	    btnNewButton.setBounds(0, 0, 406, 273);
-	    btnNewButton.setBorderPainted(false);
-	    btnNewButton.setContentAreaFilled(false);
-	    btnNewButton.setFocusPainted(false);
-	    addMissionRoomPanel.add(btnNewButton);
+	    JButton detailPopup = new JButton("");
+	    detailPopup.setBounds(0, 0, 406, 273);
+	    detailPopup.setBorderPainted(false);
+	    detailPopup.setContentAreaFilled(false);
+	    detailPopup.setFocusPainted(false);
+	    
+	    detailPopup.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            // GroupDetailPopup 인스턴스 생성 및 프레임 표시
+	            GroupDetailPopup popup = new GroupDetailPopup();
+	            popup.initialize();
+	            popup.getFrame().setVisible(true);
+	        }
+	    });
+	    addMissionRoomPanel.add(detailPopup);
 
 	}
-
+	
 	public JPanel getPanel() {
 		// TODO Auto-generated method stub
 		return addMissionRoomPanel;
