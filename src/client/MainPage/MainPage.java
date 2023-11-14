@@ -1,6 +1,9 @@
 package client.MainPage;
 
 import javax.swing.*;
+
+import client.mypage.Mypage;
+
 import java.awt.*;
 
 public class MainPage extends JFrame {
@@ -12,8 +15,9 @@ public class MainPage extends JFrame {
 	public void callingInfo() {
 		;
 	}
-	
-	
+	public static void main(String [] args) {
+	      MainPage mainpage = new MainPage(true);
+	   }
 	
 	
 	public MainPage(boolean vis) {
