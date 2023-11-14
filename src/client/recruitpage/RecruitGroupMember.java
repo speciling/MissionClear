@@ -84,7 +84,7 @@ public class RecruitGroupMember {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		groupRecruitment = new ImagePanel(new ImageIcon("C://Users//jihwan//Desktop//ssd_호랑이양말//mypage/image/grouprecruitment.jpg").getImage());
+		groupRecruitment = new ImagePanel(new ImageIcon("./resource/RecruitGroupMember/RecruitPageMain.jpg").getImage());
 		groupRecruitment.setBackground(new Color(169, 169, 169));
 		frame.setSize(1200, 850);
 		frame.getContentPane().add(groupRecruitment, BorderLayout.EAST);
@@ -102,7 +102,7 @@ public class RecruitGroupMember {
 		윗부분.add(lblNewLabel);
 		
 		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\jihwan\\Desktop\\Ellipse 3.png"));
+		lblNewLabel_2.setIcon(new ImageIcon("./resource/RecruitGroupMember/호랑이.png"));
 		lblNewLabel_2.setBounds(864, 8, 58, 58);
 		윗부분.add(lblNewLabel_2);
 		
