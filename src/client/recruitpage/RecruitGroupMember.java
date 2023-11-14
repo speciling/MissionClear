@@ -55,53 +55,17 @@ class RoundedPanel extends JPanel {
 
 public class RecruitGroupMember extends MainPage{
 	
-	private static RecruitGroupMember instance;
+	//private static RecruitGroupMember instance;
 	private JTextField textField;
 	private JPanel groupRecruitment;
 
-	JPanel a;
-	
 	public JPanel get() {
-	    return a;
+	    return groupRecruitment;
 	}
-	/**
-	 * Launch the application.
-	 */
-	/*
-	public void setFrame(JFrame frame) {
-        this.frame = frame;
-        initialize();
-    }
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RecruitGroupMember window = new RecruitGroupMember();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-*/
-	/**
-	 * Create the application.
-	 */
-	/*
-	private RecruitGroupMember() {
-		initialize();
-	}
-*/
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
-//	public static synchronized RecruitGroupMember getInstance() {
-//        if (instance == null) {
-//            instance = new RecruitGroupMember(boolean vis);
-//        }
-//        return instance;
-//    }
 	
 	public RecruitGroupMember(boolean vis) {
 		super(vis);
@@ -145,12 +109,12 @@ public class RecruitGroupMember extends MainPage{
         textField.setBounds(39, 12, 866, 59);
         groupRecruitment.add(textField);
         
-                textField.setOpaque(false); // 배경을 투명하게 설정
-                textField.setText("          원하는 미션방을 검색할 수 있어요!");
-                textField.setForeground(SystemColor.controlShadow);
-                textField.setFont(new Font("나눔고딕", Font.BOLD, 18));
-                textField.setBorder(null);
-                textField.setColumns(10);
+        textField.setOpaque(false); // 배경을 투명하게 설정
+        textField.setText("          원하는 미션방을 검색할 수 있어요!");
+        textField.setForeground(SystemColor.controlShadow);
+        textField.setFont(new Font("나눔고딕", Font.BOLD, 18));
+        textField.setBorder(null);
+        textField.setColumns(10);
         groupRecruitment.add(missionRoomCreate);
         
         JLabel lblNewLabel_1 = new JLabel("카테고리 선택");
@@ -161,11 +125,7 @@ public class RecruitGroupMember extends MainPage{
         comboBox.setBounds(180, 82, 121, 35);
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
         groupRecruitment.add(comboBox);
-        /*
-        frame.setVisible(true);
-        frame.add(groupRecruitment); 
-        frame.setVisible(true);
-        */
+
         MainPage mp = new MainPage(true);
 		JPanel a = mp.globPan;
 		a.setLayout(null);

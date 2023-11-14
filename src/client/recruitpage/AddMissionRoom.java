@@ -55,6 +55,18 @@ public class AddMissionRoom {
 	/**
 	 * Launch the application.
 	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					AddMissionRoom window = new AddMissionRoom();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
@@ -67,7 +79,6 @@ public class AddMissionRoom {
 	 * Initialize the contents of the frame.
 	 */
 	void initialize() {
-		
 		
 		addMissionRoomPanel = new RoundedPanel(20); 
 		addMissionRoomPanel.setBounds(4, 1, 406, 273);

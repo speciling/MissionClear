@@ -10,6 +10,7 @@ import client.MainPage.MainPage;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+import javax.swing.JButton;
 
 public class MyGroupList extends MainPage{
 
@@ -59,6 +60,14 @@ public class MyGroupList extends MainPage{
 		lblNewLabel_1.setFont(new Font("나눔고딕", Font.PLAIN, 18));
 		lblNewLabel_1.setBounds(26, 53, 352, 93);
 		panel.add(lblNewLabel_1);
+		
+		JButton btnNewButton = new JButton("");
+		btnNewButton.setBounds(0, 0, 932, 189);
+		btnNewButton.setBorderPainted(false);
+		btnNewButton.setContentAreaFilled(false);
+		btnNewButton.setFocusPainted(false);
+		panel.add(btnNewButton);
+		
 		
 		MainPage mp = new MainPage(true);
 		JPanel a = mp.globPan;
