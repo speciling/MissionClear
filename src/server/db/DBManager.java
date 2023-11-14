@@ -19,6 +19,7 @@ import java.util.stream.IntStream;
 
 public class DBManager {
     protected static Connection conn = null;
+    protected static Path path = null;
 
     protected static ResultType executeSQL(String sql) {
         try (Statement statement = conn.createStatement();) {
@@ -62,14 +63,14 @@ public class DBManager {
                     });
                 }
                 if (result.isEmpty())
-                    result.put("resultType", ResultType.WARNING);
+                    result.put("resultType", ResultType.WARNING.getCode());
                 else
-                    result.put("resultType", ResultType.SUCCESS);
+                    result.put("resultType", ResultType.SUCCESS.getCode());
                 return result;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            result.put("resultType", ResultType.FAILURE);
+            result.put("resultType", ResultType.FAILURE.getCode());
             return result;
         }
     }
@@ -108,12 +109,12 @@ public class DBManager {
     }
 
     // 저장 성공시 채팅 번호 반환, 실패시 -1 반환
-    public static int saveChatMessage(int uid, int gid, String chatMessage){
+    public static int saveChatMessage(JSONObject data){
         return -1;
     }
 
     // 저장 성공시 채팅 번호 반환, 실패시 -1 반환
-    public static int saveCertifyPicture(int uid, int gid, Path picture){
+    public static int saveCertifyPicture(JSONObject data){
         return -1;
     }
 
@@ -148,26 +149,4 @@ public class DBManager {
         return ResultType.SUCCESS;
     }
 
-
-
-
-    // 결과 코드 정의
-    public enum ResultType {
-        SUCCESS(1),     // 성공
-        WARNING(0),     // 경고
-        FAILURE(-1);    // 실패
-
-        // 코드 변수
-        private int code = 0;
-
-        // 코드값 설정
-        private ResultType(int code){
-            this.code = code;
-        }
-
-        // 코드값 가져오기
-        public int getCode() {
-            return this.code;
-        }
-    }
 }
