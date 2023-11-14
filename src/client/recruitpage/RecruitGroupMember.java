@@ -104,14 +104,6 @@ public class RecruitGroupMember extends MainPage{
 //    }
 	
 	public RecruitGroupMember(boolean vis) {
-		/*
-		if (frame == null) { // 프레임이 아직 생성되지 않았다면 새로 생성
-            frame = new JFrame();
-            frame.setSize(1200, 850);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLayout(null);
-		}
-		*/
 		super(vis);
 		initializeGroupRecruitment();
 	}
