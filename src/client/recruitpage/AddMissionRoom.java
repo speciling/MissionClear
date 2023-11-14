@@ -19,6 +19,7 @@ import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.JButton;
 
 class RoundedBorder implements Border {
     private int radius;
@@ -43,28 +44,11 @@ class RoundedBorder implements Border {
     }
 }
 
-class RoundedPanel1 extends JPanel {
-    private int radius;
-
-    public RoundedPanel1(int radius) {
-        this.radius = radius;
-        setOpaque(false); // 패널 배경을 투명하게 설정
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // 모서리가 둥근 사각형을 그림
-        g2d.fill(new RoundRectangle2D.Double(0, 0, getWidth()-1, getHeight()-1, radius, radius));
-    }
-}
 
 public class AddMissionRoom {
 
 	private JFrame frame;
-	protected RoundedPanel1 addMissionRoomPanel;
+	protected RoundedPanel addMissionRoomPanel;
 
 	/**
 	 * Launch the application.
@@ -98,7 +82,7 @@ public class AddMissionRoom {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		addMissionRoomPanel = new RoundedPanel1(20); 
+		addMissionRoomPanel = new RoundedPanel(20); 
 		addMissionRoomPanel.setBounds(4, 1, 406, 273);
 		addMissionRoomPanel.setForeground(new Color(255, 255, 255));
 	    addMissionRoomPanel.setBackground(new Color(255, 255, 255));
@@ -133,6 +117,13 @@ public class AddMissionRoom {
 	    Color customColor = new Color(56, 183, 255);
 	    category.setBorder(new RoundedBorder(10, customColor));
 	    addMissionRoomPanel.add(category);
+	    
+	    JButton btnNewButton = new JButton("");
+	    btnNewButton.setBounds(0, 0, 406, 273);
+	    btnNewButton.setBorderPainted(false);
+	    btnNewButton.setContentAreaFilled(false);
+	    btnNewButton.setFocusPainted(false);
+	    addMissionRoomPanel.add(btnNewButton);
 
 	}
 

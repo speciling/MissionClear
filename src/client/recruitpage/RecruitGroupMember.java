@@ -22,6 +22,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.border.Border;
 import javax.swing.JButton;
@@ -31,7 +32,23 @@ import javax.swing.JToggleButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+class RoundedPanel extends JPanel {
+    private int radius;
 
+    public RoundedPanel(int radius) {
+        this.radius = radius;
+        setOpaque(false); // 패널 배경을 투명하게 설정
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // 모서리가 둥근 사각형을 그림
+        g2d.fill(new RoundRectangle2D.Double(0, 0, getWidth()-1, getHeight()-1, radius, radius));
+    }
+}
 
 public class RecruitGroupMember {
 	
@@ -122,9 +139,9 @@ public class RecruitGroupMember {
         missionRoomCreate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	MissionRoomPopup mp = new MissionRoomPopup(); // mypagepopup 인스턴스 생성
-                mp.initialize(); // mypagepopup의 UI 초기화 및 프레임 표시
-                mp.getFrame().setVisible(true); // 창을 화면에 표시
+            	CreateNewGroupPopup cp = new CreateNewGroupPopup(); // CreateNewGroupPopup 인스턴스 생성
+                cp.initialize(); // CreateNewGroupPopup의 UI 초기화 및 프레임 표시
+                cp.getFrame().setVisible(true); // 창을 화면에 표시
             }
         });
         groupRecruitment.add(missionRoomCreate);
@@ -144,7 +161,7 @@ public class RecruitGroupMember {
 		panel.setBounds(50, 210, 406, 273);
         groupRecruitment.add(panel);
         groupRecruitment.revalidate();
-        groupRecruitment.repaint();
+        groupRecruitment.repaint();	
     }
 }
 
