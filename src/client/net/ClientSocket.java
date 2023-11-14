@@ -157,14 +157,16 @@ public class ClientSocket extends Thread{
         }
     }
 
-    public static void getInitData() {}
+    public static JSONObject getInitData() {
+        return null;
+    }
 
     public static boolean createNewGroup() {
         return false;
     }
 
-    public static boolean enterGroup() {
-        return false;
+    public static JSONObject enterGroup() {
+        return null;
     }
 
     public static void sendChat() {}

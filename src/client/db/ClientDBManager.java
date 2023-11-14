@@ -1,5 +1,6 @@
 package client.db;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.db.DBManager;
 
@@ -20,10 +21,12 @@ public class ClientDBManager extends DBManager {
             }
             conn = DriverManager.getConnection("jdbc:sqlite:missioncleardata/client/client.db");
 
+            createTable("MYID", """
+                    CREATE TABLE IF NOT EXISTS MYID (uid integer)""");
+
             createTable("USER", """
                     CREATE TABLE IF NOT EXISTS USER 
                     (uid integer not null, nickname string not null, pfp string, groups string default '')""");
-            executeSQL("INSERT INTO USER VALUES (-1, '', '', '')");
 
             createTable("GROUPS", """
                     CREATE TABLE IF NOT EXISTS GROUPS (gid integer unique, 
@@ -39,5 +42,25 @@ public class ClientDBManager extends DBManager {
     }
 
     public static void saveInitData(JSONObject data) {}
+
+    public static Integer[] getMyGroupList() {
+        return null;
+    }
+
+    public static JSONObject getGroupInfo() {
+        return null;
+    }
+    public static String getUserInfo(int uid) {
+        return null;
+    }
+
+    public static JSONObject getGroupProgress(int gid) {
+
+        return null;
+    }
+
+    public static JSONArray getChatData(int gid) {
+        return null;
+    }
 
 }
