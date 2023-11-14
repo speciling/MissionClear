@@ -132,7 +132,7 @@ public class RecruitGroupMember {
         
         JButton missionRoomCreate = new JButton("");
         missionRoomCreate.setBackground(new Color(255, 255, 255));
-        missionRoomCreate.setIcon(new ImageIcon("C:\\Users\\jihwan\\Desktop\\미션방생성.png"));
+        missionRoomCreate.setIcon(new ImageIcon("./resource/RecruitGroupMember/미션방생성.png"));
         missionRoomCreate.setToolTipText("");
         missionRoomCreate.setBounds(707, 155, 189, 35);
         missionRoomCreate.setBorderPainted(false);
