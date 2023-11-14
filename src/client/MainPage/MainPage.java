@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 import DetailMyGroup.DetailMyGroup;
+import client.mypage.Mypage;
+import client.recruitpage.MyGroupList;
+import client.recruitpage.RecruitGroupMember;
 
 public class MainPage extends JFrame {
 
@@ -189,14 +192,17 @@ public class MainPage extends JFrame {
       // 모두 페이지가 존재한다고 가정하고 패널을 불러올 때 boolean 매개변수가 존재하는 함수호출을 통해 불러오기(현재 함수의
       // setvisible은 false)
       if (panelName.equals("group")) {
-         recruit r = new recruit();
+         RecruitGroupMember r = new RecruitGroupMember(true);
          JPanel p = r.get();
          p = makePan(p);
          globPan.add(p);
       }// add함수(True);
       
       else if (panelName.equals("mygroup")) {
-         
+    	  MyGroupList r = new MyGroupList(true);
+          JPanel p = r.get();
+          p = makePan(p);
+          globPan.add(p);
          //changePan();//panel 초기화
          /*
          DetailMyGroup dg = new DetailMyGroup();
@@ -207,7 +213,7 @@ public class MainPage extends JFrame {
       }
          // add함수(True);
       else if (panelName.equals("mypage")) {
-         Mypage mp = new Mypage();
+         Mypage mp = new Mypage(true);
          JPanel p = mp.get();
          p = makePan(p);
          globPan.add(p);
