@@ -18,6 +18,7 @@ import javax.swing.JSeparator;
 
 import client.MainPage.MainPage;
 import client.login.Login;
+import client.recruitpage.RecruitGroupMember;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -25,6 +26,12 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * @author 최지원
+ * 
+ * 사각형의 바텀부분에만 검정색 선을 더하기 위해 JPanel을 커스텀한 클래스
+ *
+ */
 class CustomPanel extends JPanel {
 
     @Override
@@ -41,6 +48,9 @@ class CustomPanel extends JPanel {
     }
 }
 
+/**
+ * 사각형의 모서리를 둥글게 만들기 위해 JPanel 커스텀한 클래스
+ * */
 class RoundedPanel2 extends JPanel {
     private int radius;
 
@@ -59,19 +69,38 @@ class RoundedPanel2 extends JPanel {
     }
 }
 
+/**
+ * 
+ * mypage 클래스
+ *
+ */
 public class Mypage extends MainPage{
 
+	public static void main(String [] args) {
+		  Mypage mp = new Mypage(true);
+	   }
 	private JPanel box;
     JPanel a;
     
+    /**화면전환을 위한 패널값 반환
+     * 
+     * @return a
+     */
     public JPanel get() {
     	return a;
     }
 	
+    /**
+     * 화면에 보이게 하기 위한 생성자
+     * @param vis
+     */
     public Mypage(boolean vis) {
     	super(vis);
     	initializeMypage();
     }
+    /**
+     * ui메소드
+     */
     private void initializeMypage() {
 		// TODO Auto-generated method stub
     	box = new JPanel();    	
@@ -146,8 +175,6 @@ public class Mypage extends MainPage{
         btnNewButton.setBorderPainted(false);
         box.add(btnNewButton);
         
-        
-        
         MainPage mp = new MainPage(true);
         JPanel a = mp.globPan;
         a.setLayout(null);
@@ -159,22 +186,29 @@ public class Mypage extends MainPage{
         //frame.setVisible(true);
 	}
 	
-    
+    /**서버에 닉네임 변경을 요청하는 함수*/
     public void changeNickName(String newNickName) {
     	; //서버에 닉네임 변경을 요청하는 함수
     }
     
+    /**서버에 프로필 사진 변경을 요청하는 함수*/
     public void changePFP(File Picture) {
     	;//서버에 프로필 사진 변경을 요청하는 함수
     }
+    
+    /**진행중인 미션을 보여주는 함수*/
     public void showOngoingMission() {
     	//진행중인 미션을 보여주는 함수
     }
+    
+    /** 완료된 미션을 보여주는 함수*/
     public void showFinishedMission() {
     	//완료된 미션을 보여주는 함수
     }
     
 }
+
+/** 이미지패널 클래스*/
 
 class ImagePanel extends JPanel{
 	   private Image img;
