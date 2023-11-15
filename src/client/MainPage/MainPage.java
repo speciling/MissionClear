@@ -9,23 +9,35 @@ import client.mypage.Mypage;
 import client.recruitpage.MyGroupList;
 import client.recruitpage.RecruitGroupMember;
 
+/**
+ * 로그인 후 모든 페이지를 관리하는 메인페이지이다
+ * @author choyeonwoo
+ *
+ */
 public class MainPage extends JFrame {
 
    public JPanel globPan;
    public String userName = "호랑이양말";
    public String userPic = "./resource/DetailMyGroup/Ellipse3.png";
    public Container main;
-   // 사용자의 이름과 사진을 불러오는 함수를 작성
+
+/**
+ * DB에서 userName과 userPoc 같은 유저의 정보를 가져오는 함수이다. 
+ */
    public void callingInfo() {
       ;
    }
-   
+   /**
+    * @author : choyeonwoo
+    * @param p : 가져온 JPanel을 메인페이지에 맞는 절대적인 크기로 바꿔주는 함수이다. 
+    * @return
+    */
    public JPanel makePan(JPanel p) {
       p.setBounds(0,0,943,781);
       return p;
    }
 
-   public void changePan() {
+   private void refreshPan() {
       globPan = new JPanel();
       globPan.setBackground(Color.gray);
       globPan.setBounds(257, 69, 943, 781);
@@ -77,7 +89,7 @@ public class MainPage extends JFrame {
       
       
       
-      changePan();
+      refreshPan();
       
       JPanel menuBar = new JPanel();
       menuBar.setLayout(null);
@@ -176,7 +188,7 @@ public class MainPage extends JFrame {
       logout(answer);
    }
 
-   public void logout(int check) {
+   private void logout(int check) {
 	   if (check==0) {
 		   Login l = new Login();
 	   }
