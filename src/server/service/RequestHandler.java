@@ -165,7 +165,7 @@ public class RequestHandler implements Handler{
 
     private void enterGroup(Request request) {
         int uid = 0, gid = 0;
-        ResultType resultType = ServerDBManager.enterGroup(uid, gid);
+        ResultType resultType = ServerDBManager.enterGroup(uid, gid, new String());
     }
 
     private void chat(Request request) {

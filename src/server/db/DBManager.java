@@ -95,7 +95,7 @@ public class DBManager {
         }
     }
 
-    private static ResultType dropTable(String tableName) {
+    protected static ResultType dropTable(String tableName) {
         try {
             if( !checkTable(tableName) ) {
                 return ResultType.WARNING;
@@ -110,7 +110,18 @@ public class DBManager {
 
     // 저장 성공시 채팅 번호 반환, 실패시 -1 반환
     public static int saveChatMessage(JSONObject data){
-        return -1;
+        int uid = (Integer)data.get("uid");
+        int gid = (Integer)data.get("gid");
+        String msg = (String)data.get("message");
+        String time = (String)data.get("time");
+
+        String sql = String.format("""
+                INSERT INTO G%dCHAT (uid, message, time) VALUES (%d, '%s', '%s')""", gid, uid, msg, time);
+        executeSQL(sql);
+
+        sql = "SELECT last_insert_rowid()";
+        Integer chatId = (Integer) executeQuery(sql).get("last_insert_rowid()");
+        return chatId;
     }
 
     // 저장 성공시 채팅 번호 반환, 실패시 -1 반환
