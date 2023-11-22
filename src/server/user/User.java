@@ -13,10 +13,10 @@ public class User {
     RequestHandler requestHandler;
     private List<Group> groupList;
 
-    public User(int userID, RequestHandler requestHandler, List<Integer> gidList) {
+    public User(int userID, List<Integer> gidList, RequestHandler requestHandler) {
         this.userID = userID;
-        this.requestHandler = requestHandler;
         this.groupList = new ArrayList<>();
+        this.requestHandler = requestHandler;
         for (int gid : gidList)
             groupList.add(Group.get(gid));
         connect();
