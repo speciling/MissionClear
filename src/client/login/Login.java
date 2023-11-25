@@ -2,13 +2,20 @@ package client.login;
 
 import java.awt.*;
 
+import org.json.simple.JSONObject;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 
+import client.db.ClientDBManager;
 import client.login.signUpPopUp;
+import client.net.ClientSocket;
 import client.recruitpage.RecruitGroupMember;
+import server.db.ResultType;
+import server.service.Request;
+import server.service.RequestType;
 
 /**
  * 
@@ -17,13 +24,17 @@ import client.recruitpage.RecruitGroupMember;
 public class Login extends JFrame{
 	
 	public static void main(String [] args) {
-		  Login login = new Login();
-		  login.loginpage();
+		ClientSocket socket = new ClientSocket(8080);
+		socket.start();
+		ClientDBManager.init();
+		Login login = new Login();
+		login.loginpage();
 	   }
 	   
 	private RoundCornerTextField idTextField;
 	private JPasswordField passwordField;
 	private JLabel loginWarning;
+	private JLabel loginMatchWarning;
 	
 	  /**
      * loginpage 띄우는 메소드
@@ -128,7 +139,7 @@ public class Login extends JFrame{
         loginWarning.setVisible(false);
         panel.add(loginWarning);
         
-        JLabel loginMatchWarning = new JLabel("아이디 또는 비밀번호가 틀렸습니다.%n 다시 입력해주세요.");
+        loginMatchWarning = new JLabel("아이디 또는 비밀번호가 틀렸습니다..");
         loginMatchWarning.setBounds(476,683,300,48);
         loginMatchWarning.setFont(new Font("나눔고딕", Font.PLAIN, 25));
         loginMatchWarning.setForeground(Color.red);
@@ -155,6 +166,13 @@ public class Login extends JFrame{
             	String password=new String(passwordChars);
             	
             	checkValid();
+            	if(login(id, password)) {
+            		System.out.println("Success");
+            	}
+            	else {
+            		loginMatchWarning.setVisible(true);
+            	}
+            	
             }
         });
         panel.add(loginButton);
@@ -178,14 +196,20 @@ public class Login extends JFrame{
 	/**
      * try login and return success
      */
-	private boolean login(String id, String pw) {
-		return false;
-	}
+	public boolean login(String id, String pw) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", id);
+        jsonObject.put("password", pw);
+
+        ClientSocket.send(new Request(RequestType.LOGIN, jsonObject));
+        return ClientSocket.getResult();
+    }
 	/*
 	void acceptData(Hashmap <int, int>) {
 		;
 	}
 	*/
+	
 	
 }
 

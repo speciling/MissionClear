@@ -13,6 +13,13 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.SwingConstants;
+
+import org.json.simple.JSONObject;
+
+import client.net.ClientSocket;
+import server.service.Request;
+import server.service.RequestType;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -31,6 +38,7 @@ public class signUpPopUp {
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
 	private JLabel idWarning;
+	private JLabel idRuleWarning;
 	private JLabel passwordWarning;
 	private JLabel passwordMatchWarning;
 	private JLabel passwordRuleWarning;
@@ -86,6 +94,14 @@ public class signUpPopUp {
 		idWarning.setHorizontalAlignment(SwingConstants.LEFT);
 		idInputPanel.add(idWarning);
 		idWarning.setVisible(false);
+		
+		idRuleWarning = new JLabel("이미 있는 아이디입니다.");
+		idRuleWarning.setForeground(new Color(255, 0, 0));
+		idRuleWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+		idRuleWarning.setBounds(130, 0, 226, 35);
+		idRuleWarning.setHorizontalAlignment(SwingConstants.LEFT);
+		idInputPanel.add(idRuleWarning);
+		idRuleWarning.setVisible(false);
 		
 		idTextField = new JTextField();
 		idTextField.setBackground(new Color(237, 237, 237));
@@ -204,11 +220,18 @@ public class signUpPopUp {
                 checkValue();
                 
                 if(checkValidPassword(password)) {
-                	signUp(id, password, nickname);
+                	passwordRuleWarning.setVisible(false);
                 }
                 else {
                 	if(password.length()!=0)
                 		passwordRuleWarning.setVisible(true);
+                }
+                
+                if(singUp(id,password,nickname)) {
+                	frame.dispose();
+                }
+                else {
+                	idRuleWarning.setVisible(true);
                 }
                 
                 // 여기에서 입력된 아이디와 비밀번호를 처리
@@ -259,6 +282,7 @@ public class signUpPopUp {
 		}
 		else
 			idWarning.setVisible(false);
+		
 		if(passwordField.getPassword().length==0) {
 	         passwordWarning.setVisible(true);
 		}
@@ -290,4 +314,15 @@ public class signUpPopUp {
 		String passwordRegex = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*()-_=+])[0-9a-zA-Z!@#$%^&*()-_=+]{1,16}$";
 	    return password.matches(passwordRegex);
 	}
+	
+	public boolean singUp(String id, String pw, String nickname) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", id);
+        jsonObject.put("password", pw);
+        jsonObject.put("nickname", nickname);
+
+        ClientSocket.send(new Request(RequestType.SIGNUP, jsonObject));
+        return ClientSocket.getResult();
+        //return false;
+    }
 }
