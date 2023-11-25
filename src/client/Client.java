@@ -8,10 +8,11 @@ import client.DetailMyGroup.DetailMyGroup;
 import client.MainPage.MainPage;
 import client.mypage.Mypage;
 import client.recruitpage.RecruitGroupMember;
+import client.recruitpage.*;
 
 public class Client {
 	
 	  public static void main(String [] args) {
-		  RecruitGroupMember m = new RecruitGroupMember(true);
+		  RecruitGroupMember a = new RecruitGroupMember(false);
 	   }
 }

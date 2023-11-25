@@ -51,7 +51,6 @@ public class AddMissionRoom {
 
 	private JFrame frame;
 	protected RoundedPanel addMissionRoomPanel;
-
 	/**
 	 * Launch the application.
 	 */
