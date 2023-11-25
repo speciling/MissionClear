@@ -166,7 +166,6 @@ public class RequestHandler implements Handler{
                     gidList.add(gid);
                 }
             }
-            System.out.println(request.getData().get("groups"));
 
             JSONObject initData = ServerDBManager.getInitData(gidList);
             addTask(Request.toByteBuffer(RequestType.SENDDATA, initData));
