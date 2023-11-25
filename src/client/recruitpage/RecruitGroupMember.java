@@ -34,15 +34,26 @@ import javax.swing.DefaultComboBoxModel;
 
 
 import client.MainPage.MainPage;
-
+/**
+ * A custom JPanel with rounded corners.
+ * This class extends JPanel to create a panel with rounded corners.
+ */
 class RoundedPanel extends JPanel {
     private int radius;
 
+    /**
+     * Constructor to create a rounded panel with a specified radius.
+     * @param radius the radius of the corners in the panel.
+     */
     public RoundedPanel(int radius) {
         this.radius = radius;
         setOpaque(false); // 패널 배경을 투명하게 설정
     }
 
+    /**
+     * Paints the rounded corners on the panel.
+     * @param g the Graphics object to protect.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -53,33 +64,45 @@ class RoundedPanel extends JPanel {
     }
 }
 
+/**
+ * Class representing the recruitment group member interface.
+ * This class extends MainPage and provides a user interface for recruitment functionalities.
+ */
 public class RecruitGroupMember extends MainPage{
 	
-	//private static RecruitGroupMember instance;
 	private JTextField textField;
 	private JPanel groupRecruitment;
-
-	public JPanel get() {
-	    return groupRecruitment;
-	}
+	//JPanel a;
+	
+	/**
+     * Retrieves the main panel of the recruitment interface.
+     * @return the main JPanel component of the recruitment interface.
+     */
+	//public JPanel get() {
+	//    return a;
+	//}
 
 	/**
-	 * Initialize the contents of the frame.
-	 */
-	
+     * Constructor to initialize the RecruitGroupMember interface.
+     * @param vis Boolean value to set the visibility of the main page.
+     */
 	public RecruitGroupMember(boolean vis) {
 		super(vis);
 		initializeGroupRecruitment();
 	}
+	
+	/**
+     * Initializes and sets up the group recruitment interface.
+     */
 	private void initializeGroupRecruitment() {
         groupRecruitment = new JPanel();
         groupRecruitment.setBackground(new Color(246, 246, 246));
-        groupRecruitment.setBounds(0, 0, 930, 850);
+        groupRecruitment.setBounds(0, 0, 950, 850);
         groupRecruitment.setLayout(null);
 		
         JButton missionRoomCreate = new JButton("");
         missionRoomCreate.setBounds(707, 84, 189, 40);
-        missionRoomCreate.setBackground(new Color(255, 255, 255));
+        missionRoomCreate.setBackground(new Color(246, 246, 246));
         missionRoomCreate.setIcon(new ImageIcon("./resource/RecruitGroupMember/미션방생성.png"));
         missionRoomCreate.setToolTipText("");
         missionRoomCreate.setBorderPainted(false);
@@ -90,6 +113,13 @@ public class RecruitGroupMember extends MainPage{
                 cp.getFrame().setVisible(true);
             }
         });
+        
+        JButton searchButton = new JButton("");
+        searchButton.setBackground(new Color(255, 255, 255));
+        searchButton.setBorderPainted(false);
+        searchButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/search.png"));
+        searchButton.setBounds(56, 26, 30, 30);
+        groupRecruitment.add(searchButton);
         
         
         // 미션 방 검색
@@ -130,8 +160,26 @@ public class RecruitGroupMember extends MainPage{
 		JPanel a = mp.globPan;
 		a.setLayout(null);
         a.add(groupRecruitment);
+        
+        JButton backButton = new JButton("");
+        backButton.setBackground(new Color(246, 246, 246));
+        backButton.setBorderPainted(false);
+        backButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/backButton.png"));
+        backButton.setBounds(875, 725, 30, 40);
+        groupRecruitment.add(backButton);
+        
+        JButton nextButton = new JButton("");
+        nextButton.setBackground(new Color(246, 246, 246));
+        nextButton.setBorderPainted(false);
+        nextButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/nextButton.png"));
+        nextButton.setBounds(905, 725, 30, 40);
+        groupRecruitment.add(nextButton);
 	}
    
+	 /**
+     * Adds a panel to the group recruitment interface.
+     * @param panel The panel to be added to the group recruitment interface.
+     */
 	public void addToGroupRecruitment(JPanel panel) {
 		if (groupRecruitment != null) {
             panel.setBounds(50, 141, 406, 273);

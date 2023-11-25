@@ -15,12 +15,12 @@ import client.recruitpage.RecruitGroupMember;
   This class represents the login screen where users can log in by entering their username and password.
  */
 public class Login extends JFrame{
-	/*
+	
 	public static void main(String [] args) {
 		  Login login = new Login();
 		  login.loginpage();
 	   }
-	   */
+	   
 	private RoundCornerTextField idTextField;
 	private JPasswordField passwordField;
 	private JLabel loginWarning;
@@ -151,8 +151,8 @@ public class Login extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
             	String id=idTextField.getText();
-            	char[] password=passwordField.getPassword();
-            	String pw=new String(password);
+            	char[] passwordChars=passwordField.getPassword();
+            	String password=new String(passwordChars);
             	
             	checkValid();
             }

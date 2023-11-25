@@ -14,6 +14,7 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 
 import client.MainPage.MainPage;
@@ -25,6 +26,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 /**
  * @author 최지원
@@ -34,7 +36,7 @@ import java.awt.event.ActionEvent;
  */
 class CustomPanel extends JPanel {
 
-    @Override
+	@Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -47,7 +49,7 @@ class CustomPanel extends JPanel {
         g.drawLine(0, height - 1, width, height - 1);
     }
 }
-
+	
 /**
  * 사각형의 모서리를 둥글게 만들기 위해 JPanel 커스텀한 클래스
  * */
@@ -76,18 +78,22 @@ class RoundedPanel2 extends JPanel {
  */
 public class Mypage extends MainPage{
 
-	public static void main(String [] args) {
-		  Mypage mp = new Mypage(true);
-	   }
-	private JPanel box;
-    JPanel a;
-    
-    /**화면전환을 위한 패널값 반환
-     * 
-     * @return a
-     */
+
+	public JPanel box;
+	JPanel main;
+	
+	//public static void main(String [] args) {
+	//	  Mypage mp = new Mypage(true);
+	//   }
+
+	public CustomPanel missionProgressPanel;
+	private JLabel ongoingGroupName;
+	public RoundedPanel2 missionInProgress;
+
+
     public JPanel get() {
-    	return a;
+    	return main;
+
     }
 	
     /**
@@ -107,12 +113,12 @@ public class Mypage extends MainPage{
         
         //JPanel mypagePanel = new JPanel();
         box.setBackground(new Color(246, 246, 246));
-        box.setBounds(0,0,930,850);
-        //frame.setSize(1200, 850);
-        //frame.getContentPane().add(mypagePanel, BorderLayout.EAST);
+
+        box.setBounds(0,0,943,781);
+
         box.setLayout(null);
         
-        RoundedPanel2 missionInProgress = new RoundedPanel2(32);
+        missionInProgress = new RoundedPanel2(32);
         missionInProgress.setBounds(29, 249, 420, 462);
         missionInProgress.setForeground(new Color(255, 255, 255));
         missionInProgress.setBackground(new Color(255, 255, 255));
@@ -124,33 +130,19 @@ public class Mypage extends MainPage{
         lblNewLabel_2_1.setBounds(147, 10, 129, 35);
         missionInProgress.add(lblNewLabel_2_1);
 	    
-	    CustomPanel panel = new CustomPanel();
-	    panel.setBackground(new Color(255, 255, 255));
-	    panel.setBounds(23, 56, 374, 107);
-	    missionInProgress.add(panel);
-	    panel.setLayout(null);
+	    showOngoingMission();
        
         RoundedPanel2 missionended = new RoundedPanel2(32);
         missionended.setBounds(476, 249, 420, 462);
         missionended.setForeground(new Color(255, 255, 255));
         missionended.setBackground(new Color(255, 255, 255));
-        box.add(missionended); // Add missionInProgress to mypagepanel
+        box.add(missionended);
         missionended.setLayout(null);
         
         JLabel lblNewLabel_2 = new JLabel("종료된 미션");
         lblNewLabel_2.setFont(new Font("나눔고딕", Font.BOLD, 20));
         lblNewLabel_2.setBounds(158, 10, 102, 35);
         missionended.add(lblNewLabel_2);
-        
-        JSeparator separator1 = new JSeparator();
-        separator1.setForeground(new Color(128, 128, 128));
-        separator1.setBounds(23, 264, 374, 1); // 위치와 크기 설정
-        missionended.add(separator1);
-       
-        JSeparator separator2 = new JSeparator();
-        separator2.setForeground(new Color(128, 128, 128));
-        separator2.setBounds(23, 162, 374, 1); // 위치와 크기 설정
-        missionended.add(separator2);
        
         JButton lblNewLabel = new JButton("");
         lblNewLabel.setBounds(388, 10, 149, 149);
@@ -175,10 +167,12 @@ public class Mypage extends MainPage{
         btnNewButton.setBorderPainted(false);
         box.add(btnNewButton);
         
+        
+        
         MainPage mp = new MainPage(true);
-        JPanel a = mp.globPan;
-        a.setLayout(null);
-        a.add(box); 
+        JPanel main = mp.globPan;
+        main.setLayout(null);
+        main.add(box); 
         
        // nav=mypagePanel;
         //setVisible(false);
@@ -198,8 +192,33 @@ public class Mypage extends MainPage{
     
     /**진행중인 미션을 보여주는 함수*/
     public void showOngoingMission() {
-    	//진행중인 미션을 보여주는 함수
+    	
+    	missionProgressPanel = new CustomPanel();
+	    missionProgressPanel.setBackground(new Color(255, 255, 255));
+	    missionProgressPanel.setBounds(23, 56, 374, 107);
+	    missionInProgress.add(missionProgressPanel);
+	    missionProgressPanel.setLayout(null);
+	    
+	    ongoingGroupName = new JLabel();
+	    ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
+	    ongoingGroupName.setText("돈 아껴서 부자되자");
+	    ongoingGroupName.setBounds(12, 10, 265, 35);
+	    missionProgressPanel.add(ongoingGroupName);
+	    
+    	int progressValue = 50;
+
+      
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setStringPainted(true); 
+        progressBar.setValue(progressValue); 
+        progressBar.setBounds(12, 55, 304, 30);
+
+        missionProgressPanel.add(progressBar);
+        missionProgressPanel.revalidate();
+        missionProgressPanel.repaint();
     }
+    
+    
     
     /** 완료된 미션을 보여주는 함수*/
     public void showFinishedMission() {

@@ -32,9 +32,12 @@ public class signUpPopUp {
 	private JPasswordField passwordField_1;
 	private JLabel idWarning;
 	private JLabel passwordWarning;
+	private JLabel passwordMatchWarning;
+	private JLabel passwordRuleWarning;
 	private JLabel nicknameWarning;
 	private String id;
-	private char[] password;
+	private String nickname;
+	private char[] passwordChar;
 	private JButton signUpButton;
 	
 	/**
@@ -51,6 +54,7 @@ public class signUpPopUp {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
+		frame.setLocationRelativeTo(null);
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 		
@@ -123,6 +127,14 @@ public class signUpPopUp {
 		pwInputPanel.add(passwordWarning);
 		passwordWarning.setVisible(false);
 		
+		passwordRuleWarning = new JLabel("비밀번호가 조건에 맞지 않습니다.");
+		passwordRuleWarning.setHorizontalAlignment(SwingConstants.LEFT);
+		passwordRuleWarning.setForeground(Color.RED);
+		passwordRuleWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+		passwordRuleWarning.setBounds(156, 2, 279, 35);
+		pwInputPanel.add(passwordRuleWarning);
+		passwordRuleWarning.setVisible(false);
+		
 		JPanel pwCheckPanel = new JPanel();
 		pwCheckPanel.setLayout(null);
 		pwCheckPanel.setBackground(Color.WHITE);
@@ -141,6 +153,13 @@ public class signUpPopUp {
 		passwordField_1.setBounds(0, 39, 461, 41);
 		pwCheckPanel.add(passwordField_1);
 		
+		passwordMatchWarning = new JLabel("비밀번호가 일치하지 않습니다.");
+		passwordMatchWarning.setHorizontalAlignment(SwingConstants.LEFT);
+		passwordMatchWarning.setForeground(Color.RED);
+		passwordMatchWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+		passwordMatchWarning.setBounds(156, 2, 247, 35);
+		pwCheckPanel.add(passwordMatchWarning);
+		passwordMatchWarning.setVisible(false);
 		/*
 		 닉네임 패널
 		 */
@@ -179,8 +198,18 @@ public class signUpPopUp {
 		signUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				id = idTextField.getText();
-                password = passwordField.getPassword();
+                passwordChar = passwordField.getPassword();
+                nickname = nicknameTextField.getText();
+                String password = new String(passwordChar);
                 checkValue();
+                
+                if(checkValidPassword(password)) {
+                	signUp(id, password, nickname);
+                }
+                else {
+                	if(password.length()!=0)
+                		passwordRuleWarning.setVisible(true);
+                }
                 
                 // 여기에서 입력된 아이디와 비밀번호를 처리
                 // 예를 들어, 데이터베이스에 저장하거나 작업 수행
@@ -235,10 +264,30 @@ public class signUpPopUp {
 		}
 		else
 			passwordWarning.setVisible(false);
+		
+		//비밀번호 확인 코드
+		char[] passwordChars1 = passwordField.getPassword();
+		char[] passwordChars2 = passwordField_1.getPassword();
+
+		String password1 = new String(passwordChars1);
+		String password2 = new String(passwordChars2);
+		
+		if (!password1.equals(password2)) {
+		    passwordMatchWarning.setVisible(true);
+		} else {
+		    passwordMatchWarning.setVisible(false);
+		}
+		
 		if(nicknameTextField.getText().trim().length()==0) {
 	         nicknameWarning.setVisible(true);
 		}
 		else
 			nicknameWarning.setVisible(false);
+	}
+	
+	private boolean checkValidPassword(String password) {
+	    // Password should be 16 characters or fewer and contain a combination of letters, special characters, and numbers
+		String passwordRegex = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*()-_=+])[0-9a-zA-Z!@#$%^&*()-_=+]{1,16}$";
+	    return password.matches(passwordRegex);
 	}
 }
