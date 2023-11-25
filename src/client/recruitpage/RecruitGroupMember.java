@@ -97,7 +97,7 @@ public class RecruitGroupMember extends MainPage{
 	private void initializeGroupRecruitment() {
         groupRecruitment = new JPanel();
         groupRecruitment.setBackground(new Color(246, 246, 246));
-        groupRecruitment.setBounds(0, 0, 930, 850);
+        groupRecruitment.setBounds(0, 0, 950, 850);
         groupRecruitment.setLayout(null);
 		
         JButton missionRoomCreate = new JButton("");
@@ -165,14 +165,14 @@ public class RecruitGroupMember extends MainPage{
         backButton.setBackground(new Color(246, 246, 246));
         backButton.setBorderPainted(false);
         backButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/backButton.png"));
-        backButton.setBounds(855, 690, 30, 40);
+        backButton.setBounds(875, 725, 30, 40);
         groupRecruitment.add(backButton);
         
         JButton nextButton = new JButton("");
         nextButton.setBackground(new Color(246, 246, 246));
         nextButton.setBorderPainted(false);
         nextButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/nextButton.png"));
-        nextButton.setBounds(885, 690, 30, 40);
+        nextButton.setBounds(905, 725, 30, 40);
         groupRecruitment.add(nextButton);
 	}
    
