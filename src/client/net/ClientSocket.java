@@ -124,6 +124,16 @@ public class ClientSocket extends Thread{
         writeQueue.add(Request.toByteBuffer(request));
     }
 
+    public static boolean getResult() {
+        while (true) {
+            if (!readQueue.isEmpty()) {
+                JSONObject data = readQueue.poll().getData();
+
+                return Integer.parseInt(data.get("resultType").toString()) == ResultType.SUCCESS.getCode();
+            }
+        }
+    }
+
     public static boolean login(String id, String pw) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);
