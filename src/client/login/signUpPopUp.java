@@ -20,6 +20,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.DropMode;
 
+/**
+ *
+ * 회원가입 팝업 클래스*/
 public class signUpPopUp {
 
 	private JFrame frame;
@@ -29,12 +32,17 @@ public class signUpPopUp {
 	private JPasswordField passwordField_1;
 	private JLabel idWarning;
 	private JLabel passwordWarning;
+	private JLabel passwordMatchWarning;
+	private JLabel passwordRuleWarning;
 	private JLabel nicknameWarning;
 	private String id;
-	private char[] password;
+	private String nickname;
+	private char[] passwordChar;
 	private JButton signUpButton;
 	
 	/**
+	 * 
+	 * 회원가입 팝업 띄우는 함수
 	 * @wbp.parser.entryPoint
 	 */
 	public void createSignPopUp() {
@@ -46,12 +54,14 @@ public class signUpPopUp {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
+		frame.setLocationRelativeTo(null);
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 		
 		JLabel signUpTitle = new JLabel("회원가입");
-		signUpTitle.setFont(new Font("AppleSDGothicNeoB00", Font.PLAIN, 40));
-		signUpTitle.setBounds(205, 49, 139, 35);
+		signUpTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		signUpTitle.setFont(new Font("나눔고딕", Font.BOLD, 40));
+		signUpTitle.setBounds(179, 33, 176, 51);
 		panel.add(signUpTitle);
 		
 		/*
@@ -64,15 +74,15 @@ public class signUpPopUp {
 		idInputPanel.setLayout(null);
 		
 		JLabel idInput = new JLabel("아이디 입력");
-		idInput.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 22));
+		idInput.setFont(new Font("나눔고딕", Font.PLAIN, 22));
 		idInput.setBounds(0, 0, 117, 35);
 		idInput.setHorizontalAlignment(SwingConstants.CENTER);
 		idInputPanel.add(idInput);
 		
 		idWarning = new JLabel("* 아이디를 입력해주세요");
 		idWarning.setForeground(new Color(255, 0, 0));
-		idWarning.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 18));
-		idWarning.setBounds(130, 0, 178, 35);
+		idWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+		idWarning.setBounds(130, 0, 226, 35);
 		idWarning.setHorizontalAlignment(SwingConstants.LEFT);
 		idInputPanel.add(idWarning);
 		idWarning.setVisible(false);
@@ -90,8 +100,8 @@ public class signUpPopUp {
 		pwInputPanel.setLayout(null);
 		
 		JLabel pwInput = new JLabel("비밀번호 입력");
-		pwInput.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 22));
-		pwInput.setBounds(0, 0, 131, 35);
+		pwInput.setFont(new Font("나눔고딕", Font.PLAIN, 22));
+		pwInput.setBounds(0, 0, 144, 35);
 		pwInputPanel.add(pwInput);
 		
 		
@@ -99,8 +109,8 @@ public class signUpPopUp {
 		 패스워드 패널
 		 */
 		JLabel pwRule = new JLabel("- 16자 이내 영어, 숫자, 특수문자 조합으로 입력");
-		pwRule.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 15));
-		pwRule.setBounds(0, 96, 295, 15);
+		pwRule.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		pwRule.setBounds(0, 96, 344, 15);
 		pwInputPanel.add(pwRule);
 		
 		passwordField = new JPasswordField();
@@ -112,10 +122,18 @@ public class signUpPopUp {
 		passwordWarning = new JLabel("* 비밀번호를 입력해주세요");
 		passwordWarning.setHorizontalAlignment(SwingConstants.LEFT);
 		passwordWarning.setForeground(Color.RED);
-		passwordWarning.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 18));
-		passwordWarning.setBounds(132, 2, 195, 35);
+		passwordWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+		passwordWarning.setBounds(156, 2, 247, 35);
 		pwInputPanel.add(passwordWarning);
 		passwordWarning.setVisible(false);
+		
+		passwordRuleWarning = new JLabel("비밀번호가 조건에 맞지 않습니다.");
+		passwordRuleWarning.setHorizontalAlignment(SwingConstants.LEFT);
+		passwordRuleWarning.setForeground(Color.RED);
+		passwordRuleWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+		passwordRuleWarning.setBounds(156, 2, 279, 35);
+		pwInputPanel.add(passwordRuleWarning);
+		passwordRuleWarning.setVisible(false);
 		
 		JPanel pwCheckPanel = new JPanel();
 		pwCheckPanel.setLayout(null);
@@ -125,7 +143,7 @@ public class signUpPopUp {
 		
 		JLabel pwCheck = new JLabel("비밀번호 확인");
 		pwCheck.setHorizontalAlignment(SwingConstants.LEFT);
-		pwCheck.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 22));
+		pwCheck.setFont(new Font("나눔고딕", Font.PLAIN, 22));
 		pwCheck.setBounds(0, 0, 144, 35);
 		pwCheckPanel.add(pwCheck);
 		
@@ -135,6 +153,13 @@ public class signUpPopUp {
 		passwordField_1.setBounds(0, 39, 461, 41);
 		pwCheckPanel.add(passwordField_1);
 		
+		passwordMatchWarning = new JLabel("비밀번호가 일치하지 않습니다.");
+		passwordMatchWarning.setHorizontalAlignment(SwingConstants.LEFT);
+		passwordMatchWarning.setForeground(Color.RED);
+		passwordMatchWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+		passwordMatchWarning.setBounds(156, 2, 247, 35);
+		pwCheckPanel.add(passwordMatchWarning);
+		passwordMatchWarning.setVisible(false);
 		/*
 		 닉네임 패널
 		 */
@@ -147,7 +172,7 @@ public class signUpPopUp {
 		
 		JLabel nicknameInput = new JLabel("닉네임 입력");
 		nicknameInput.setHorizontalAlignment(SwingConstants.LEFT);
-		nicknameInput.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 22));
+		nicknameInput.setFont(new Font("나눔고딕", Font.PLAIN, 22));
 		nicknameInput.setBounds(0, 0, 144, 35);
 		nicknamePanel.add(nicknameInput);
 		
@@ -160,8 +185,8 @@ public class signUpPopUp {
 		nicknameWarning = new JLabel("* 닉네임을 입력해주세요");
 		nicknameWarning.setHorizontalAlignment(SwingConstants.LEFT);
 		nicknameWarning.setForeground(Color.RED);
-		nicknameWarning.setFont(new Font("AppleSDGothicNeoM00", Font.PLAIN, 18));
-		nicknameWarning.setBounds(109, 0, 188, 35);
+		nicknameWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+		nicknameWarning.setBounds(118, 2, 235, 35);
 		nicknamePanel.add(nicknameWarning);
 		nicknameWarning.setVisible(false);
 		
@@ -173,8 +198,18 @@ public class signUpPopUp {
 		signUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				id = idTextField.getText();
-                password = passwordField.getPassword();
+                passwordChar = passwordField.getPassword();
+                nickname = nicknameTextField.getText();
+                String password = new String(passwordChar);
                 checkValue();
+                
+                if(checkValidPassword(password)) {
+                	signUp(id, password, nickname);
+                }
+                else {
+                	if(password.length()!=0)
+                		passwordRuleWarning.setVisible(true);
+                }
                 
                 // 여기에서 입력된 아이디와 비밀번호를 처리
                 // 예를 들어, 데이터베이스에 저장하거나 작업 수행
@@ -211,11 +246,13 @@ public class signUpPopUp {
         frame.setVisible(true);
 	}
 	
+	/** 소켓과 연결하는 함수*/
 	private void signUp(String id, String pw, String nickname) {
 		//return false;
 		//이 안에서 소켓에서 받아온거를 트루펄스해서 여기서 경고문구까지 띄우기
 	}
 	
+	/** 아이디필드와 비밀번호필드가 잘 채워져있는지 검사하는 메소드*/
 	private void checkValue() {
 		if(idTextField.getText().trim().length()==0) {
 	         idWarning.setVisible(true);
@@ -227,10 +264,30 @@ public class signUpPopUp {
 		}
 		else
 			passwordWarning.setVisible(false);
+		
+		//비밀번호 확인 코드
+		char[] passwordChars1 = passwordField.getPassword();
+		char[] passwordChars2 = passwordField_1.getPassword();
+
+		String password1 = new String(passwordChars1);
+		String password2 = new String(passwordChars2);
+		
+		if (!password1.equals(password2)) {
+		    passwordMatchWarning.setVisible(true);
+		} else {
+		    passwordMatchWarning.setVisible(false);
+		}
+		
 		if(nicknameTextField.getText().trim().length()==0) {
 	         nicknameWarning.setVisible(true);
 		}
 		else
 			nicknameWarning.setVisible(false);
+	}
+	
+	private boolean checkValidPassword(String password) {
+	    // Password should be 16 characters or fewer and contain a combination of letters, special characters, and numbers
+		String passwordRegex = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*()-_=+])[0-9a-zA-Z!@#$%^&*()-_=+]{1,16}$";
+	    return password.matches(passwordRegex);
 	}
 }

@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
+/**
+* JTextField의 모서리를 둥글게 하기 위해서 만든 클래스 
+*/
 public class RoundCornerTextField extends JTextField{
 	 private int arc = 20; // 원하는 모서리 반경 설정
 

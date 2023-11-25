@@ -9,18 +9,17 @@ import server.user.User;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 public class RequestHandler implements Handler{
     private static final int READING = 0, SENDING = 1;
@@ -94,7 +93,6 @@ public class RequestHandler implements Handler{
         }
         else {
             ByteBuffer data = writeQueue.poll();
-            data.flip();
             try{
                 socketChannel.write(data);
             } catch (IOException e) {
@@ -115,9 +113,11 @@ public class RequestHandler implements Handler{
 
     private Request getRequest() {
         ByteBuffer headerBuffer = ByteBuffer.allocate(5);
+
         try {
             int readCount = socketChannel.read(headerBuffer);
             if (readCount > 0) {
+
                 headerBuffer.flip();
 
                 byte type = headerBuffer.get();
@@ -126,30 +126,39 @@ public class RequestHandler implements Handler{
                 ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
                 socketChannel.read(bodyBuffer);
                 bodyBuffer.flip();
-                String body = new String(bodyBuffer.array()).trim();
+                String body = new String(bodyBuffer.array());
 
                 return new Request(type, body);
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            selectionKey.cancel();
         }
         return null;
     }
 
     private void login(Request request) {
-        JSONObject requsetData = request.getData();
-        String id = (String)requsetData.get("id");
-        String password = (String)requsetData.get("password");
-        JSONObject userInfo = ServerDBManager.getUser(id, password);
-        User user = null;
+        JSONObject requestData = request.getData();
+        String id = (String)requestData.get("id");
+        String password = (String)requestData.get("password");
+        JSONObject result = ServerDBManager.getUser(id, password);
 
-        this.user = user;
+//        if(ResultType.of((Integer) result.get("resultType")).equals(ResultType.SUCCESS)) {
+//            List<Integer> gidList = Arrays.stream(((String)result.get("groups")).split(",")).map(Integer::parseInt).toList();
+//            this.user = new User((Integer)result.get("uid"), gidList, this);
+//        }
+
+        addTask(Request.toByteBuffer(RequestType.LOGIN, result));
     }
 
     private void signUp(Request request) {
-        String id = null, password = null, nickname = null;
+        JSONObject requestData = request.getData();
+        String id = (String)requestData.get("id");
+        String password = (String)requestData.get("password");
+        String nickname = (String)requestData.get("nickname");
         JSONObject result = ServerDBManager.addUser(id, password, nickname);
+
+        addTask(Request.toByteBuffer(RequestType.SIGNUP, result));
     }
 
     private void sendData(Request request) {
@@ -165,7 +174,7 @@ public class RequestHandler implements Handler{
 
     private void enterGroup(Request request) {
         int uid = 0, gid = 0;
-        ResultType resultType = ServerDBManager.enterGroup(uid, gid);
+        ResultType resultType = ServerDBManager.enterGroup(uid, gid, new String());
     }
 
     private void chat(Request request) {

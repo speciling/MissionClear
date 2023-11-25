@@ -4,6 +4,7 @@ import client.db.ClientDBManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import server.db.ResultType;
+import server.service.Request;
 import server.service.RequestType;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class ClientSocket extends Thread{
     private final int PORT;
     private SocketChannel socket;
     private static final BlockingQueue<ByteBuffer> writeQueue = new LinkedBlockingQueue<>();
-    private static final BlockingQueue<JSONObject> readQueue = new LinkedBlockingQueue<>();
+    private static final BlockingQueue<Request> readQueue = new LinkedBlockingQueue<>();
 
 
 
@@ -44,9 +45,8 @@ public class ClientSocket extends Thread{
             while (true) {
                 if (!writeQueue.isEmpty()) {
                     ByteBuffer data = writeQueue.poll();
-                    data.flip();
                     try {
-                        this.socket.write(data);
+                        socket.write(data);
                     } catch (IOException e) {
                         try {
                             this.socket.close();
@@ -58,13 +58,13 @@ public class ClientSocket extends Thread{
             }
         });
 
-        writeThread.run();
+        writeThread.start();
 
         while (true) {
-            JSONObject response = getResponse();
+            Request response = getResponse();
             if (response == null)
                 continue;
-            switch (RequestType.of((byte)response.get("requestType"))){
+            switch (response.type){
                 case LOGIN:
                 case SIGNUP:
                 case CHANGEPFP:
@@ -74,13 +74,13 @@ public class ClientSocket extends Thread{
                     readQueue.add(response);
                     break;
                 case SENDDATA:
-                    ClientDBManager.saveInitData(response);
+                    ClientDBManager.saveInitData(response.getData());
                     break;
                 case CHAT:
-                    ClientDBManager.saveChatMessage(response);
+                    ClientDBManager.saveChatMessage(response.getData());
                     break;
                 case CERTIFYMISSION:
-                    ClientDBManager.saveCertifyPicture(response);
+                    ClientDBManager.saveCertifyPicture(response.getData());
                     break;
             }
         }
@@ -88,42 +88,36 @@ public class ClientSocket extends Thread{
 
     }
 
-    private JSONObject getResponse() {
+    private Request getResponse() {
         JSONObject response;
         ByteBuffer headerBuffer = ByteBuffer.allocate(5);
         try {
-            this.socket.read(headerBuffer);
-            headerBuffer.flip();
-            byte type = headerBuffer.get();
-            int length = headerBuffer.getInt();
+            int readCount = socket.read(headerBuffer);
+            if (readCount > 0) {
 
-            ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
-            socket.read(bodyBuffer);
-            bodyBuffer.flip();
-            String body = new String(bodyBuffer.array()).trim();
+                headerBuffer.flip();
 
-            JSONParser parser = new JSONParser();
-            response = (JSONObject) parser.parse(body);
-            response.put("responseType", type);
+                byte type = headerBuffer.get();
+                int length = headerBuffer.getInt();
 
-            return response;
+                ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
+                socket.read(bodyBuffer);
+                bodyBuffer.flip();
+                String body = new String(bodyBuffer.array());
+                System.out.println(body);
+
+                return new Request(type, body);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+        return null;
     }
 
-    private static void send(RequestType requestType ,JSONObject request) {
-        byte[] body = request.toJSONString().getBytes();
-
-        ByteBuffer requset = ByteBuffer.allocate(body.length+5);
-        requset.put((byte) RequestType.LOGIN.getCode());
-        requset.putInt(body.length);
-        requset.put(body);
-        requset.flip();
-
-        writeQueue.add(requset);
+    private static void send(Request request) {
+        writeQueue.add(Request.toByteBuffer(request));
     }
 
     public static boolean login(String id, String pw) {
@@ -131,12 +125,10 @@ public class ClientSocket extends Thread{
         jsonObject.put("id", id);
         jsonObject.put("password", pw);
 
-        send(RequestType.LOGIN, jsonObject);
-
+        send(new Request((byte)RequestType.LOGIN.getCode(), jsonObject.toJSONString()));
         while (true) {
             if (!readQueue.isEmpty()) {
-                Integer result = (Integer) readQueue.poll().get("resultType");
-                return result == ResultType.SUCCESS.getCode();
+                return ResultType.of((Integer) readQueue.poll().getData().get("resultType")).equals(ResultType.SUCCESS);
             }
         }
     }
@@ -147,11 +139,11 @@ public class ClientSocket extends Thread{
         jsonObject.put("password", pw);
         jsonObject.put("nickname", nickname);
 
-        send(RequestType.LOGIN, jsonObject);
+        send(new Request((byte) RequestType.LOGIN.getCode(), jsonObject.toJSONString()));
 
         while (true) {
             if (!readQueue.isEmpty()) {
-                Integer result = (Integer) readQueue.poll().get("resultType");
+                Integer result = (Integer) readQueue.poll().getData().get("resultType");
                 return result == ResultType.SUCCESS.getCode();
             }
         }

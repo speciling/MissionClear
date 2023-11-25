@@ -21,6 +21,8 @@ public class ServerDBManager extends DBManager{
             }
             conn = DriverManager.getConnection("jdbc:sqlite:missioncleardata/server/server.db");
 
+            dropTable("USER");
+            dropTable("GROUPS");
             createTable("USER", """
                     CREATE TABLE IF NOT EXISTS USER (uid integer primary key, id string not null unique, 
                     password string not null, nickname string not null, pfp string, groups string default '')""");
@@ -30,7 +32,7 @@ public class ServerDBManager extends DBManager{
                     title string not null, description string not null, mission string not null, 
                     capacity integer not null, category integer not null, usercnt integer default 1, 
                     deadline string not null, startDate string not null, endDate string not null, 
-                    password string, users string not null)""");
+                    password string default '', users string not null)""");
 
 
         } catch (SQLException e) {
@@ -55,7 +57,7 @@ public class ServerDBManager extends DBManager{
     }
 
     // 성공시 SUCCESS, 아이디나 비밀번호가 잘못됐으면 WARNING, 에러 발생시 FAILURE
-    public static  JSONObject getUser(int uid) {
+    public static JSONObject getUser(int uid) {
         String sql = String.format("""
                 SELECT uid, groups, nickname, pfp FROM USER WHERE uid=%s""", uid);
 
@@ -92,9 +94,10 @@ public class ServerDBManager extends DBManager{
     }
 
     public static void main(String[] args) {
+        ServerDBManager.init();
         JSONObject groupInfo = new JSONObject();
         addUser("t5", "tt", "");
-        groupInfo.put("title", "t1");
+        addUser("t4", "tt", "");
         groupInfo.put("title", "t1");
         groupInfo.put("description", "t1");
         groupInfo.put("mission", "t1");
@@ -103,11 +106,20 @@ public class ServerDBManager extends DBManager{
         groupInfo.put("deadline", "2023-11-15");
         groupInfo.put("startDate", "");
         groupInfo.put("endDate", "");
-        groupInfo.put("password", null);
+        groupInfo.put("password", "");
         groupInfo.put("uid", 1);
         System.out.println(createGroup(groupInfo));
-        System.out.println(executeQuery("SELECT * FROM USER WHERE uid=1"));
-        System.out.println(executeQuery("SELECT * FROM GROUPS WHERE gid=3"));
+//        System.out.println(enterGroup(2, 1, ""));
+
+        JSONObject chatData = new JSONObject();
+        chatData.put("uid", 1);
+        chatData.put("gid", 1);
+        chatData.put("message", "hi");
+        chatData.put("time", "2023-11-18");
+        System.out.println(saveChatMessage(chatData));
+
+//        System.out.println(executeQuery("SELECT * FROM USER WHERE uid=2"));
+//        System.out.println(executeQuery("SELECT * FROM GROUPS WHERE gid=1"));
     }
 
     public static JSONObject createGroup(JSONObject groupInfo){
@@ -137,16 +149,40 @@ public class ServerDBManager extends DBManager{
             Integer gid = (Integer) executeQuery(sql).get("last_insert_rowid()");
 
             // user의 groups에 group 추가
-            sql = "SELECT groups FROM USER WHERE uid=" + uid;
-            String groups = (String) executeQuery(sql).get("groups");
-            groups += gid+",";
-            sql = String.format("UPDATE USER SET groups='%s' WHERE uid=%d", groups, uid);
+            sql = String.format("UPDATE USER SET groups=groups+'%s'+',' WHERE uid=%d", gid, uid);
             executeSQL(sql);
+
+            // 채팅, 미션인증 진행도 db 생성
+            sql = String.format("""
+                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message chat not null, time string not null)""", gid);
+            createTable("G"+gid+"CHAT", sql);
+            sql = String.format("""
+                    CREATE TABLE IF NOT EXISTS G%sPROGRESS (uid integer not null, date string not null)""", gid);
+            createTable("G"+gid+"PROGRESS", sql);
         }
         return result;
     }
 
-    public static ResultType enterGroup(int uid, int gid){
+    public static ResultType enterGroup(int uid, int gid, String pw){
+        String sql = String.format("""
+                SELECT users FROM GROUPS WHERE (gid=%d AND password='%s' AND usercnt<capacity)""", gid, pw);
+        String users = ((String)executeQuery(sql).get("users"));
+
+        if(users != null) {
+            users += uid+",";
+            sql = String.format("""
+                    UPDATE GROUPS SET users='%s' WHERE gid=%d""", users, gid);
+            executeSQL(sql);
+
+            sql = String.format("""
+                    UPDATE GROUPS SET usercnt=usercnt+1 WHERE gid='%s'""", gid);
+            executeSQL(sql);
+
+            sql = String.format("""
+                    UPDATE USER SET groups=groups+'%s'+',' WHERE uid=%d""", gid, uid);
+            executeSQL(sql);
+            return ResultType.SUCCESS;
+        }
 
         return ResultType.WARNING;
     }

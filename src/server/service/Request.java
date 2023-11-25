@@ -6,6 +6,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -19,10 +22,9 @@ public class Request {
 
     public Request(byte type, String body) {
         this.type = RequestType.of(type);
-        this.bodyString = body;
         JSONParser parser = new JSONParser();
         try {
-            parser.parse(bodyString);
+            data = (JSONObject) parser.parse(body);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -30,8 +32,28 @@ public class Request {
 
     public JSONObject getData() { return data; }
 
-    public static ByteBuffer getPacket(RequestType type, JSONObject data) {
-        return null;
+    public static ByteBuffer toByteBuffer(RequestType type, JSONObject data) {
+        String jsonString = data.toJSONString();
+        byte[] bytes = jsonString.getBytes();
+        ByteBuffer bf = ByteBuffer.allocate(bytes.length+5);
+        bf.put((byte)type.getCode());
+        bf.putInt(bytes.length);
+        bf.put(bytes);
+        bf.flip();
+        return bf;
+    }
+
+    public static ByteBuffer toByteBuffer(Request request) {
+        RequestType type = request.type;
+        JSONObject data = request.getData();
+        String jsonString = data.toJSONString();
+        byte[] bytes = jsonString.getBytes();
+        ByteBuffer bf = ByteBuffer.allocate(bytes.length+5);
+        bf.put((byte)type.getCode());
+        bf.putInt(bytes.length);
+        bf.put(bytes);
+        bf.flip();
+        return bf;
     }
 
 }
