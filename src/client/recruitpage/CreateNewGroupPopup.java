@@ -25,11 +25,19 @@ import javax.swing.ImageIcon;
 
 
 // 모서리가 둥근 JPanel을 생성하는 클래스
-
+/**
+ * Class representing the popup window for creating a new group.
+ * This class provides a user interface for users to enter details and create a new group.
+ */
 public class CreateNewGroupPopup {
 	private RecruitGroupMember recruitGroupMember; // RecruitGroupMember 참조 추가
 
     // 생성자 수정
+	/**
+     * @wbp.parser.constructor
+     * Constructor for CreateNewGroupPopup with a reference to RecruitGroupMember.
+     * @param recruitGroupMember A reference to the RecruitGroupMember.
+     */
     public CreateNewGroupPopup(RecruitGroupMember recruitGroupMember) {
         this.recruitGroupMember = recruitGroupMember;
         initialize();
@@ -41,30 +49,32 @@ public class CreateNewGroupPopup {
     private JTextField recruitmentDeadlineYear;
     private JTextField recruitmentDeadlineMonth;
     private JTextField recruitmentDeadlineDay;
-    private JTextField startDateYear;
-    private JTextField startDateMonth;
-    private JTextField startDateDay;
-    private JTextField endDateYear;
-    private JTextField endDateMonth;
-    private JTextField endDateDay;
+    private JTextField recruitmentStartDateYear;
+    private JTextField recruitmentStartDateMonth;
+    private JTextField recruitmentStartDateDay;
+    private JTextField recruitmentEndDateYear;
+    private JTextField recruitmentEndDateMonth;
+    private JTextField recruitmentEndDateDay;
     private JTextField roomPassword;
 
     /**
-     * Create the application.
+     * Default constructor for CreateNewGroupPopup.
      */
     public CreateNewGroupPopup() {
         initialize();
     }
 
     /**
-     * Initialize the contents of the frame.
+     * Initializes the contents of the frame.
+     * This method sets up the layout and UI components of the popup.
      */
-
+    
     public void initialize() {
     	setFrame(new JFrame());
     	getFrame().setSize(691, 760);
     	getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	getFrame().getContentPane().setLayout(null);
+    	
     	
     	RoundedPanel createPopup = new RoundedPanel(30); // 모서리 반경을 20으로 설정
     	createPopup.setBounds(0, 0, 675, 721);
@@ -170,52 +180,52 @@ public class CreateNewGroupPopup {
     	activityPeriod.setBounds(56, 503, 80, 35);
     	createPopup.add(activityPeriod);
     	
-    	startDateYear = new JTextField();
-    	startDateYear.setColumns(10);
-    	startDateYear.setBorder(null);
-    	startDateYear.setBackground(new Color(237, 237, 237));
-    	startDateYear.setBounds(56, 541, 62, 32);
-    	createPopup.add(startDateYear);
+    	recruitmentStartDateYear = new JTextField();
+    	recruitmentStartDateYear.setColumns(10);
+    	recruitmentStartDateYear.setBorder(null);
+    	recruitmentStartDateYear.setBackground(new Color(237, 237, 237));
+    	recruitmentStartDateYear.setBounds(56, 541, 62, 32);
+    	createPopup.add(recruitmentStartDateYear);
     	
-    	startDateMonth = new JTextField();
-    	startDateMonth.setColumns(10);
-    	startDateMonth.setBorder(null);
-    	startDateMonth.setBackground(new Color(237, 237, 237));
-    	startDateMonth.setBounds(128, 541, 62, 32);
-    	createPopup.add(startDateMonth);
+    	recruitmentStartDateMonth = new JTextField();
+    	recruitmentStartDateMonth.setColumns(10);
+    	recruitmentStartDateMonth.setBorder(null);
+    	recruitmentStartDateMonth.setBackground(new Color(237, 237, 237));
+    	recruitmentStartDateMonth.setBounds(128, 541, 62, 32);
+    	createPopup.add(recruitmentStartDateMonth);
     	
-    	startDateDay = new JTextField();
-    	startDateDay.setColumns(10);
-    	startDateDay.setBorder(null);
-    	startDateDay.setBackground(new Color(237, 237, 237));
-    	startDateDay.setBounds(200, 541, 62, 32);
-    	createPopup.add(startDateDay);
+    	recruitmentStartDateDay = new JTextField();
+    	recruitmentStartDateDay.setColumns(10);
+    	recruitmentStartDateDay.setBorder(null);
+    	recruitmentStartDateDay.setBackground(new Color(237, 237, 237));
+    	recruitmentStartDateDay.setBounds(200, 541, 62, 32);
+    	createPopup.add(recruitmentStartDateDay);
     	
     	JLabel activityPeriod_1 = new JLabel("~");
     	activityPeriod_1.setFont(new Font("나눔고딕", Font.PLAIN, 19));
     	activityPeriod_1.setBounds(274, 539, 20, 35);
     	createPopup.add(activityPeriod_1);
     	
-    	endDateYear = new JTextField();
-    	endDateYear.setColumns(10);
-    	endDateYear.setBorder(null);
-    	endDateYear.setBackground(new Color(237, 237, 237));
-    	endDateYear.setBounds(300, 541, 62, 32);
-    	createPopup.add(endDateYear);
+    	recruitmentEndDateYear = new JTextField();
+    	recruitmentEndDateYear.setColumns(10);
+    	recruitmentEndDateYear.setBorder(null);
+    	recruitmentEndDateYear.setBackground(new Color(237, 237, 237));
+    	recruitmentEndDateYear.setBounds(300, 541, 62, 32);
+    	createPopup.add(recruitmentEndDateYear);
     	
-    	endDateMonth = new JTextField();
-    	endDateMonth.setColumns(10);
-    	endDateMonth.setBorder(null);
-    	endDateMonth.setBackground(new Color(237, 237, 237));
-    	endDateMonth.setBounds(371, 541, 62, 32);
-    	createPopup.add(endDateMonth);
+    	recruitmentEndDateMonth = new JTextField();
+    	recruitmentEndDateMonth.setColumns(10);
+    	recruitmentEndDateMonth.setBorder(null);
+    	recruitmentEndDateMonth.setBackground(new Color(237, 237, 237));
+    	recruitmentEndDateMonth.setBounds(371, 541, 62, 32);
+    	createPopup.add(recruitmentEndDateMonth);
     	
-    	endDateDay = new JTextField();
-    	endDateDay.setColumns(10);
-    	endDateDay.setBorder(null);
-    	endDateDay.setBackground(new Color(237, 237, 237));
-    	endDateDay.setBounds(442, 541, 62, 32);
-    	createPopup.add(endDateDay);
+    	recruitmentEndDateDay = new JTextField();
+    	recruitmentEndDateDay.setColumns(10);
+    	recruitmentEndDateDay.setBorder(null);
+    	recruitmentEndDateDay.setBackground(new Color(237, 237, 237));
+    	recruitmentEndDateDay.setBounds(442, 541, 62, 32);
+    	createPopup.add(recruitmentEndDateDay);
     	
     	JLabel lblNewLabel_1_1_1_2_2_1 = new JLabel("비밀방 설정(비밀번호 4자리 입력)");
     	lblNewLabel_1_1_1_2_2_1.setFont(new Font("나눔고딕", Font.PLAIN, 19));
@@ -252,8 +262,30 @@ public class CreateNewGroupPopup {
     	
     	creationComplete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	AddMissionRoom addMissionRoom = new AddMissionRoom();
-                addMissionRoom.initialize();
+            	// AddMissionRoom 객체를 생성하면서 제목을 전달
+            	
+            	String missionTitle = title.getText();
+            	String missionDescription = description.getText(); // Fetch the mission description text
+            	int deadlineYear = Integer.parseInt(recruitmentDeadlineYear.getText());
+                int deadlineMonth = Integer.parseInt(recruitmentDeadlineMonth.getText());
+                int deadlineDay = Integer.parseInt(recruitmentDeadlineDay.getText());
+                
+                int startDateYear = Integer.parseInt(recruitmentStartDateYear.getText());
+                int startDateMonth = Integer.parseInt(recruitmentStartDateMonth.getText());
+                int startDateDay = Integer.parseInt(recruitmentStartDateDay.getText());
+                
+                int endDateYear = Integer.parseInt(recruitmentEndDateYear.getText());
+                int endDateMonth = Integer.parseInt(recruitmentEndDateMonth.getText());
+                int endDateDay = Integer.parseInt(recruitmentEndDateDay.getText());
+                
+                String selectedCapacity = (String) recruitmentCapacity.getSelectedItem();
+                int recruitmentCapacityValue = Integer.parseInt(selectedCapacity);
+                
+                String selectedCategory = (String) category.getSelectedItem();
+                
+            	
+                AddMissionRoom addMissionRoom = new AddMissionRoom(missionTitle, missionDescription, deadlineYear, deadlineMonth, deadlineDay, recruitmentCapacityValue, selectedCategory, startDateYear, startDateMonth, startDateDay, endDateYear, endDateMonth, endDateDay);
+                addMissionRoom.initialize(missionTitle, missionDescription, deadlineYear, deadlineMonth, deadlineDay, recruitmentCapacityValue, selectedCategory, startDateYear, startDateMonth, startDateDay, endDateYear, endDateMonth, endDateDay);
 
                 // RecruitGroupMember의 frame에 패널 추가
                 recruitGroupMember.addToGroupRecruitment(addMissionRoom.getPanel());
@@ -262,10 +294,17 @@ public class CreateNewGroupPopup {
             }
         });    }
 
+    /**
+     * Gets the frame of the popup window.
+     * @return The JFrame object of this popup.
+     */
 	public JFrame getFrame() {
 		return frame;
 	}
-
+	/**
+     * Sets the frame of the popup window.
+     * @param frame The JFrame object to set for this popup.
+     */
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
 	}

@@ -30,6 +30,11 @@ public class Request {
         }
     }
 
+    public Request(RequestType requestType, JSONObject data) {
+        this.type = requestType;
+        this.data = data;
+    }
+
     public JSONObject getData() { return data; }
 
     public static ByteBuffer toByteBuffer(RequestType type, JSONObject data) {
