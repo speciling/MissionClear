@@ -60,7 +60,7 @@ public class RecruitGroupMember extends MainPage{
 	private JPanel groupRecruitment;
 
 	public JPanel get() {
-	    return groupRecruitment;
+	    return a;
 	}
 
 	/**

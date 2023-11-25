@@ -36,7 +36,7 @@ import javax.swing.JTextField;
  */
 class CustomPanel extends JPanel {
 
-    @Override
+	@Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -78,20 +78,21 @@ class RoundedPanel2 extends JPanel {
  */
 public class Mypage extends MainPage{
 
+
+	public JPanel box;
+
 	public static void main(String [] args) {
 		  Mypage mp = new Mypage(true);
 	   }
-	private JPanel box;
+
 	public CustomPanel missionProgressPanel;
 	private JTextField ongoingGroupName;
 	public RoundedPanel2 missionInProgress;
-    
-    /**화면전환을 위한 패널값 반환
-     * 
-     * @return a
-     */
+
+
     public JPanel get() {
     	return box;
+
     }
 	
     /**
@@ -111,9 +112,9 @@ public class Mypage extends MainPage{
         
         //JPanel mypagePanel = new JPanel();
         box.setBackground(new Color(246, 246, 246));
-        box.setBounds(0,0,930,850);
-        //frame.setSize(1200, 850);
-        //frame.getContentPane().add(mypagePanel, BorderLayout.EAST);
+
+        box.setBounds(0,0,943,781);
+
         box.setLayout(null);
         
         missionInProgress = new RoundedPanel2(32);
@@ -141,18 +142,6 @@ public class Mypage extends MainPage{
         lblNewLabel_2.setFont(new Font("나눔고딕", Font.BOLD, 20));
         lblNewLabel_2.setBounds(158, 10, 102, 35);
         missionended.add(lblNewLabel_2);
-        
-        /*
-        JSeparator separator1 = new JSeparator();
-        separator1.setForeground(new Color(128, 128, 128));
-        separator1.setBounds(23, 264, 374, 1); // 위치와 크기 설정
-        missionended.add(separator1);
-       
-        JSeparator separator2 = new JSeparator();
-        separator2.setForeground(new Color(128, 128, 128));
-        separator2.setBounds(23, 162, 374, 1); // 위치와 크기 설정
-        missionended.add(separator2);
-        */
        
         JButton lblNewLabel = new JButton("");
         lblNewLabel.setBounds(388, 10, 149, 149);
