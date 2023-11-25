@@ -80,18 +80,19 @@ public class Mypage extends MainPage{
 
 
 	public JPanel box;
-
-	public static void main(String [] args) {
-		  Mypage mp = new Mypage(true);
-	   }
+	JPanel main;
+	
+	//public static void main(String [] args) {
+	//	  Mypage mp = new Mypage(true);
+	//   }
 
 	public CustomPanel missionProgressPanel;
-	private JTextField ongoingGroupName;
+	private JLabel ongoingGroupName;
 	public RoundedPanel2 missionInProgress;
 
 
     public JPanel get() {
-    	return box;
+    	return main;
 
     }
 	
@@ -168,10 +169,10 @@ public class Mypage extends MainPage{
         
         
         
-        //MainPage mp = new MainPage(true);
-        //JPanel a = mp.globPan;
-        //a.setLayout(null);
-        //a.add(box); 
+        MainPage mp = new MainPage(true);
+        JPanel main = mp.globPan;
+        main.setLayout(null);
+        main.add(box); 
         
        // nav=mypagePanel;
         //setVisible(false);
@@ -198,12 +199,11 @@ public class Mypage extends MainPage{
 	    missionInProgress.add(missionProgressPanel);
 	    missionProgressPanel.setLayout(null);
 	    
-	    ongoingGroupName = new JTextField();
+	    ongoingGroupName = new JLabel();
 	    ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
 	    ongoingGroupName.setText("돈 아껴서 부자되자");
 	    ongoingGroupName.setBounds(12, 10, 265, 35);
 	    missionProgressPanel.add(ongoingGroupName);
-	    ongoingGroupName.setColumns(10);
 	    
     	int progressValue = 50;
 
