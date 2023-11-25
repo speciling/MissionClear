@@ -102,7 +102,9 @@ public class RequestHandler implements Handler{
     }
 
     private void closeSocket() {
-        this.user.disconnect();
+        if (user != null){
+            this.user.disconnect();
+        }
         this.selectionKey.cancel();
         try {
             this.socketChannel.close();
@@ -132,7 +134,7 @@ public class RequestHandler implements Handler{
             }
 
         } catch (IOException e) {
-            selectionKey.cancel();
+            closeSocket();
         }
         return null;
     }
@@ -143,12 +145,35 @@ public class RequestHandler implements Handler{
         String password = (String)requestData.get("password");
         JSONObject result = ServerDBManager.getUser(id, password);
 
-//        if(ResultType.of((Integer) result.get("resultType")).equals(ResultType.SUCCESS)) {
-//            List<Integer> gidList = Arrays.stream(((String)result.get("groups")).split(",")).map(Integer::parseInt).toList();
-//            this.user = new User((Integer)result.get("uid"), gidList, this);
-//        }
-
         addTask(Request.toByteBuffer(RequestType.LOGIN, result));
+
+        if(ResultType.of((Integer) result.get("resultType")).equals(ResultType.SUCCESS)) {
+            String groups = "";
+            try {
+                groups = (String)result.get("groups");
+            } catch (ClassCastException e ){
+                groups = ((Integer)result.get("groups")).toString();
+            }
+            List<Integer> gidList;
+            if(groups.equals("")){
+                gidList = new ArrayList<>();
+            } else{
+                try {
+                    gidList = Arrays.stream(((String)result.get("groups")).split(",")).map(Integer::parseInt).toList();
+                } catch (ClassCastException e) {
+                    Integer gid = (Integer) result.get("groups");
+                    gidList = new ArrayList<>();
+                    gidList.add(gid);
+                }
+            }
+            System.out.println(request.getData().get("groups"));
+
+            JSONObject initData = ServerDBManager.getInitData(gidList);
+            addTask(Request.toByteBuffer(RequestType.SENDDATA, initData));
+
+            this.user = new User((Integer)result.get("uid"), gidList, this);
+        }
+
     }
 
     private void signUp(Request request) {
@@ -162,24 +187,31 @@ public class RequestHandler implements Handler{
     }
 
     private void sendData(Request request) {
-        JSONObject GoupsData = ServerDBManager.getGroupsData();
-        JSONObject chatData = ServerDBManager.getChatData((JSONObject) request.getData().get("lastChatId"));
-        JSONObject ProfileData = ServerDBManager.getProfileData((JSONObject) request.getData().get("prfiles"));
     }
 
     private void  createNewGroup(Request request) {
         ((JSONObject)request.getData().get("groupInfo")).put("users", user.userID);
         JSONObject result = ServerDBManager.createGroup((JSONObject) request.getData().get("groupInfo"));
+        addTask(Request.toByteBuffer(RequestType.CREATENEWGROUP, result));
     }
 
     private void enterGroup(Request request) {
         int uid = 0, gid = 0;
         ResultType resultType = ServerDBManager.enterGroup(uid, gid, new String());
+        if (resultType == ResultType.SUCCESS) {
+            request.getData().put("resultType", resultType);
+            addTask(Request.toByteBuffer(request));
+        } else {
+            JSONObject result = new JSONObject();
+            result.put("resultType", resultType);
+            addTask(Request.toByteBuffer(RequestType.ENTERGROUP, result));
+        }
     }
 
     private void chat(Request request) {
         int chatId = DBManager.saveChatMessage(request.getData());
-
+        request.getData().put("chatId", chatId);
+        addTask(Request.toByteBuffer(request));
     }
 
     private void certifyMission(Request request) {

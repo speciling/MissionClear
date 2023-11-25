@@ -3,6 +3,7 @@ package client.net;
 import client.db.ClientDBManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import server.db.DBManager;
 import server.db.ResultType;
 import server.service.Request;
 import server.service.RequestType;
@@ -61,28 +62,7 @@ public class ClientSocket extends Thread{
         writeThread.start();
 
         while (true) {
-            Request response = getResponse();
-            if (response == null)
-                continue;
-            switch (response.type){
-                case LOGIN:
-                case SIGNUP:
-                case CHANGEPFP:
-                case CHANGENICKNAME:
-                case CREATENEWGROUP:
-                case ENTERGROUP:
-                    readQueue.add(response);
-                    break;
-                case SENDDATA:
-                    ClientDBManager.saveInitData(response.getData());
-                    break;
-                case CHAT:
-                    ClientDBManager.saveChatMessage(response.getData());
-                    break;
-                case CERTIFYMISSION:
-                    ClientDBManager.saveCertifyPicture(response.getData());
-                    break;
-            }
+            recieve();
         }
 
 
@@ -104,7 +84,6 @@ public class ClientSocket extends Thread{
                 socket.read(bodyBuffer);
                 bodyBuffer.flip();
                 String body = new String(bodyBuffer.array());
-                System.out.println(body);
 
                 return new Request(type, body);
             }
@@ -116,7 +95,32 @@ public class ClientSocket extends Thread{
         return null;
     }
 
-    private static void send(Request request) {
+    private void recieve() {
+        Request response = getResponse();
+        if (response != null) {
+            switch (response.type){
+                case LOGIN:
+                case SIGNUP:
+                case CHANGEPFP:
+                case CHANGENICKNAME:
+                case CREATENEWGROUP:
+                case ENTERGROUP:
+                    readQueue.add(response);
+                    break;
+                case SENDDATA:
+                    ClientDBManager.saveInitData(response.getData());
+                    break;
+                case CHAT:
+                    ClientDBManager.saveChatMessage(response.getData());
+                    break;
+                case CERTIFYMISSION:
+                    ClientDBManager.saveCertifyPicture(response.getData());
+                    break;
+            }
+        }
+    }
+
+    public static void send(Request request) {
         writeQueue.add(Request.toByteBuffer(request));
     }
 
@@ -128,7 +132,9 @@ public class ClientSocket extends Thread{
         send(new Request((byte)RequestType.LOGIN.getCode(), jsonObject.toJSONString()));
         while (true) {
             if (!readQueue.isEmpty()) {
-                return ResultType.of((Integer) readQueue.poll().getData().get("resultType")).equals(ResultType.SUCCESS);
+                JSONObject data = readQueue.poll().getData();
+
+                return Integer.parseInt(data.get("resultType").toString()) == ResultType.SUCCESS.getCode();
             }
         }
     }
@@ -143,35 +149,9 @@ public class ClientSocket extends Thread{
 
         while (true) {
             if (!readQueue.isEmpty()) {
-                Integer result = (Integer) readQueue.poll().getData().get("resultType");
+                Integer result = Integer.parseInt(readQueue.poll().getData().get("resultType").toString());
                 return result == ResultType.SUCCESS.getCode();
             }
         }
     }
-
-    public static JSONObject getInitData() {
-        return null;
-    }
-
-    public static boolean createNewGroup() {
-        return false;
-    }
-
-    public static JSONObject enterGroup() {
-        return null;
-    }
-
-    public static void sendChat() {}
-
-    public static void certifyMission() {}
-
-    public static boolean changePFP() {
-        return false;
-    }
-
-    public static boolean changeNickname() {
-        return false;
-    }
 }
-
-
