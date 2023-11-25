@@ -19,25 +19,28 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
 
-
+/**
+ * Class representing the detail popup for a group.
+ * This class is responsible for displaying the detailed information of a group in a popup window.
+ */
 public class GroupDetailPopup {
 
 	private JFrame frame;
 	protected RoundedPanel groupDetailPopupPanel;
 
-	/**
-	 * Launch the application.
-	 */
-	/**
-	 * Create the application.
-	 */
+    /**
+     * Constructor for GroupDetailPopup.
+     * Initializes the UI components of the popup.
+     */
 	public GroupDetailPopup() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
+    /**
+     * Initializes the contents of the popup window.
+     * Sets up the frame and layout of the popup, including labels, buttons, and other UI elements.
+     */ 
 	void initialize() {
 		frame = new JFrame();
 		frame.setSize(422, 425);
@@ -111,7 +114,10 @@ public class GroupDetailPopup {
 	    groupDetailPopupPanel.add(enterButton);
 	}
 
-
+	 /**
+     * Gets the frame of the popup window.
+     * @return The JFrame object of this popup.
+     */
 	public JFrame getFrame() {
         return frame;
     }

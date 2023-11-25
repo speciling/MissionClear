@@ -11,28 +11,36 @@ import client.MainPage.MainPage;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
-
+/**
+ * Class representing the list of groups a user is part of.
+ * This class extends MainPage and provides a user interface for displaying a list of groups the user is in.
+ */
 public class MyGroupList extends MainPage{
 
 	private JPanel myGroup;
 
-	JPanel a;
+	//JPanel a;
 	
-	public JPanel get() {
-	    return a;
-	}
-	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the application.
-	 */
+	 /**
+     * Retrieves the main panel of the group list interface.
+     * @return the main JPanel component of the group list interface.
+     */
+	//public JPanel get() {
+	//    return a;
+	//}
+	 /**
+     * Constructor to initialize the MyGroupList interface.
+     * @param vis Boolean value to set the visibility of the main page.
+     */
 	public MyGroupList(boolean vis) {
 		super(vis);
 		initializeMyGroupList();
 	}
 
+	/**
+     * Initializes and sets up the My Group List interface.
+     * This method sets up the layout and components for displaying the list of groups the user is part of.
+     */
 	private void initializeMyGroupList() {
 		// TODO Auto-generated method stub
 		myGroup = new JPanel();
