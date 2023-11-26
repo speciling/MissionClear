@@ -110,17 +110,24 @@ public class DBManager {
 
     // 저장 성공시 채팅 번호 반환, 실패시 -1 반환
     public static int saveChatMessage(JSONObject data){
-        int uid = (Integer)data.get("uid");
-        int gid = (Integer)data.get("gid");
+        Integer uid = Integer.parseInt(data.get("uid").toString());
+        Integer gid = Integer.parseInt(data.get("gid").toString());
         String msg = (String)data.get("message");
-        String time = (String)data.get("time");
 
+        if (data.get("chatId") == null) {
+            String sql = String.format("""
+                    INSERT INTO G%dCHAT (uid, message) VALUES (%d, '%s')""", gid, uid, msg);
+            executeSQL(sql);
+
+            sql = "SELECT last_insert_rowid()";
+            Integer chatId = (Integer) executeQuery(sql).get("last_insert_rowid()");
+            return chatId;
+        }
+
+        Integer chatId = Integer.parseInt(data.get("chatId").toString());
         String sql = String.format("""
-                INSERT INTO G%dCHAT (uid, message, time) VALUES (%d, '%s', '%s')""", gid, uid, msg, time);
+                INSERT INTO G%dCHAT (chatId, uid, message) VALUES (%d, %d, '%s')""", gid, chatId, uid, msg);
         executeSQL(sql);
-
-        sql = "SELECT last_insert_rowid()";
-        Integer chatId = (Integer) executeQuery(sql).get("last_insert_rowid()");
         return chatId;
     }
 

@@ -3,6 +3,7 @@ package client.net;
 import client.db.ClientDBManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import server.db.DBManager;
 import server.db.ResultType;
 import server.service.Request;
 import server.service.RequestType;
@@ -61,9 +62,41 @@ public class ClientSocket extends Thread{
         writeThread.start();
 
         while (true) {
-            Request response = getResponse();
-            if (response == null)
-                continue;
+            try {
+                recieve();
+            } catch (IOException e) {
+                System.out.println("서버와 연결이 끊어졌습니다.");
+            }
+        }
+
+
+    }
+
+    private Request getResponse() throws IOException{
+        JSONObject response;
+        ByteBuffer headerBuffer = ByteBuffer.allocate(5);
+
+        int readCount = socket.read(headerBuffer);
+        if (readCount > 0) {
+
+            headerBuffer.flip();
+
+            byte type = headerBuffer.get();
+            int length = headerBuffer.getInt();
+
+            ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
+            socket.read(bodyBuffer);
+            bodyBuffer.flip();
+            String body = new String(bodyBuffer.array());
+
+            return new Request(type, body);
+        }
+        return null;
+    }
+
+    private void recieve() throws IOException{
+        Request response = getResponse();
+        if (response != null) {
             switch (response.type){
                 case LOGIN:
                 case SIGNUP:
@@ -84,40 +117,20 @@ public class ClientSocket extends Thread{
                     break;
             }
         }
-
-
     }
 
-    private Request getResponse() {
-        JSONObject response;
-        ByteBuffer headerBuffer = ByteBuffer.allocate(5);
-        try {
-            int readCount = socket.read(headerBuffer);
-            if (readCount > 0) {
-
-                headerBuffer.flip();
-
-                byte type = headerBuffer.get();
-                int length = headerBuffer.getInt();
-
-                ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
-                socket.read(bodyBuffer);
-                bodyBuffer.flip();
-                String body = new String(bodyBuffer.array());
-                System.out.println(body);
-
-                return new Request(type, body);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        return null;
-    }
-
-    private static void send(Request request) {
+    public static void send(Request request) {
         writeQueue.add(Request.toByteBuffer(request));
+    }
+
+    public static boolean getResult() {
+        while (true) {
+            if (!readQueue.isEmpty()) {
+                JSONObject data = readQueue.poll().getData();
+
+                return Integer.parseInt(data.get("resultType").toString()) == ResultType.SUCCESS.getCode();
+            }
+        }
     }
 
     public static boolean login(String id, String pw) {
@@ -128,7 +141,9 @@ public class ClientSocket extends Thread{
         send(new Request((byte)RequestType.LOGIN.getCode(), jsonObject.toJSONString()));
         while (true) {
             if (!readQueue.isEmpty()) {
-                return ResultType.of((Integer) readQueue.poll().getData().get("resultType")).equals(ResultType.SUCCESS);
+                JSONObject data = readQueue.poll().getData();
+
+                return Integer.parseInt(data.get("resultType").toString()) == ResultType.SUCCESS.getCode();
             }
         }
     }
@@ -143,35 +158,9 @@ public class ClientSocket extends Thread{
 
         while (true) {
             if (!readQueue.isEmpty()) {
-                Integer result = (Integer) readQueue.poll().getData().get("resultType");
+                Integer result = Integer.parseInt(readQueue.poll().getData().get("resultType").toString());
                 return result == ResultType.SUCCESS.getCode();
             }
         }
     }
-
-    public static JSONObject getInitData() {
-        return null;
-    }
-
-    public static boolean createNewGroup() {
-        return false;
-    }
-
-    public static JSONObject enterGroup() {
-        return null;
-    }
-
-    public static void sendChat() {}
-
-    public static void certifyMission() {}
-
-    public static boolean changePFP() {
-        return false;
-    }
-
-    public static boolean changeNickname() {
-        return false;
-    }
 }
-
-

@@ -116,6 +116,7 @@ public class MainPage extends JFrame {
       JButton bRecruit = new JButton(iconRecruit);
       bRecruit.setBackground(mainColor);
       bRecruit.setBorderPainted(false); //버튼 그림자 없애기
+      bRecruit.setFocusPainted(false);
       bpRecruit.add(bRecruit);
       
       JPanel bpMyGroup = new JPanel();
@@ -125,8 +126,10 @@ public class MainPage extends JFrame {
       JButton bMyGroup = new JButton(iconMyGroup);
       bMyGroup.setBackground(mainColor);
       bMyGroup.setBorderPainted(false); //버튼 그림자 없애기
+      bMyGroup.setFocusPainted(false);
       bpMyGroup.add(bMyGroup);
       
+      //마이페이지 버튼
       JPanel bpMyPage = new JPanel();
       bpMyPage.setBounds(0,242+59*2,257,59);
       bpMyPage.setBackground(mainColor);
@@ -134,6 +137,7 @@ public class MainPage extends JFrame {
       JButton bMyPage = new JButton(iconMyPage);
       bMyPage.setBackground(mainColor);
       bMyPage.setBorderPainted(false); //버튼 그림자 없애기
+      bMyPage.setFocusPainted(false);
       bpMyPage.add(bMyPage);
       
       menuBar.add(bpRecruit);
@@ -198,6 +202,7 @@ public class MainPage extends JFrame {
    
 
    public void changePanel(String panelName) {
+	   /*
       if (panelName.equals("group")) {
          RecruitGroupMember r = new RecruitGroupMember(true);
          JPanel p = r.get();
@@ -206,19 +211,20 @@ public class MainPage extends JFrame {
       }
       
       else if (panelName.equals("mygroup")) {
-    	  MyGroupList r = new MyGroupList(true);
+    	  /*MyGroupList r = new MyGroupList(true);
           JPanel p = r.get();
           p = makePan(p);
-          globPan.add(p);
+          globPan.add(p);*/
          //changePan();//panel 초기화
-         /*
-         DetailMyGroup dg = new DetailMyGroup();
+       /*  
+         DetailMyGroup dg = new DetailMyGroup(true);
          JPanel p = dg.get();
          p = makePan(p);
-         globPan.add(p);*/
+         globPan.add(p);
          
       }
-      else if (panelName.equals("mypage")) {
+   */
+      if (panelName.equals("mypage")) {
     	  Mypage r = new Mypage(true);
     	  JPanel p = r.get();
           p = makePan(p);

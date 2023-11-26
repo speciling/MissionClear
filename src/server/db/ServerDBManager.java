@@ -1,13 +1,13 @@
 package server.db;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.*;
 
 public class ServerDBManager extends DBManager{
 
@@ -21,8 +21,6 @@ public class ServerDBManager extends DBManager{
             }
             conn = DriverManager.getConnection("jdbc:sqlite:missioncleardata/server/server.db");
 
-            dropTable("USER");
-            dropTable("GROUPS");
             createTable("USER", """
                     CREATE TABLE IF NOT EXISTS USER (uid integer primary key, id string not null unique, 
                     password string not null, nickname string not null, pfp string, groups string default '')""");
@@ -77,6 +75,87 @@ public class ServerDBManager extends DBManager{
 
         if (result.isEmpty())
             result.put("resultType", ResultType.WARNING.getCode());
+
+        return result;
+    }
+
+    public static JSONObject getGroup(int gid) {
+        String sql = String.format("""
+                SELECT gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users FROM GROUPS WHERE gid=%s""", gid);
+
+        JSONObject result = executeQuery(sql);
+
+        if (result.isEmpty())
+            result.put("resultType", ResultType.WARNING.getCode());
+
+        return result;
+    }
+
+    public static JSONObject getInitData(List<Integer> groups) {
+        JSONObject result = new JSONObject();
+        JSONArray myGroups = new JSONArray();
+        Set<Integer> userSet = new HashSet<>();
+        for (int gid: groups) {
+            JSONObject group = getGroup(gid);
+            myGroups.add(group);
+            List<Integer> users = Arrays.stream(((String)group.get("users")).split(",")).map(Integer::parseInt).toList();
+            userSet.addAll(users);
+        }
+        result.put("groupData", myGroups);
+
+        List<Integer> userList = new ArrayList<>(userSet);
+        Collections.sort(userList);
+        JSONArray users = new JSONArray();
+        for (int uid: userList) {
+            JSONObject user = getUser(uid);
+            users.add(user);
+        }
+        result.put("userData", users);
+
+        JSONObject chatData = new JSONObject();
+        try {
+            for (int gid : groups) {
+                JSONArray jsonArray = new JSONArray();
+                Statement statement = conn.createStatement();
+                String sql = "SELECT * from G" + gid + "CHAT";
+                ResultSet rs = statement.executeQuery(sql);
+
+                while(rs.next()) {
+                    JSONObject chat = new JSONObject();
+                    chat.put("chatId", rs.getInt("chatId"));
+                    chat.put("uid", rs.getInt("uid"));
+                    chat.put("message", rs.getString("message"));
+                    jsonArray.add(chat);
+                }
+
+                chatData.put("G"+gid+"CHAT", jsonArray);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        result.put("chatData", chatData);
+
+        JSONObject progressData = new JSONObject();
+        try {
+            for (int gid : groups) {
+                JSONArray jsonArray = new JSONArray();
+                Statement statement = conn.createStatement();
+                String sql = "SELECT * from G" + gid + "PROGRESS";
+                ResultSet rs = statement.executeQuery(sql);
+
+                while(rs.next()) {
+                    JSONObject chat = new JSONObject();
+                    chat.put("uid", rs.getInt("uid"));
+                    chat.put("date", rs.getString("date"));
+                    jsonArray.add(chat);
+                }
+
+                progressData.put("G"+gid+"PROGRESS", jsonArray);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        result.put("progressData", progressData);
 
         return result;
     }
@@ -149,12 +228,15 @@ public class ServerDBManager extends DBManager{
             Integer gid = (Integer) executeQuery(sql).get("last_insert_rowid()");
 
             // user의 groups에 group 추가
-            sql = String.format("UPDATE USER SET groups=groups+'%s'+',' WHERE uid=%d", gid, uid);
+            sql = String.format("""
+                SELECT groups FROM USER WHERE (uid=%d)""", uid);
+            String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
+            sql = String.format("UPDATE USER SET groups='%s' WHERE uid=%d", groups, uid);
             executeSQL(sql);
 
-            // 채팅, 미션인증 진행도 db 생성
+            // 채팅, 미션인증 진행도 테이블 생성
             sql = String.format("""
-                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message chat not null, time string not null)""", gid);
+                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message chat not null)""", gid);
             createTable("G"+gid+"CHAT", sql);
             sql = String.format("""
                     CREATE TABLE IF NOT EXISTS G%sPROGRESS (uid integer not null, date string not null)""", gid);
@@ -168,6 +250,9 @@ public class ServerDBManager extends DBManager{
                 SELECT users FROM GROUPS WHERE (gid=%d AND password='%s' AND usercnt<capacity)""", gid, pw);
         String users = ((String)executeQuery(sql).get("users"));
 
+        sql = String.format("""
+                SELECT groups FROM USER WHERE (uid=%d)""", uid);
+        String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
         if(users != null) {
             users += uid+",";
             sql = String.format("""
@@ -179,7 +264,7 @@ public class ServerDBManager extends DBManager{
             executeSQL(sql);
 
             sql = String.format("""
-                    UPDATE USER SET groups=groups+'%s'+',' WHERE uid=%d""", gid, uid);
+                    UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
             executeSQL(sql);
             return ResultType.SUCCESS;
         }
