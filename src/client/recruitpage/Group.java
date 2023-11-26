@@ -1,6 +1,9 @@
 package client.recruitpage;
 
+import org.json.simple.JSONObject;
+
 public class Group {
+    private int gid;
     private String title;
     private String description;
     private String mission;
@@ -88,6 +91,50 @@ public class Group {
         this.recruitmentEndDateDay = recruitmentEndDateDay;
         this.roomPassword = roomPassword;
         this.isSecretRoom = isSecretRoom;
+    }
+
+    public Group(JSONObject data) {
+        this.gid = Integer.parseInt(data.get("gid").toString());
+        this.title = data.get("title").toString();
+        this.description = data.get("description").toString();
+        this.mission = data.get("mission").toString();
+        this.recruitmentCapacity = Integer.parseInt(data.get("capacity").toString());
+        int category = Integer.parseInt(data.get("capacity").toString());
+        this.category = (category==0?"챌린지":(category==1?"스터디":(category==2?"다이어트":"기타")));
+        String[] deadline = data.get("deadline").toString().split("-");
+        this.recruitmentDeadlineYear = deadline[0];
+        this.recruitmentDeadlineMonth = deadline[1];
+        this.recruitmentDeadlineDay = deadline[2];
+        String[] startDate = data.get("startDate").toString().split("-");
+        this.recruitmentStartDateYear = startDate[0];
+        this.recruitmentStartDateMonth = startDate[1];
+        this.recruitmentStartDateDay = startDate[2];
+        String[] endDate = data.get("endDate").toString().split("-");
+        this.recruitmentEndDateYear = endDate[0];
+        this.recruitmentEndDateMonth = endDate[1];
+        this.recruitmentEndDateDay = endDate[2];
+        this.roomPassword = null;
+        this.isSecretRoom = Boolean.parseBoolean(data.get("isSecret").toString());
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("title", this.title);
+        json.put("description", this.description);
+        json.put("mission", this.mission);
+        json.put("capacity", this.recruitmentCapacity);
+        int c = (category.equals("챌린지")?0:(category.equals("스터디")?1:(category.equals("다이어트")?2:(category.equals("기타")?3:-1))));
+        json.put("category", c);
+        String deadline = recruitmentDeadlineYear + "-" + recruitmentDeadlineMonth + "-" + recruitmentDeadlineDay;
+        json.put("deadline", deadline);
+        String startDate = recruitmentStartDateYear + "-" + recruitmentStartDateMonth + "-" + recruitmentStartDateDay;
+        json.put("startDate", startDate);
+        String endDate = recruitmentEndDateYear + "-" + recruitmentEndDateMonth + "-" + recruitmentEndDateDay;
+        json.put("endDate", endDate);
+        if (roomPassword != null) {
+            json.put("password", roomPassword);
+        }
+        return json;
     }
 
     // 게터와 세터 메서드들
