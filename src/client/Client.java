@@ -14,6 +14,6 @@ public class Client {
 	
 	  public static void main(String [] args) {
 //		  MyGroupList m = new MyGroupList(true);
-		  RecruitGroupMember m = new RecruitGroupMember(true);
+		  RecruitGroupMember m = new RecruitGroupMember();
 	   }
 }

@@ -59,10 +59,10 @@ public class GroupDetailPopup {
 	    title.setBounds(19, 53, 357, 35);
 	    groupDetailPopupPanel.add(title);
 	    
-	    JLabel lblNewLabel = new JLabel("<html>정말 열심히 할 분만 모집하고 있습니다.<br>벌금 있습니다!</html>");
-	    lblNewLabel.setFont(new Font("나눔고딕", Font.PLAIN, 18));
-	    lblNewLabel.setBounds(19, 100, 369, 42);
-	    groupDetailPopupPanel.add(lblNewLabel);
+	    JLabel description = new JLabel("<html>정말 열심히 할 분만 모집하고 있습니다.<br>벌금 있습니다!</html>");
+	    description.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+	    description.setBounds(19, 100, 369, 42);
+	    groupDetailPopupPanel.add(description);
 	    
 	    JSeparator separator = new JSeparator();
 	    separator.setForeground(new Color(128, 128, 128));

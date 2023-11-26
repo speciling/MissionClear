@@ -22,6 +22,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 
 /**
@@ -78,22 +79,23 @@ class RoundedBorder implements Border {
  * This class represents the UI for adding a new mission room.
  * It initializes and displays the UI components for creating a mission room.
  */
+
 public class AddMissionRoom {
+	
 	private JLabel title;
 	private JLabel description;
 	protected RoundedPanel addMissionRoomPanel;
-	 /**
-     * Constructor for creating an instance of AddMissionRoom.
-     * Initializes the UI components.
-     */
-	public AddMissionRoom(String missionTitle, String missionDescription, int recruitmentDeadlineYear, int recruitmentDeadlineMonth, int recruitmentDeadlineDay, int recruitmentCapacityValue, String selectedCategory, int startDateYear, int startDateMonth, int startDateDay, int endDateYear, int endDateMonth, int endDateDay) {
-		this.initialize(missionTitle, missionDescription, recruitmentDeadlineYear, recruitmentDeadlineMonth, recruitmentDeadlineDay, recruitmentCapacityValue, selectedCategory, startDateYear, startDateMonth, startDateDay, endDateYear, endDateMonth, endDateDay);
-	}
+	 
+	public AddMissionRoom(Group group) {
+        if (group != null) {
+            this.initialize(group);
+        }
+    }
 
-	/**
-     * Initializes the contents of the frame and sets up the UI components.
+	 /**
+     * @wbp.parser.entryPoint
      */
-	void initialize(String missionTitle, String missionDescription, int recruitmentDeadlineYear, int recruitmentDeadlineMonth, int recruitmentDeadlineDay, int recruitmentCapacityValue, String selectedCategory, int startDateYear, int startDateMonth, int startDateDay, int endDateYear, int endDateMonth, int endDateDay) {
+	void initialize(Group group) {
 		
 		addMissionRoomPanel = new RoundedPanel(20); 
 		addMissionRoomPanel.setBounds(4, 1, 406, 273);
@@ -101,12 +103,12 @@ public class AddMissionRoom {
 	    addMissionRoomPanel.setBackground(new Color(255, 255, 255));
 	    addMissionRoomPanel.setLayout(null);
 	    
-	    title = new JLabel(missionTitle);
+	    title = new JLabel(group.getTitle());
 	    title.setBounds(22, 21, 357, 35);
 	    title.setFont(new Font("나눔고딕", Font.BOLD, 20));
 	    addMissionRoomPanel.add(title);
 	    
-	    this.description = new JLabel("<html>" + missionDescription + "</html>");
+	    this.description = new JLabel("<html>" + group.getDescription() + "</html>");
 	    this.description.setBounds(22, 73, 357, 42);
 	    this.description.setFont(new Font("나눔고딕", Font.PLAIN, 18));
 	    addMissionRoomPanel.add(this.description);
@@ -116,12 +118,12 @@ public class AddMissionRoom {
 	    separator.setBounds(17, 162, 374, 1); // 위치와 크기 설정
 	    addMissionRoomPanel.add(separator);
 	    
-	    JLabel recruitDeadline = new JLabel("<html><b>모집기한:</b> " + recruitmentDeadlineYear + ". " + recruitmentDeadlineMonth +". " + recruitmentDeadlineDay + " 까지<br></html>\r\n");
+	    JLabel recruitDeadline = new JLabel("<html><b>모집기한:</b> " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + "까지<br></html>");
 	    recruitDeadline.setFont(new Font("나눔고딕", Font.PLAIN, 15));
 	    recruitDeadline.setBounds(23, 180, 357, 21);
 	    addMissionRoomPanel.add(recruitDeadline);
 	    
-	    JLabel category = new JLabel(selectedCategory);
+	    JLabel category = new JLabel(group.getCategory());
 	    category.setForeground(new Color(56, 183, 255));
 	    category.setHorizontalAlignment(JLabel.CENTER);
 	    category.setFont(new Font("나눔고딕", Font.PLAIN, 17));
@@ -146,22 +148,26 @@ public class AddMissionRoom {
 	    });
 	    addMissionRoomPanel.add(detailPopup);
 	    
-	    JLabel recruitmentCapacity = new JLabel("<html><b>모집인원:</b> " + recruitmentCapacityValue + "명<br></html>\r\n");
+	    JLabel recruitmentCapacity = new JLabel("<html><b>모집인원:</b> " + group.getCapacity() + "명<br></html>");
 	    recruitmentCapacity.setFont(new Font("나눔고딕", Font.PLAIN, 15));
 	    recruitmentCapacity.setBounds(23, 201, 357, 21);
 	    addMissionRoomPanel.add(recruitmentCapacity);
-	    
-	    JLabel activityPeriod = new JLabel("<html><b>활동기간:</b> " + startDateYear + ". " + startDateMonth + ". " + startDateDay + ". ~ " + endDateYear + ". " + endDateMonth + ". " + endDateDay + "</html>\r\n");
+
+	    JLabel activityPeriod = new JLabel("<html><b>활동기간:</b> " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + ". ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "</html>");
 	    activityPeriod.setFont(new Font("나눔고딕", Font.PLAIN, 15));
 	    activityPeriod.setBounds(23, 222, 357, 21);
 	    addMissionRoomPanel.add(activityPeriod);
+	    
+	    JLabel lockLabel = new JLabel("");
+	    lockLabel.setIcon(new ImageIcon("./resource/RecruitGroupMember/lock.png"));
+	    lockLabel.setBounds(297, 26, 24, 24);
+	    if (group.isSecretRoom()) {
+            addMissionRoomPanel.add(lockLabel);
+        }
 
 	}
 	
-	/**
-     * Retrieves the main panel of the mission room.
-     * @return the main JPanel component of the mission room.
-     */
+	
 	
 	public JPanel getPanel() {
 		// TODO Auto-generated method stub
