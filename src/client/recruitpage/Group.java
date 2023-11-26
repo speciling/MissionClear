@@ -27,6 +27,9 @@ public class Group {
     public String getDescription() {
     	return description;
     }
+    public String getMission() {
+    	return mission;
+    }
     public String getDeadlineYear() {
     	return recruitmentDeadlineYear;
     }

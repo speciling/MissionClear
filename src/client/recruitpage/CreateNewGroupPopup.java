@@ -274,7 +274,8 @@ public class CreateNewGroupPopup {
             	// AddMissionRoom 객체를 생성하면서 제목을 전달
             	
             	String missionTitle = title.getText();
-            	String missionDescription = description.getText(); // Fetch the mission description text
+            	String missionDescription = description.getText();
+            	String missionContent = mission.getText();// Fetch the mission description text
             	int deadlineYear = Integer.parseInt(recruitmentDeadlineYear.getText());
                 int deadlineMonth = Integer.parseInt(recruitmentDeadlineMonth.getText());
                 int deadlineDay = Integer.parseInt(recruitmentDeadlineDay.getText());
@@ -297,7 +298,7 @@ public class CreateNewGroupPopup {
                 Group group = new Group(
                 	    missionTitle, 
                 	    missionDescription, 
-                	    mission.getText(), // 누락된 mission 필드 추가
+                	    missionContent, // 누락된 mission 필드 추가
                 	    Integer.parseInt(recruitmentCapacity.getSelectedItem().toString()), // recruitmentCapacity는 int 타입
                 	    selectedCategory, 
                 	    recruitmentDeadlineYear.getText(), 

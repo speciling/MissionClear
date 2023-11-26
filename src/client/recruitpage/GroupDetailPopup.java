@@ -27,12 +27,13 @@ public class GroupDetailPopup {
 
 	private JFrame frame;
 	protected RoundedPanel groupDetailPopupPanel;
-
+	private Group group;
     /**
      * Constructor for GroupDetailPopup.
      * Initializes the UI components of the popup.
      */
-	public GroupDetailPopup() {
+	public GroupDetailPopup(Group group) {
+		this.group = group;
 		initialize();
 	}
 
@@ -54,12 +55,12 @@ public class GroupDetailPopup {
 	    frame.getContentPane().add(groupDetailPopupPanel);
 	    groupDetailPopupPanel.setLayout(null);
 	    
-	    JLabel title = new JLabel("미라클모닝 챌린지 할 사람 구합니다!");
+	    JLabel title = new JLabel(group.getTitle());
 	    title.setFont(new Font("나눔고딕", Font.BOLD, 20));
 	    title.setBounds(19, 53, 357, 35);
 	    groupDetailPopupPanel.add(title);
 	    
-	    JLabel description = new JLabel("<html>정말 열심히 할 분만 모집하고 있습니다.<br>벌금 있습니다!</html>");
+	    JLabel description = new JLabel(group.getDescription());
 	    description.setFont(new Font("나눔고딕", Font.PLAIN, 18));
 	    description.setBounds(19, 100, 369, 42);
 	    groupDetailPopupPanel.add(description);
@@ -69,7 +70,7 @@ public class GroupDetailPopup {
 	    separator.setBounds(19, 168, 374, 1); // 위치와 크기 설정
 	    groupDetailPopupPanel.add(separator);
 	    
-	    JLabel category = new JLabel("챌린지");
+	    JLabel category = new JLabel(group.getCategory());
 	    category.setForeground(new Color(56, 183, 255));
 	    category.setHorizontalAlignment(JLabel.CENTER);
 	    category.setFont(new Font("나눔고딕", Font.PLAIN, 17));
@@ -97,10 +98,10 @@ public class GroupDetailPopup {
 	    
 	    groupDetailPopupPanel.add(exitButton);
 	    
-	    JLabel lblNewLabel_1 = new JLabel("<html><b>모집기한</b>: 2023. 10. 01까지<br>\r\n<b>모집인원</b>: 5명<br>\r\n<b>활동기간</b>: 2023. 10. 03 ~ 2023. 12. 03<br>\r\n<b>활동내용</b>: 매일매일 기상시간 인증</html>");
-	    lblNewLabel_1.setFont(new Font("나눔고딕", Font.PLAIN, 18));
-	    lblNewLabel_1.setBounds(19, 220, 357, 113);
-	    groupDetailPopupPanel.add(lblNewLabel_1);
+	    JLabel missionInfo = new JLabel("<html><b>모집기한</b>: " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + "까지<br>\r\n<b>모집인원</b>: " + group.getCapacity() + "명<br>\r\n<b>활동기간</b>: " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + " ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "<br>\r\n<b>활동내용</b>: " + group.getMission() + "</html>");
+	    missionInfo.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+	    missionInfo.setBounds(19, 220, 357, 113);
+	    groupDetailPopupPanel.add(missionInfo);
 	    
 	    JButton enterButton = new JButton("");
 	    enterButton.setBackground(new Color(255, 255, 255));

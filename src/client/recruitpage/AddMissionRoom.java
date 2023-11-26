@@ -141,7 +141,7 @@ public class AddMissionRoom {
 	    detailPopup.addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
 	            // GroupDetailPopup 인스턴스 생성 및 프레임 표시
-	            GroupDetailPopup popup = new GroupDetailPopup();
+	            GroupDetailPopup popup = new GroupDetailPopup(group);
 	            popup.initialize();
 	            popup.getFrame().setVisible(true);
 	        }
