@@ -23,6 +23,8 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.border.Border;
 import javax.swing.JButton;
@@ -69,6 +71,9 @@ class RoundedPanel extends JPanel {
  * This class extends MainPage and provides a user interface for recruitment functionalities.
  */
 public class RecruitGroupMember{
+	 private int currentPage = 0;
+	 private final int PANELS_PER_PAGE = 4;
+	 private List<JPanel> allPanels = new ArrayList<>();
 	
 	private JTextField textField;
 	private JPanel groupRecruitment;
@@ -94,12 +99,18 @@ public class RecruitGroupMember{
 	/**
      * Initializes and sets up the group recruitment interface.
      */
+	private JPanel dynamicPanel;
 	private void initializeGroupRecruitment() {
         groupRecruitment = new JPanel();
         groupRecruitment.setBackground(new Color(246, 246, 246));
         groupRecruitment.setBounds(0, 0, 950, 850);
         groupRecruitment.setLayout(null);
-		
+        dynamicPanel = new JPanel();
+        dynamicPanel.setLayout(null);
+        dynamicPanel.setOpaque(false); // 배경을 투명하게 설정
+        dynamicPanel.setBounds(0, 0, 950, 850); // 동적 패널의 위치와 크기 설정
+        groupRecruitment.add(dynamicPanel);
+
         JButton missionRoomCreate = new JButton("");
         missionRoomCreate.setBounds(707, 84, 189, 40);
         missionRoomCreate.setBackground(new Color(246, 246, 246));
@@ -167,13 +178,30 @@ public class RecruitGroupMember{
         backButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/backButton.png"));
         backButton.setBounds(875, 725, 30, 40);
         groupRecruitment.add(backButton);
-        
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (currentPage > 0) {
+                    currentPage--;
+                    updatePanels();
+                }
+            }
+        });
         JButton nextButton = new JButton("");
         nextButton.setBackground(new Color(246, 246, 246));
         nextButton.setBorderPainted(false);
         nextButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/nextButton.png"));
         nextButton.setBounds(905, 725, 30, 40);
         groupRecruitment.add(nextButton);
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if ((currentPage + 1) * PANELS_PER_PAGE < allPanels.size()) {
+                    currentPage++;
+                    updatePanels();
+                }
+            }
+        });
 	}
    
 	 /**
@@ -181,40 +209,50 @@ public class RecruitGroupMember{
      * @param panel The panel to be added to the group recruitment interface.
      */
 	public void addToGroupRecruitment(JPanel panel) {
-		if (groupRecruitment != null) {
-            int top, left;
-
-            // 배열 인덱스에 따라 위치를 결정합니다.
-            switch (panelCount % 4) { // % 연산자를 사용하여 4개의 패널마다 위치를 변경합니다.
-                case 0:
-                    top = 141;
-                    left = 50;
-                    break;
-                case 1:
-                    top = 141;
-                    left = 490;
-                    break;
-                case 2:
-                    top = 439;
-                    left = 50;
-                    break;
-                case 3:
-                    top = 439;
-                    left = 490;
-                    break;
-                default:
-                    top = 141; // 기본값 설정
-                    left = 50; // 기본값 설정
-                    break;
-            }
-
-            panel.setBounds(left, top, panel.getWidth(), panel.getHeight());
-            groupRecruitment.add(panel);
-            groupRecruitment.revalidate();
-            groupRecruitment.repaint();
-
-            panelCount++; // 패널이 추가될 때마다 카운트를 증가시킵니다.
+		allPanels.add(panel);
+        if (allPanels.size() <= (currentPage + 1) * PANELS_PER_PAGE) {
+            placePanel(panel, allPanels.size() - 1);
         }
     }
+	
+	private void updatePanels() {
+	    dynamicPanel.removeAll(); // 현재 페이지의 패널들을 모두 제거
+	    int start = currentPage * PANELS_PER_PAGE;
+	    int end = Math.min(start + PANELS_PER_PAGE, allPanels.size());
+	    for (int i = start; i < end; i++) {
+	        placePanel(allPanels.get(i), i % PANELS_PER_PAGE); // 현재 페이지에 맞는 패널만 추가
+	    }
+	    dynamicPanel.revalidate();
+	    dynamicPanel.repaint();
+	}
+
+	private void placePanel(JPanel panel, int index) {
+	    int position = index % PANELS_PER_PAGE;
+	    int top, left;
+	    switch (position) {
+	        case 0:
+	            top = 141;
+	            left = 50;
+	            break;
+	        case 1:
+	            top = 141;
+	            left = 490;
+	            break;
+	        case 2:
+	            top = 439;
+	            left = 50;
+	            break;
+	        case 3:
+	            top = 439;
+	            left = 490;
+	            break;
+	        default:
+	            throw new IllegalStateException("Unexpected panel index: " + position);
+	    }
+
+	    panel.setBounds(left, top, panel.getWidth(), panel.getHeight());
+	    dynamicPanel.add(panel); // Add panel to dynamicPanel instead of groupRecruitment
+	}
+
 	
 }
