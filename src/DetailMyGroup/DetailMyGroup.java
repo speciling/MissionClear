@@ -1,11 +1,15 @@
 package DetailMyGroup;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 
@@ -33,12 +37,41 @@ public class DetailMyGroup extends JFrame {
    String missionName = "돈 아껴서 부자되자!";
    String missionInfo = "매일 매일 사용한 돈 인증";
    String authPicPath;
+
+   Calendar missionStart = Calendar.getInstance();
+   Calendar missionEnd = Calendar.getInstance();
+   public int calculateDayCount() {
+	   missionStart.set(Calendar.HOUR_OF_DAY, 0);
+       missionStart.set(Calendar.MINUTE, 0);
+       missionStart.set(Calendar.SECOND, 0);
+       missionStart.set(Calendar.MILLISECOND, 0);
+
+       missionEnd.set(Calendar.HOUR_OF_DAY, 0);
+       missionEnd.set(Calendar.MINUTE, 0);
+       missionEnd.set(Calendar.SECOND, 0);
+       missionEnd.set(Calendar.MILLISECOND, 0);
+
+       long diffInMillis = missionEnd.getTimeInMillis() - missionStart.getTimeInMillis();
+       long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
+       return ((int) diffInDays)+1;
+   }
+   int dayCount;
    
    // 먼저 detailmygroup정보에서 userID들을 가져와서 각각의 유저의 진행도와 사진과 이름을 가져오기 
    // int[] groupUserID = {};
-   int[] missionProgRage = {30,10,40,30,30};
+
+   int [][] detailProgress = {{2,2,1,1,0,0,0,0},
+		   {1,2,1,0,0,0,0,0},
+		   {1,1,1,1,0,0,0,0},
+		   {2,2,2,0,0,0,0,0},
+		   {2,2,2,1,0,0,0,0}};
+   int []missionProgRage = {0,0,0,0,0};
+   
    String[] username = {"호랑이양말", "임지환", "조연우", "지연우", "최지원"};
    String[] picPath = {"./resource/DetailMyGroup/userPic1.png", "./resource/DetailMyGroup/userPic2.png", "./resource/DetailMyGroup/userPic3.png", "./resource/DetailMyGroup/userPic4.png", "./resource/DetailMyGroup/userPic5.png"};
+   // 세부 미션 수행도 만들기
+   //int[username.length][dayCount] detailProgress = {};
+   // 0 은 기본값 1은 함 2는 하지 않음
    
    JPanel ff = new JPanel();
    public JPanel detailMyGroupP;
@@ -52,7 +85,52 @@ public class DetailMyGroup extends JFrame {
       // id를 통해서 사용자 이름, 프로필 사진을 가져오기 
       // 세부 방정보도 가져오기
    
-   public JPanel makeUserProgress(String name, String path, int rage) {
+   public void createProgressDetailPopup(int i, JPanel pan) {
+	   JFrame popupF = new JFrame();
+	   popupF.setSize(434,307);
+	   popupF.setVisible(true);
+	   
+	   JPanel popup = new JPanel();
+	   popup.setBackground(Color.white);
+	   popupF.add(popup);
+	   popup.setLayout(null);
+	   JLabel title = new JLabel("진행상황");
+	   title.setHorizontalAlignment(JLabel.CENTER);
+       title.setVerticalAlignment(JLabel.CENTER);
+	   title.setFont(new Font("나눔고딕",Font.BOLD, 30));
+	   title.setBounds(0,0,434,70);
+	   popup.add(title);
+	   pan.setBounds(0,70,434,72);
+	   popup.add(pan);
+       
+       // 세부진행도 패널 만들기
+       JPanel detailProgressP = new JPanel();
+       detailProgressP.setBackground(Color.white);
+       detailProgressP.setLayout(new GridLayout(3,10,0,0));
+       detailProgressP.setBounds(10,142,415,124);
+       int count = 0;
+       for (int j=0;j<detailProgress[i].length;j++) {
+    	   count++;
+    	   String path=null;
+    	   if(detailProgress[i][j] ==0){path ="./resource/RecruitGroupMember/Default.png"; }
+    	   else if(detailProgress[i][j]==1) {path ="./resource/RecruitGroupMember/clear.png";}
+    	   else if(detailProgress[i][j]==2) {path ="./resource/RecruitGroupMember/fail.png";}
+    	   ImageIcon icon = new ImageIcon(path);
+    	   JLabel detail = new JLabel(icon);
+    	   detail.setSize(50,50);
+    	   detailProgressP.add(detail);
+       }
+       while(count!=30) { // limit = 30
+    	   detailProgressP.add(new JLabel());
+    	   count++;
+       }
+       popup.add(detailProgressP);
+	   
+	   
+	   
+   }
+   
+   public JPanel makeUserProgress(String name, String path, int rage, int i) {
 	   JPanel make = new JPanel();
 	   make.setBackground(Color.white);
 	   make.setLayout(null);
@@ -89,7 +167,9 @@ public class DetailMyGroup extends JFrame {
        progressBar.setStringPainted(false);
        down.add(progressBar);
        
-       // up에 진행도 30%넣기
+       userPic.addActionListener(event -> {
+           createProgressDetailPopup(i, make);
+       });
        
 	   return make;
    }
@@ -112,8 +192,9 @@ public class DetailMyGroup extends JFrame {
        userProgressP.setBounds(0, 90, 390, 360);  //한칸에72
        userProgressP.setBackground(Color.white);
        
+       //각 멤버의 미션수행도 부분 만들기
        for(int i=0;i<missionProgRage.length;i++) {
-    	   JPanel j = makeUserProgress(username[i], picPath[i], missionProgRage[i]);
+    	   JPanel j = makeUserProgress(username[i], picPath[i], missionProgRage[i],i);
     	   j.setBounds(0,72*i,390,72);
     	   userProgressP.add(j);
        }
@@ -139,20 +220,29 @@ public class DetailMyGroup extends JFrame {
       // TODO Auto-generated method stub
       
       
-
+      for (int i=0;i<detailProgress.length;i++) {
+   	   int count =0;
+   	   for (int j =0;j<detailProgress[0].length;j++) {
+   		   if(detailProgress[i][j]==1) count++;
+   		//System.out.println(count);
+   	   }
+   	   missionProgRage[i] = (int)(count*100/detailProgress[0].length);
+      }
+      
+      
       showProgressRate();
       
 
       //임시날짜
-      Calendar missionStart = Calendar.getInstance();
       missionStart.set(Calendar.YEAR, 2023);
       missionStart.set(Calendar.MONTH, Calendar.NOVEMBER);
       missionStart.set(Calendar.DAY_OF_MONTH, 12);
-      Calendar missionEnd = Calendar.getInstance();
       missionEnd.set(Calendar.YEAR, 2023);
       missionEnd.set(Calendar.MONTH, Calendar.NOVEMBER);
       missionEnd.set(Calendar.DAY_OF_MONTH, 19);
       
+      //dayCount만들기
+      dayCount = calculateDayCount();
       
       //배너
       detailMyGroupP.setLayout(null);
@@ -209,6 +299,7 @@ public class DetailMyGroup extends JFrame {
                File file = jfc.getSelectedFile();
                try {
                    authPicPath = file.getPath();
+                   //System.out.println(authPicPath);
                    }
                catch(Exception e) {
                    e.printStackTrace();
