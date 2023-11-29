@@ -23,6 +23,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +103,7 @@ public class RecruitGroupMember{
      * Initializes and sets up the group recruitment interface.
      */
 	private JPanel dynamicPanel;
+	private JComboBox<String> comboBox;
 	private void initializeGroupRecruitment() {
         groupRecruitment = new JPanel();
         groupRecruitment.setBackground(new Color(246, 246, 246));
@@ -140,7 +143,7 @@ public class RecruitGroupMember{
         });
         
         // 미션 방 검색
-        searchTitle = new JTextField() {
+        searchTitle = new JTextField("          원하는 미션방을 검색할 수 있어요!") {
             @Override
             protected void paintComponent(Graphics g) {
                 if (!isOpaque()) {
@@ -153,22 +156,39 @@ public class RecruitGroupMember{
                 super.paintComponent(g);
             }
         };
+        searchTitle.setForeground(SystemColor.controlShadow); // 초기 텍스트 색상 설정
+        searchTitle.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (searchTitle.getText().trim().equals("원하는 미션방을 검색할 수 있어요!")) {
+                    searchTitle.setText("                ");
+                    searchTitle.setForeground(Color.BLACK); // 사용자가 클릭하면 텍스트 색상을 변경
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (searchTitle.getText().trim().isEmpty()) {
+                    searchTitle.setText("          원하는 미션방을 검색할 수 있어요!");
+                    searchTitle.setForeground(SystemColor.controlShadow); // 포커스를 잃으면 다시 초기 텍스트와 색상을 설정
+                }
+            }
+        });
         searchTitle.setBounds(39, 12, 866, 59);
         groupRecruitment.add(searchTitle);
         
         searchTitle.setOpaque(false); // 배경을 투명하게 설정
-        searchTitle.setText("          원하는 미션방을 검색할 수 있어요!");
         searchTitle.setForeground(SystemColor.controlShadow);
         searchTitle.setFont(new Font("나눔고딕", Font.BOLD, 18));
         searchTitle.setBorder(null);
         searchTitle.setColumns(10);
         groupRecruitment.add(missionRoomCreate);
         
-        JLabel lblNewLabel_1 = new JLabel("카테고리 선택");
-        lblNewLabel_1.setBounds(50, 81, 110, 35);
-        lblNewLabel_1.setFont(new Font("\uB098\uB214\uACE0\uB515", lblNewLabel_1.getFont().getStyle() | Font.BOLD, lblNewLabel_1.getFont().getSize() + 6));
-        groupRecruitment.add(lblNewLabel_1);
-        JComboBox comboBox = new JComboBox();
+        JLabel searchCategory = new JLabel("카테고리 선택");
+        searchCategory.setBounds(50, 81, 110, 35);
+        searchCategory.setFont(new Font("\uB098\uB214\uACE0\uB515", searchCategory.getFont().getStyle() | Font.BOLD, searchCategory.getFont().getSize() + 6));
+        groupRecruitment.add(searchCategory);
+        comboBox = new JComboBox<>();
         comboBox.setBounds(180, 82, 121, 35);
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
         groupRecruitment.add(comboBox);
@@ -221,17 +241,26 @@ public class RecruitGroupMember{
         }
     }
 	private void performSearch() {
-        String searchText = searchTitle.getText().trim().toLowerCase();
-        searchList.clear(); // 이전 검색 결과를 지웁니다.
+	    String searchText = searchTitle.getText().trim().toLowerCase();
+	    if (searchText.equals("원하는 미션방을 검색할 수 있어요!")) {
+	        searchText = ""; // 기본 텍스트인 경우 검색 텍스트를 빈 문자열로 설정합니다.
+	    }
+	    String selectedCategory = comboBox.getSelectedItem().toString(); // comboBox에서 선택된 카테고리를 가져옵니다.
 
-        for (Group group : GroupManager.getGroupList()) { // GroupManager에서 groupList를 가져옵니다.
-            if (group.getTitle().toLowerCase().contains(searchText)) {
-                searchList.add(group); // 검색 텍스트와 일치하는 그룹을 searchList에 추가합니다.
-            }
-        }
+	    searchList.clear(); // 이전 검색 결과를 지웁니다.
 
-        updateSearchResults(); // 검색 결과에 따라 패널을 업데이트합니다.
-    }
+	    for (Group group : GroupManager.getGroupList()) {
+	        boolean titleMatches = group.getTitle().toLowerCase().contains(searchText);
+	        boolean categoryMatches = selectedCategory.equals("선택하기") || group.getCategory().equals(selectedCategory); // 카테고리가 일치하는지 확인
+
+	        if (titleMatches && categoryMatches) {
+	            searchList.add(group); // 검색 조건과 카테고리 모두 일치하는 그룹을 searchList에 추가합니다.
+	        }
+	    }
+
+	    updateSearchResults(); // 검색 결과에 따라 패널을 업데이트합니다.
+	}
+
 	private void updateSearchResults() {
 	    dynamicPanel.removeAll(); // 현재 동적 패널의 모든 컴포넌트를 제거합니다.
 
