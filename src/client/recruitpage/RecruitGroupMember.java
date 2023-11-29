@@ -14,6 +14,7 @@ import java.awt.BorderLayout;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Color;
+import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.DropMode;
@@ -33,7 +34,7 @@ import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-
+import client.recruitpage.Group;
 
 import client.MainPage.MainPage;
 /**
@@ -71,11 +72,11 @@ class RoundedPanel extends JPanel {
  * This class extends MainPage and provides a user interface for recruitment functionalities.
  */
 public class RecruitGroupMember{
-	 private int currentPage = 0;
-	 private final int PANELS_PER_PAGE = 4;
-	 private List<JPanel> allPanels = new ArrayList<>();
-	
-	private JTextField textField;
+	private int currentPage = 0;
+	private final int PANELS_PER_PAGE = 4;
+	private List<JPanel> allPanels = new ArrayList<>();
+	private List<Group> searchList = new ArrayList<>();
+	private JTextField searchTitle;
 	private JPanel groupRecruitment;
 	//JPanel a;
 	private static int panelCount = 0;
@@ -131,10 +132,15 @@ public class RecruitGroupMember{
         searchButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/search.png"));
         searchButton.setBounds(56, 26, 30, 30);
         groupRecruitment.add(searchButton);
-        
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performSearch();
+            }
+        });
         
         // 미션 방 검색
-        textField = new JTextField() {
+        searchTitle = new JTextField() {
             @Override
             protected void paintComponent(Graphics g) {
                 if (!isOpaque()) {
@@ -147,15 +153,15 @@ public class RecruitGroupMember{
                 super.paintComponent(g);
             }
         };
-        textField.setBounds(39, 12, 866, 59);
-        groupRecruitment.add(textField);
+        searchTitle.setBounds(39, 12, 866, 59);
+        groupRecruitment.add(searchTitle);
         
-        textField.setOpaque(false); // 배경을 투명하게 설정
-        textField.setText("          원하는 미션방을 검색할 수 있어요!");
-        textField.setForeground(SystemColor.controlShadow);
-        textField.setFont(new Font("나눔고딕", Font.BOLD, 18));
-        textField.setBorder(null);
-        textField.setColumns(10);
+        searchTitle.setOpaque(false); // 배경을 투명하게 설정
+        searchTitle.setText("          원하는 미션방을 검색할 수 있어요!");
+        searchTitle.setForeground(SystemColor.controlShadow);
+        searchTitle.setFont(new Font("나눔고딕", Font.BOLD, 18));
+        searchTitle.setBorder(null);
+        searchTitle.setColumns(10);
         groupRecruitment.add(missionRoomCreate);
         
         JLabel lblNewLabel_1 = new JLabel("카테고리 선택");
@@ -214,7 +220,54 @@ public class RecruitGroupMember{
             placePanel(panel, allPanels.size() - 1);
         }
     }
-	
+	private void performSearch() {
+        String searchText = searchTitle.getText().trim().toLowerCase();
+        searchList.clear(); // 이전 검색 결과를 지웁니다.
+
+        for (Group group : GroupManager.getGroupList()) { // GroupManager에서 groupList를 가져옵니다.
+            if (group.getTitle().toLowerCase().contains(searchText)) {
+                searchList.add(group); // 검색 텍스트와 일치하는 그룹을 searchList에 추가합니다.
+            }
+        }
+
+        updateSearchResults(); // 검색 결과에 따라 패널을 업데이트합니다.
+    }
+	private void updateSearchResults() {
+	    dynamicPanel.removeAll(); // 현재 동적 패널의 모든 컴포넌트를 제거합니다.
+
+	    int searchPanelIndex = 0; // 검색된 패널의 인덱스
+	    for (Group group : searchList) {
+	        for (JPanel panel : allPanels) {
+	            if (isPanelMatchingGroup(panel, group)) {
+	                placePanel(panel, searchPanelIndex % PANELS_PER_PAGE); // 검색된 패널을 앞쪽에 배치합니다.
+	                searchPanelIndex++; // 다음 검색된 패널의 인덱스를 업데이트합니다.
+	                if (searchPanelIndex >= PANELS_PER_PAGE) {
+	                    break; // 한 페이지에 표시할 수 있는 최대 패널 수에 도달했습니다.
+	                }
+	            }
+	        }
+	        if (searchPanelIndex >= PANELS_PER_PAGE) {
+	            break; // 한 페이지의 패널 한계에 도달했으므로 더 이상의 검색은 중단합니다.
+	        }
+	    }
+
+	    dynamicPanel.revalidate();
+	    dynamicPanel.repaint();
+	}
+
+	private boolean isPanelMatchingGroup(JPanel panel, Group group) {
+	    // 패널 내부를 순회하며 JLabel 컴포넌트를 찾습니다.
+	    for (Component comp : panel.getComponents()) {
+	        if (comp instanceof JLabel) {
+	            JLabel label = (JLabel)	 comp;
+	            if (label.getText().equals(group.getTitle())) {
+	                return true; // 레이블의 텍스트가 Group의 제목과 일치하면 true를 반환합니다.
+	            }
+	        }
+	    }
+	    return false; // 일치하는 레이블이 없으면 false를 반환합니다.
+	}
+
 	private void updatePanels() {
 	    dynamicPanel.removeAll(); // 현재 페이지의 패널들을 모두 제거
 	    int start = currentPage * PANELS_PER_PAGE;
@@ -224,8 +277,9 @@ public class RecruitGroupMember{
 	    }
 	    dynamicPanel.revalidate();
 	    dynamicPanel.repaint();
+	    
 	}
-
+	
 	private void placePanel(JPanel panel, int index) {
 	    int position = index % PANELS_PER_PAGE;
 	    int top, left;
