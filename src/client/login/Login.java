@@ -1,7 +1,8 @@
 package client.login;
 
 import java.awt.*;
-
+import client.MainPage.*;
+import client.recruitpage.*;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
@@ -35,6 +36,7 @@ public class Login extends JFrame{
 	private JPasswordField passwordField;
 	private JLabel loginWarning;
 	private JLabel loginMatchWarning;
+	private JPanel panel;
 	
 	  /**
      * loginpage 띄우는 메소드
@@ -48,7 +50,7 @@ public class Login extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1200,850);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		Color backgroundColor = new Color(56,183,255);
 		panel.setBackground(backgroundColor);
 		
@@ -167,7 +169,10 @@ public class Login extends JFrame{
             	
             	checkValid();
             	if(login(id, password)) {
-            		System.out.println("Success");
+            		MainPage mp = new MainPage(true);
+            		mp.changePanel("group");
+            		frame.dispose();
+            		//System.out.println("Success");
             	}
             	else {
             		loginMatchWarning.setVisible(true);

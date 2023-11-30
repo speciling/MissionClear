@@ -79,7 +79,7 @@ public class RecruitGroupMember{
 	private List<JPanel> allPanels = new ArrayList<>();
 	private List<Group> searchList = new ArrayList<>();
 	private JTextField searchTitle;
-	private JPanel groupRecruitment;
+	public JPanel groupRecruitment;
 	//JPanel a;
 	private static int panelCount = 0;
 	/**
@@ -89,7 +89,9 @@ public class RecruitGroupMember{
 	//public JPanel get() {
 	//    return a;
 	//}
-
+	public JPanel get() {
+	      return groupRecruitment;
+	}
 	/**
      * Constructor to initialize the RecruitGroupMember interface.
 	 * @param b 
@@ -99,7 +101,6 @@ public class RecruitGroupMember{
 		super();
 		initializeGroupRecruitment();
 	}
-	
 	/**
      * Initializes and sets up the group recruitment interface.
      */
@@ -230,7 +231,6 @@ public class RecruitGroupMember{
             }
         });
 	}
-   
 	 /**
      * Adds a panel to the group recruitment interface.
      * @param panel The panel to be added to the group recruitment interface.

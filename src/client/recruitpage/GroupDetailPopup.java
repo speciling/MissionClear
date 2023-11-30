@@ -112,6 +112,17 @@ public class GroupDetailPopup {
 	    enterButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/참여하기.png"));
 	    enterButton.setBounds(149, 334, 110, 38);
 	    enterButton.setBorderPainted(false);
+	    enterButton.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            if (group.isSecretRoom()) {
+	                // InputPasswordPopup 인스턴스 생성 및 표시
+	                InputPasswordPopup passwordPopup = new InputPasswordPopup();
+	                passwordPopup.frame.setVisible(true);
+	            } else {
+	                // 여기에 비밀방이 아닐 경우 수행할 추가적인 액션을 넣으세요
+	            }
+	        }
+	    });
 	    groupDetailPopupPanel.add(enterButton);
 	}
 

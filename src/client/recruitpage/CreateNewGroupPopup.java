@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JSpinner;
@@ -230,10 +231,10 @@ public class CreateNewGroupPopup {
     	recruitmentEndDateDay.setBounds(442, 541, 62, 32);
     	createPopup.add(recruitmentEndDateDay);
     	
-    	JLabel lblNewLabel_1_1_1_2_2_1 = new JLabel("비밀방 설정(비밀번호 4자리 입력)");
-    	lblNewLabel_1_1_1_2_2_1.setFont(new Font("나눔고딕", Font.PLAIN, 19));
-    	lblNewLabel_1_1_1_2_2_1.setBounds(56, 580, 280, 35);
-    	createPopup.add(lblNewLabel_1_1_1_2_2_1);
+    	JLabel setPasswordLabel = new JLabel("비밀방 설정(비밀번호 4자리 입력)");
+    	setPasswordLabel.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	setPasswordLabel.setBounds(56, 580, 280, 35);
+    	createPopup.add(setPasswordLabel);
     	
     	JButton creationComplete = new JButton("");
     	creationComplete.setSelectedIcon(new ImageIcon("./resource/RecruitGroupMember/생성완료.png"));
@@ -261,7 +262,7 @@ public class CreateNewGroupPopup {
     	createPopup.add(openRoom);
     	
     	
-    	roomPassword = new JTextField();
+    	roomPassword = new JPasswordField();
     	roomPassword.setToolTipText("");
     	roomPassword.setColumns(10);
     	roomPassword.setBorder(null);
