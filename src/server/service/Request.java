@@ -9,15 +9,14 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Request {
     public RequestType type;
     public String bodyString;
+    public byte[] file = null;
     private JSONObject data;
 
     public Request(byte type, String body) {
@@ -53,10 +52,14 @@ public class Request {
         JSONObject data = request.getData();
         String jsonString = data.toJSONString();
         byte[] bytes = jsonString.getBytes();
-        ByteBuffer bf = ByteBuffer.allocate(bytes.length+5);
+        ByteBuffer bf = ByteBuffer.allocate(bytes.length+5 + (request.file!=null? request.file.length+4: 0));
         bf.put((byte)type.getCode());
         bf.putInt(bytes.length);
         bf.put(bytes);
+        if (request.file != null) {
+            bf.putInt(request.file.length);
+            bf.put(request.file);
+        }
         bf.flip();
         return bf;
     }

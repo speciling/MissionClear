@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import server.db.DBManager;
 import server.db.ResultType;
 import server.db.ServerDBManager;
+import server.group.Group;
 import server.user.User;
 
 import java.io.File;
@@ -57,6 +58,9 @@ public class RequestHandler implements Handler{
                     case SENDDATA:
                         sendData(request);
                         break;
+                    case GETRECRUITINGGROUPDATA:
+                        getRecruitingGroupData(request);
+                        break;
                     case CREATENEWGROUP:
                         createNewGroup(request);
                         break;
@@ -74,6 +78,9 @@ public class RequestHandler implements Handler{
                         break;
                     case CHANGENICKNAME:
                         changeNickname(request);
+                        break;
+                    case GETFILE:
+                        getFile(request);
                         break;
                 }
             }
@@ -129,8 +136,24 @@ public class RequestHandler implements Handler{
                 socketChannel.read(bodyBuffer);
                 bodyBuffer.flip();
                 String body = new String(bodyBuffer.array());
+                Request request = new Request(type, body);
 
-                return new Request(type, body);
+                if (type == RequestType.CERTIFYMISSION.getCode() || type == RequestType.CHANGEPFP.getCode()) {
+                    headerBuffer = ByteBuffer.allocate(4);
+                    socketChannel.read(headerBuffer);
+                    length = headerBuffer.getInt();
+
+                    bodyBuffer = ByteBuffer.allocate(length);
+                    socketChannel.read(bodyBuffer);
+                    bodyBuffer.flip();
+                    request.file = bodyBuffer.array();
+                }
+
+                if (this.user != null) {
+                    request.getData().put("uid", this.user.userID);
+                }
+
+                return request;
             }
 
         } catch (IOException e) {
@@ -188,6 +211,11 @@ public class RequestHandler implements Handler{
     private void sendData(Request request) {
     }
 
+    private void getRecruitingGroupData(Request request) {
+        JSONObject result = ServerDBManager.getRecruitingGroupData();
+        addTask(Request.toByteBuffer(RequestType.GETRECRUITINGGROUPDATA, result));
+    }
+
     private void  createNewGroup(Request request) {
         ((JSONObject)request.getData().get("groupInfo")).put("users", user.userID);
         JSONObject result = ServerDBManager.createGroup((JSONObject) request.getData().get("groupInfo"));
@@ -195,8 +223,9 @@ public class RequestHandler implements Handler{
     }
 
     private void enterGroup(Request request) {
-        int uid = 0, gid = 0;
-        ResultType resultType = ServerDBManager.enterGroup(uid, gid, new String());
+        int uid = user.userID, gid = Integer.parseInt(request.getData().get("gid").toString());
+        String pw = request.getData().get("password").toString();
+        ResultType resultType = ServerDBManager.enterGroup(uid, gid, pw);
         if (resultType == ResultType.SUCCESS) {
             request.getData().put("resultType", resultType);
             addTask(Request.toByteBuffer(request));
@@ -209,26 +238,40 @@ public class RequestHandler implements Handler{
 
     private void chat(Request request) {
         int chatId = DBManager.saveChatMessage(request.getData());
+        int gid = Integer.parseInt(request.getData().get("gid").toString());
         request.getData().put("chatId", chatId);
-        addTask(Request.toByteBuffer(request));
+        for (User user: Group.get(gid).getConnectedUserList())
+            user.send(Request.toByteBuffer(request));
     }
 
     private void certifyMission(Request request) {
-
-        int chatID = DBManager.saveCertifyPicture(request.getData());
+        int chatId = DBManager.saveCertifyPicture(request);
+        int gid = Integer.parseInt(request.getData().get("gid").toString());
+        request.getData().put("chatId", chatId);
+        for (User user: Group.get(gid).getConnectedUserList())
+            user.send(Request.toByteBuffer(request));
     }
 
     private void changePFP(Request request) {
-        int uid = 0;
-        Path picture = null;
-
-        ResultType resultType = DBManager.changePFP(uid, picture);
+        ResultType resultType = DBManager.changePFP(request.getData(), request.file);
+        JSONObject result = new JSONObject();
+        result.put("resultType", resultType);
+        addTask(Request.toByteBuffer(RequestType.CHANGEPFP, result));
     }
 
     private void  changeNickname(Request request) {
-        int uid = 0;
-        String nickname = null;
+        int uid = user.userID;
+        String nickname = request.getData().get("nickname").toString();
 
         ResultType resultType = DBManager.changeNickname(uid, nickname);
+        JSONObject result = new JSONObject();
+        result.put("resultType", resultType);
+        addTask(Request.toByteBuffer(RequestType.CHANGENICKNAME, result));
+    }
+
+    private void getFile(Request request) {
+        ServerDBManager.getFile(request);
+
+        addTask(Request.toByteBuffer(request));
     }
 }

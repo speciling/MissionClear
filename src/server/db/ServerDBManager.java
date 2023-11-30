@@ -2,12 +2,14 @@ package server.db;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import server.service.Request;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class ServerDBManager extends DBManager{
 
@@ -108,15 +110,16 @@ public class ServerDBManager extends DBManager{
         JSONArray users = new JSONArray();
         for (int uid: userList) {
             JSONObject user = getUser(uid);
+            String pfpPath = user.get("pfp").toString();
+            user.replace("pfp", Path.of(pfpPath).getFileName().toString());
             users.add(user);
         }
         result.put("userData", users);
 
         JSONObject chatData = new JSONObject();
-        try {
+        try (Statement statement = conn.createStatement()){
             for (int gid : groups) {
                 JSONArray jsonArray = new JSONArray();
-                Statement statement = conn.createStatement();
                 String sql = "SELECT * from G" + gid + "CHAT";
                 ResultSet rs = statement.executeQuery(sql);
 
@@ -124,7 +127,13 @@ public class ServerDBManager extends DBManager{
                     JSONObject chat = new JSONObject();
                     chat.put("chatId", rs.getInt("chatId"));
                     chat.put("uid", rs.getInt("uid"));
-                    chat.put("message", rs.getString("message"));
+                    chat.put("isPic", rs.getInt("isPic"));
+                    if (rs.getInt("isPic") == 1) {
+                        String filePath = rs.getString("message");
+                        chat.put("message", Path.of(filePath).getFileName().toString());
+                    } else {
+                        chat.put("message", rs.getString("message"));
+                    }
                     jsonArray.add(chat);
                 }
 
@@ -136,10 +145,9 @@ public class ServerDBManager extends DBManager{
         result.put("chatData", chatData);
 
         JSONObject progressData = new JSONObject();
-        try {
+        try (Statement statement = conn.createStatement()){
             for (int gid : groups) {
                 JSONArray jsonArray = new JSONArray();
-                Statement statement = conn.createStatement();
                 String sql = "SELECT * from G" + gid + "PROGRESS";
                 ResultSet rs = statement.executeQuery(sql);
 
@@ -156,6 +164,85 @@ public class ServerDBManager extends DBManager{
             e.printStackTrace();
         }
         result.put("progressData", progressData);
+
+        JSONArray recruitingGroups = new JSONArray();
+        try (Statement statement = conn.createStatement()){
+            String sql = "SELECT * FROM GROUPS WHERE deadline >= date('now', 'localtime')";
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                // 열 제목 리스트 생성
+                ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+                int numCols = resultSetMetaData.getColumnCount();
+                List<String> colNames = IntStream.range(0, numCols)
+                        .mapToObj(i -> {
+                            try {
+                                return resultSetMetaData.getColumnName(i + 1);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                return "?";
+                            }
+                        })
+                        .toList();
+                // 각 열을 JSON 객체로 만들어 result에 저장
+                while (resultSet.next()) {
+                    JSONObject group = new JSONObject();
+                    colNames.forEach(cn -> {
+                        try {
+                            group.put(cn, resultSet.getObject(cn));
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    group.put("isSecret", group.get("password") != null);
+                    group.remove("password");
+                    recruitingGroups.add(group);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        result.put("recruitingGroups", recruitingGroups);
+
+        return result;
+    }
+
+    public static JSONObject getRecruitingGroupData() {
+        JSONObject result = new JSONObject();
+        JSONArray recruitingGroups = new JSONArray();
+        try (Statement statement = conn.createStatement()){
+            String sql = "SELECT * FROM GROUPS WHERE (startDate <= date('now', 'localtime') AND deadline >= date('now', 'localtime'))";
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                // 열 제목 리스트 생성
+                ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+                int numCols = resultSetMetaData.getColumnCount();
+                List<String> colNames = IntStream.range(0, numCols)
+                        .mapToObj(i -> {
+                            try {
+                                return resultSetMetaData.getColumnName(i + 1);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                return "?";
+                            }
+                        })
+                        .toList();
+                // 각 열을 JSON 객체로 만들어 result에 저장
+                while (resultSet.next()) {
+                    JSONObject group = new JSONObject();
+                    colNames.forEach(cn -> {
+                        try {
+                            group.put(cn, resultSet.getObject(cn));
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    group.put("isSecret", group.get("password") != null);
+                    group.remove("password");
+                    recruitingGroups.add(group);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        result.put("recruitingGroups", recruitingGroups);
 
         return result;
     }
@@ -214,7 +301,7 @@ public class ServerDBManager extends DBManager{
         String password = (String) groupInfo.get("password");
         Integer uid = (Integer) groupInfo.get("uid");
 
-        JSONObject result = new JSONObject();
+        JSONObject result = groupInfo;
         String sql = String.format("""
                 INSERT INTO GROUPS 
                 (title, description, mission, capacity, category, deadline, startDate, endDate, password, users)
@@ -226,6 +313,7 @@ public class ServerDBManager extends DBManager{
             //gid 확인
             sql = "SELECT last_insert_rowid()";
             Integer gid = (Integer) executeQuery(sql).get("last_insert_rowid()");
+            result.put("gid", gid);
 
             // user의 groups에 group 추가
             sql = String.format("""
@@ -236,7 +324,7 @@ public class ServerDBManager extends DBManager{
 
             // 채팅, 미션인증 진행도 테이블 생성
             sql = String.format("""
-                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message chat not null)""", gid);
+                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message string not null, isPic integer not null)""", gid);
             createTable("G"+gid+"CHAT", sql);
             sql = String.format("""
                     CREATE TABLE IF NOT EXISTS G%sPROGRESS (uid integer not null, date string not null)""", gid);
@@ -270,5 +358,16 @@ public class ServerDBManager extends DBManager{
         }
 
         return ResultType.WARNING;
+    }
+
+    public static void getFile(Request request) {
+        String fileName = request.getData().get("fileName").toString();
+        fileName = path.toString() + "\\" + fileName;
+        try {
+            byte[] file = Files.readAllBytes(Path.of(fileName));
+            request.file = file;
+        } catch (IOException e) {
+            request.getData().put("resultType", ResultType.WARNING);
+        }
     }
 }

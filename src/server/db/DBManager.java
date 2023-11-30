@@ -3,6 +3,7 @@ package server.db;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.group.Group;
+import server.service.Request;
 import server.user.User;
 
 import java.io.File;
@@ -112,11 +113,12 @@ public class DBManager {
     public static int saveChatMessage(JSONObject data){
         Integer uid = Integer.parseInt(data.get("uid").toString());
         Integer gid = Integer.parseInt(data.get("gid").toString());
+        Integer isPic = Integer.parseInt(data.get("isPic").toString());
         String msg = (String)data.get("message");
 
         if (data.get("chatId") == null) {
             String sql = String.format("""
-                    INSERT INTO G%dCHAT (uid, message) VALUES (%d, '%s')""", gid, uid, msg);
+                    INSERT INTO G%dCHAT (uid, message, isPic) VALUES (%d, '%s', %d)""", gid, uid, msg, isPic);
             executeSQL(sql);
 
             sql = "SELECT last_insert_rowid()";
@@ -126,22 +128,61 @@ public class DBManager {
 
         Integer chatId = Integer.parseInt(data.get("chatId").toString());
         String sql = String.format("""
-                INSERT INTO G%dCHAT (chatId, uid, message) VALUES (%d, %d, '%s')""", gid, chatId, uid, msg);
+                INSERT INTO G%dCHAT (chatId, uid, message, isPic) VALUES (%d, %d, '%s', %d)""", gid, chatId, uid, msg, isPic);
         executeSQL(sql);
         return chatId;
     }
 
     // 저장 성공시 채팅 번호 반환, 실패시 -1 반환
-    public static int saveCertifyPicture(JSONObject data){
-        return -1;
+    public static int saveCertifyPicture(Request request){
+        int uid = Integer.parseInt(request.getData().get("uid").toString());
+        int gid = Integer.parseInt(request.getData().get("gid").toString());
+
+        String fileName = request.getData().get("fileName").toString();
+        String extension = fileName.substring(fileName.lastIndexOf('.')+1);
+        if (!extension.equals("jpg") && !extension.equals("jpeg") && !extension.equals("png")) {
+            return -1;
+        }
+
+        Path filePath = Path.of(path.toString() + '\\' + "G" + gid + "U" + uid + "certify." + extension);
+        try {
+            Files.write(filePath, request.file);
+        } catch (IOException e ) {
+            return -1;
+        }
+        String sql = String.format("INSERT INTO G%dPROGRESS (uid, date) VALUES (%d, date('now', 'localtime'))", gid, uid);
+        executeSQL(sql);
+        request.getData().put("isPic", 1);
+        request.getData().put("message", filePath);
+
+        return saveChatMessage(request.getData());
     }
 
     public static ResultType changeNickname(int uid, String nickname){
-        return ResultType.WARNING;
+        String sql = String.format("UPDATE USER SET nickname='%s' WHERE uid=%d", nickname, uid);
+        ResultType resultType = executeSQL(sql);
+        return resultType;
     }
 
-    public static ResultType changePFP(int uid, Path picture){
-        return ResultType.WARNING;
+    public static ResultType changePFP(JSONObject data, byte[] fileData){
+        int uid = Integer.parseInt(data.get("uid").toString());
+
+        String filePath = data.get("fileName").toString();
+        String extension = filePath.substring(filePath.lastIndexOf('.')+1);
+        if (!extension.equals("jpg") && !extension.equals("jpeg") && !extension.equals("png")) {
+            return ResultType.WARNING;
+        }
+
+        Path pfpPath = Path.of(path.toString() + '\\' + uid + "pfp." + extension);
+        try {
+            Files.write(pfpPath, fileData);
+        } catch (IOException e ) {
+            return ResultType.WARNING;
+        }
+
+        String sql = String.format("UPDATE USER SET pfp='%s' WHERE uid=%d", pfpPath.toString(), uid);
+
+        return executeSQL(sql);
     }
 
     public static ResultType createGroupDataTables(int gid) {

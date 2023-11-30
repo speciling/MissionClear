@@ -1,6 +1,8 @@
 package client.net;
 
 import client.db.ClientDBManager;
+import client.recruitpage.Group;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import server.db.DBManager;
@@ -12,6 +14,10 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -88,8 +94,20 @@ public class ClientSocket extends Thread{
             socket.read(bodyBuffer);
             bodyBuffer.flip();
             String body = new String(bodyBuffer.array());
+            Request request = new Request(type, body);
 
-            return new Request(type, body);
+            if (type == RequestType.CERTIFYMISSION.getCode() || type == RequestType.CHANGEPFP.getCode() || type == RequestType.GETFILE.getCode()) {
+                headerBuffer = ByteBuffer.allocate(4);
+                socket.read(headerBuffer);
+                length = headerBuffer.getInt();
+
+                bodyBuffer = ByteBuffer.allocate(length);
+                socket.read(bodyBuffer);
+                bodyBuffer.flip();
+                request.file = bodyBuffer.array();
+            }
+
+            return request;
         }
         return null;
     }
@@ -100,10 +118,15 @@ public class ClientSocket extends Thread{
             switch (response.type){
                 case LOGIN:
                 case SIGNUP:
-                case CHANGEPFP:
-                case CHANGENICKNAME:
+                case GETRECRUITINGGROUPDATA:
+                    readQueue.add(response);
+                    break;
                 case CREATENEWGROUP:
+                    ClientDBManager.createNewGroup(response.getData());
+                    readQueue.add(response);
+                    break;
                 case ENTERGROUP:
+                    ClientDBManager.enterGroup(response.getData());
                     readQueue.add(response);
                     break;
                 case SENDDATA:
@@ -113,13 +136,32 @@ public class ClientSocket extends Thread{
                     ClientDBManager.saveChatMessage(response.getData());
                     break;
                 case CERTIFYMISSION:
-                    ClientDBManager.saveCertifyPicture(response.getData());
+                    ClientDBManager.saveCertifyPicture(response);
+                    break;
+                case CHANGEPFP:
+                    DBManager.changePFP(response.getData(), response.file);
+                    break;
+                case CHANGENICKNAME:
+                    break;
+                case GETFILE:
+                    ClientDBManager.saveFile(response);
                     break;
             }
         }
     }
 
     public static void send(Request request) {
+        if (request.type == RequestType.CERTIFYMISSION || request.type == RequestType.CHANGEPFP) {
+            String filePath = request.getData().get("filePath").toString();
+            Path path = Path.of(filePath);
+            request.getData().put("fileName", path.getFileName().toString());
+
+            try {
+                request.file = Files.readAllBytes(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         writeQueue.add(Request.toByteBuffer(request));
     }
 
@@ -162,5 +204,24 @@ public class ClientSocket extends Thread{
                 return result == ResultType.SUCCESS.getCode();
             }
         }
+    }
+
+    public static List<Group> getRecruitingGroupData() {
+        send(new Request(RequestType.GETRECRUITINGGROUPDATA, new JSONObject()));
+        Request result = null;
+        while (true) {
+            if (!readQueue.isEmpty()) {
+                result = readQueue.poll();
+                break;
+            }
+        }
+        List<Group> recruitingGroupList = new ArrayList<>();
+        JSONArray recruitingGroups = (JSONArray) result.getData().get("recruitingGroups");
+        for (int i = 0; i < recruitingGroups.size(); i++) {
+            JSONObject group = (JSONObject) recruitingGroups.get(i);
+            recruitingGroupList.add(new Group(group));
+        }
+
+        return recruitingGroupList;
     }
 }

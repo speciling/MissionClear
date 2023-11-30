@@ -1,13 +1,20 @@
 package client.db;
 
+import client.Client;
+import client.net.ClientSocket;
+import client.recruitpage.Group;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.db.DBManager;
+import server.service.Request;
+import server.service.RequestType;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientDBManager extends DBManager {
 
@@ -55,11 +62,16 @@ public class ClientDBManager extends DBManager {
             Integer uid = Integer.parseInt(user.get("uid").toString());
             String nickname = (String) user.get("nickname");
             String pfp = (String) user.get("pfp");
+            String fileName = Path.of(pfp).getFileName().toString();
+            pfp = path.toString() + "\\" + fileName;
             String groups = user.get("groups").toString();
             String sql = String.format("""
                     INSERT OR REPLACE INTO USER (uid, nickname, pfp, groups) 
                     VALUES (%d, '%s', '%s', '%s')""", uid, nickname, pfp, groups);
             executeSQL(sql);
+            JSONObject object = new JSONObject();
+            object.put("fileName", fileName);
+            ClientSocket.send(new Request(RequestType.GETFILE, object));
         }
 
         JSONArray groupData = (JSONArray) data.get("groupData");
@@ -85,15 +97,22 @@ public class ClientDBManager extends DBManager {
 
             JSONArray chattings = (JSONArray) chatData.get("G"+gid+"CHAT");
             sql = String.format("""
-                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message chat not null)""", gid);
+                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message chat not null, isPic integer not null)""", gid);
             createTable("G"+gid+"CHAT", sql);
             for (int j = 0; j < chattings.size(); j++) {
                 JSONObject chatting = (JSONObject) chattings.get(j);
                 Integer chatId = Integer.parseInt(chatting.get("chatId").toString());
                 Integer uid = Integer.parseInt(chatting.get("uid").toString());
                 String message = chatting.get("message").toString();
+                Integer isPic = Integer.parseInt(chatting.get("isPic").toString());
+                if (isPic == 1) {
+                    JSONObject object = new JSONObject();
+                    object.put("fileName", message);
+                    message = path.toString() + "\\" + message;
+                    ClientSocket.send(new Request(RequestType.GETFILE, object));
+                }
                 sql = String.format("""
-                        INSERT INTO G%dCHAT (chatId, uid, message) VALUES (%d, %d, '%s')""", gid, chatId, uid, message);
+                        INSERT INTO G%dCHAT (chatId, uid, message, isPic) VALUES (%d, %d, '%s', %d)""", gid, chatId, uid, message, isPic);
                 executeSQL(sql);
             }
 
@@ -112,9 +131,56 @@ public class ClientDBManager extends DBManager {
         }
     }
 
-    public static void createNewGroup(JSONObject group) {}
+    public static void createNewGroup(JSONObject group) {
+        String title = (String) group.get("title");
+        String description = (String) group.get("description");
+        String mission = (String) group.get("mission");
+        Integer capacity = (Integer) group.get("capacity");
+        Integer category = (Integer) group.get("category");
+        String deadline = (String) group.get("deadline");
+        String startDate = (String) group.get("startDate");
+        String endDate = (String) group.get("endDate");
+        Integer uid = (Integer) group.get("uid");
 
-    public static void enterGroup(JSONObject group) {}
+        String sql = String.format("""
+                INSERT INTO GROUPS 
+                (title, description, mission, capacity, category, deadline, startDate, endDate, users)
+                VALUES ('%s', '%s', '%s', %d, %d, '%s', '%s', '%s', '%s')""",
+                title, description, mission, capacity, category, deadline, startDate, endDate, uid+",");
+
+        executeSQL(sql).getCode();
+
+        Integer gid = Integer.parseInt(group.get("gid").toString());
+        // user의 groups에 group 추가
+        sql = String.format("""
+                SELECT groups FROM USER WHERE (uid=%d)""", uid);
+        String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
+        sql = String.format("UPDATE USER SET groups='%s' WHERE uid=%d", groups, uid);
+        executeSQL(sql);
+    }
+
+    public static void enterGroup(JSONObject data) {
+        int uid = Integer.parseInt(data.get("uid").toString());
+        int gid = Integer.parseInt(data.get("gid").toString());
+
+        String sql = String.format("SELECT users FROM GROUPS WHERE gid=%d", gid);
+        String users = ((String)executeQuery(sql).get("users")) + uid + ",";
+
+        sql = String.format("SELECT groups FROM USER WHERE uid=%d", uid);
+        String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
+
+        sql = String.format("""
+                    UPDATE GROUPS SET users='%s' WHERE gid=%d""", users, gid);
+        executeSQL(sql);
+
+        sql = String.format("""
+                    UPDATE GROUPS SET usercnt=usercnt+1 WHERE gid='%s'""", gid);
+        executeSQL(sql);
+
+        sql = String.format("""
+                    UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
+        executeSQL(sql);
+    }
 
     public static JSONObject getUserInfo(int uid) {
         String sql = String.format("""
@@ -146,8 +212,18 @@ public class ClientDBManager extends DBManager {
     public static JSONArray getChatData(int gid) {
         JSONArray result = new JSONArray();
         String sql = String.format("""
-                SELECT * FROM G%dCHAT ORDER BY chatId DESC LIMIT 10""");
+                SELECT * FROM G%dCHAT ORDER BY chatId DESC LIMIT 50""");
         return result;
+    }
+
+    public static void saveFile(Request request) {
+        String fileName = request.getData().get("fileName").toString();
+        fileName = path.toString() + "\\" + fileName;
+        try {
+            Files.write(Path.of(fileName), request.file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

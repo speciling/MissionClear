@@ -9,12 +9,14 @@ public enum RequestType {
     LOGIN(1),
     SIGNUP(2),
     SENDDATA(3),
-    CREATENEWGROUP(4),
-    ENTERGROUP(5),
-    CHAT(6),
-    CERTIFYMISSION(7),
-    CHANGEPFP(8),
-    CHANGENICKNAME(9);
+    GETRECRUITINGGROUPDATA(4),
+    CREATENEWGROUP(5),
+    ENTERGROUP(6),
+    CHAT(7),
+    CERTIFYMISSION(8),
+    CHANGEPFP(9),
+    CHANGENICKNAME(10),
+    GETFILE(11);
 
     private static final Map<Integer, String> CODE_MAP = Collections.unmodifiableMap(
             Stream.of(values()).collect(Collectors.toMap(RequestType::getCode, RequestType::getName)));

@@ -17,8 +17,11 @@ public class User {
         this.userID = userID;
         this.groupList = new ArrayList<>();
         this.requestHandler = requestHandler;
-        for (int gid : gidList)
-            groupList.add(Group.get(gid));
+        for (int gid : gidList) {
+            Group group = Group.get(gid);
+            groupList.add(group);
+            group.registerUser(this);
+        }
         connect();
     }
 
@@ -31,7 +34,8 @@ public class User {
     }
 
     public void disconnect() {
-
+        for(Group group: groupList)
+            group.unRegisterUser(this);
     }
 }
 
