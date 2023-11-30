@@ -3,7 +3,7 @@ package client.MainPage;
 import javax.swing.*;
 import java.awt.*;
 
-import DetailMyGroup.DetailMyGroup;
+import client.detailMyGroup.DetailMyGroup;
 import client.login.Login;
 import client.mypage.Mypage;
 import client.recruitpage.MyGroupList;
@@ -23,7 +23,7 @@ public class MainPage extends JFrame {
    public Container main;
 
 /**
- * DB에서 userName과 userPoc 같은 유저의 정보를 가져오는 함수이다. 
+ * DB에서 userName과 userPic 같은 유저의 정보를 가져오는 함수이다. 
  */
    public void callingInfo() {
       ;
@@ -204,8 +204,7 @@ public class MainPage extends JFrame {
 
    public void changePanel(String panelName) {
 	   
-      if (panelName.equals("group")) {
-         /*
+      if (panelName.equals("group")) {/*
     	  RecruitGroupMember r = new RecruitGroupMember(true);
          JPanel p = r.get();
          p = makePan(p);
