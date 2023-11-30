@@ -68,12 +68,12 @@ class RoundedPanel extends JPanel {
  * Class representing the recruitment group member interface.
  * This class extends MainPage and provides a user interface for recruitment functionalities.
  */
-public class RecruitGroupMember extends MainPage{
+public class RecruitGroupMember{
 	
 	private JTextField textField;
 	private JPanel groupRecruitment;
 	//JPanel a;
-	
+	private static int panelCount = 0;
 	/**
      * Retrieves the main panel of the recruitment interface.
      * @return the main JPanel component of the recruitment interface.
@@ -86,8 +86,8 @@ public class RecruitGroupMember extends MainPage{
      * Constructor to initialize the RecruitGroupMember interface.
      * @param vis Boolean value to set the visibility of the main page.
      */
-	public RecruitGroupMember(boolean vis) {
-		super(vis);
+	public RecruitGroupMember() {
+		super();
 		initializeGroupRecruitment();
 	}
 	
@@ -182,10 +182,38 @@ public class RecruitGroupMember extends MainPage{
      */
 	public void addToGroupRecruitment(JPanel panel) {
 		if (groupRecruitment != null) {
-            panel.setBounds(50, 141, 406, 273);
+            int top, left;
+
+            // 배열 인덱스에 따라 위치를 결정합니다.
+            switch (panelCount % 4) { // % 연산자를 사용하여 4개의 패널마다 위치를 변경합니다.
+                case 0:
+                    top = 141;
+                    left = 50;
+                    break;
+                case 1:
+                    top = 141;
+                    left = 490;
+                    break;
+                case 2:
+                    top = 439;
+                    left = 50;
+                    break;
+                case 3:
+                    top = 439;
+                    left = 490;
+                    break;
+                default:
+                    top = 141; // 기본값 설정
+                    left = 50; // 기본값 설정
+                    break;
+            }
+
+            panel.setBounds(left, top, panel.getWidth(), panel.getHeight());
             groupRecruitment.add(panel);
             groupRecruitment.revalidate();
             groupRecruitment.repaint();
+
+            panelCount++; // 패널이 추가될 때마다 카운트를 증가시킵니다.
         }
     }
 	

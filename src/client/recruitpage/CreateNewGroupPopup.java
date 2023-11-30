@@ -16,6 +16,7 @@ import java.awt.Font;
 import javax.swing.JSpinner;
 import javax.swing.JList;
 import javax.swing.JComboBox;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
@@ -56,6 +57,8 @@ public class CreateNewGroupPopup {
     private JTextField recruitmentEndDateMonth;
     private JTextField recruitmentEndDateDay;
     private JTextField roomPassword;
+    private JRadioButton secretRoom;
+    private JRadioButton openRoom;
 
     /**
      * Default constructor for CreateNewGroupPopup.
@@ -241,16 +244,22 @@ public class CreateNewGroupPopup {
     	createPopup.add(creationComplete);
     	
     	JRadioButton secretRoom = new JRadioButton("예");
-    	secretRoom.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+    	JRadioButton openRoom = new JRadioButton("아니오");
+    	
+    	ButtonGroup roomTypeGroup = new ButtonGroup();
+        roomTypeGroup.add(secretRoom);
+        roomTypeGroup.add(openRoom);
+        
+        secretRoom.setFont(new Font("나눔고딕", Font.PLAIN, 15));
     	secretRoom.setBackground(new Color(255, 255, 255));
     	secretRoom.setBounds(56, 621, 50, 23);
     	createPopup.add(secretRoom);
     	
-    	JRadioButton openRoom = new JRadioButton("아니오");
     	openRoom.setFont(new Font("나눔고딕", Font.PLAIN, 15));
     	openRoom.setBackground(Color.WHITE);
     	openRoom.setBounds(113, 621, 70, 23);
     	createPopup.add(openRoom);
+    	
     	
     	roomPassword = new JTextField();
     	roomPassword.setToolTipText("");
@@ -265,7 +274,8 @@ public class CreateNewGroupPopup {
             	// AddMissionRoom 객체를 생성하면서 제목을 전달
             	
             	String missionTitle = title.getText();
-            	String missionDescription = description.getText(); // Fetch the mission description text
+            	String missionDescription = description.getText();
+            	String missionContent = mission.getText();// Fetch the mission description text
             	int deadlineYear = Integer.parseInt(recruitmentDeadlineYear.getText());
                 int deadlineMonth = Integer.parseInt(recruitmentDeadlineMonth.getText());
                 int deadlineDay = Integer.parseInt(recruitmentDeadlineDay.getText());
@@ -283,11 +293,28 @@ public class CreateNewGroupPopup {
                 
                 String selectedCategory = (String) category.getSelectedItem();
                 
-            	
-                AddMissionRoom addMissionRoom = new AddMissionRoom(missionTitle, missionDescription, deadlineYear, deadlineMonth, deadlineDay, recruitmentCapacityValue, selectedCategory, startDateYear, startDateMonth, startDateDay, endDateYear, endDateMonth, endDateDay);
-                addMissionRoom.initialize(missionTitle, missionDescription, deadlineYear, deadlineMonth, deadlineDay, recruitmentCapacityValue, selectedCategory, startDateYear, startDateMonth, startDateDay, endDateYear, endDateMonth, endDateDay);
-
-                // RecruitGroupMember의 frame에 패널 추가
+                boolean isSecretRoom = secretRoom.isSelected();
+                
+                Group group = new Group(
+                	    missionTitle, 
+                	    missionDescription, 
+                	    missionContent, // 누락된 mission 필드 추가
+                	    Integer.parseInt(recruitmentCapacity.getSelectedItem().toString()), // recruitmentCapacity는 int 타입
+                	    selectedCategory, 
+                	    recruitmentDeadlineYear.getText(), 
+                	    recruitmentDeadlineMonth.getText(), 
+                	    recruitmentDeadlineDay.getText(), 
+                	    recruitmentStartDateYear.getText(), 
+                	    recruitmentStartDateMonth.getText(), 
+                	    recruitmentStartDateDay.getText(), 
+                	    recruitmentEndDateYear.getText(), 
+                	    recruitmentEndDateMonth.getText(), 
+                	    recruitmentEndDateDay.getText(),
+                	    roomPassword.getText(), // roomPassword 필드 추가
+                	    isSecretRoom 
+                	);                // RecruitGroupMember의 frame에 패널 추가
+                GroupManager.addGroup(group);
+                AddMissionRoom addMissionRoom = new AddMissionRoom(group);
                 recruitGroupMember.addToGroupRecruitment(addMissionRoom.getPanel());
 
                 frame.dispose(); // 현재 프레임 닫기

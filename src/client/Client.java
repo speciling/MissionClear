@@ -13,8 +13,6 @@ import client.recruitpage.RecruitGroupMember;
 public class Client {
 	
 	  public static void main(String [] args) {
-//		  MyGroupList m = new MyGroupList(true);
-//		  RecruitGroupMember m = new RecruitGroupMember(true);
-		  MainPage test = new MainPage(true);
+		  MainPage a = new MainPage(true);
 	   }
 }

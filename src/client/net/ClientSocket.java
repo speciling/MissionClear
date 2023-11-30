@@ -62,40 +62,39 @@ public class ClientSocket extends Thread{
         writeThread.start();
 
         while (true) {
-            recieve();
+            try {
+                recieve();
+            } catch (IOException e) {
+                System.out.println("서버와 연결이 끊어졌습니다.");
+            }
         }
 
 
     }
 
-    private Request getResponse() {
+    private Request getResponse() throws IOException{
         JSONObject response;
         ByteBuffer headerBuffer = ByteBuffer.allocate(5);
-        try {
-            int readCount = socket.read(headerBuffer);
-            if (readCount > 0) {
 
-                headerBuffer.flip();
+        int readCount = socket.read(headerBuffer);
+        if (readCount > 0) {
 
-                byte type = headerBuffer.get();
-                int length = headerBuffer.getInt();
+            headerBuffer.flip();
 
-                ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
-                socket.read(bodyBuffer);
-                bodyBuffer.flip();
-                String body = new String(bodyBuffer.array());
+            byte type = headerBuffer.get();
+            int length = headerBuffer.getInt();
 
-                return new Request(type, body);
-            }
+            ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
+            socket.read(bodyBuffer);
+            bodyBuffer.flip();
+            String body = new String(bodyBuffer.array());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return new Request(type, body);
         }
         return null;
     }
 
-    private void recieve() {
+    private void recieve() throws IOException{
         Request response = getResponse();
         if (response != null) {
             switch (response.type){
@@ -122,6 +121,16 @@ public class ClientSocket extends Thread{
 
     public static void send(Request request) {
         writeQueue.add(Request.toByteBuffer(request));
+    }
+
+    public static boolean getResult() {
+        while (true) {
+            if (!readQueue.isEmpty()) {
+                JSONObject data = readQueue.poll().getData();
+
+                return Integer.parseInt(data.get("resultType").toString()) == ResultType.SUCCESS.getCode();
+            }
+        }
     }
 
     public static boolean login(String id, String pw) {
