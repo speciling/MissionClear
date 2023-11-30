@@ -65,6 +65,21 @@ public class InputPasswordPopup {
         warningLabel.setVisible(false); // 기본적으로 보이지 않도록 설정
         inputPasswordPanel.add(warningLabel);
 
+        JButton exitButton = new JButton("");
+    	exitButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/miniExit.png"));
+	    exitButton.setBounds(303, 5, 30, 30);
+	    exitButton.setOpaque(false);
+	    exitButton.setContentAreaFilled(false);
+	    exitButton.setBorderPainted(false);
+	    exitButton.setFocusPainted(false); // 포커스 테두리 제거
+    	inputPasswordPanel.add(exitButton);
+    	
+    	exitButton.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent e) {
+    	        frame.dispose(); // 현재 프레임을 닫음
+    	    }
+    	});
+    	
         // Enter 버튼에 액션 리스너 추가
         enterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
