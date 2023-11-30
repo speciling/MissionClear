@@ -270,6 +270,21 @@ public class CreateNewGroupPopup {
     	roomPassword.setBounds(202, 617, 119, 32);
     	createPopup.add(roomPassword);
     	
+    	JButton exitButton = new JButton("");
+    	exitButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/exit.png"));
+	    exitButton.setBounds(620, 10, 50, 50);
+	    exitButton.setOpaque(false);
+	    exitButton.setContentAreaFilled(false);
+	    exitButton.setBorderPainted(false);
+	    exitButton.setFocusPainted(false); // 포커스 테두리 제거
+    	createPopup.add(exitButton);
+    	
+    	exitButton.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent e) {
+    	        frame.dispose(); // 현재 프레임을 닫음
+    	    }
+    	});
+    	
     	creationComplete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	// AddMissionRoom 객체를 생성하면서 제목을 전달
