@@ -39,6 +39,8 @@ public class MainPage extends JFrame {
    }
 
    private void refreshPan() {
+      if (globPan != null)
+         this.remove(globPan);
       globPan = new JPanel();
       globPan.setBackground(Color.gray);
       globPan.setBounds(257, 69, 943, 781);
@@ -209,6 +211,7 @@ public class MainPage extends JFrame {
     	  RecruitGroupMember r = new RecruitGroupMember(true);
          JPanel p = r.get();
          p = makePan(p);
+         refreshPan();
          globPan.add(p);
          globPan.repaint();
          globPan.revalidate();
