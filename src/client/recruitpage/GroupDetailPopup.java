@@ -116,7 +116,7 @@ public class GroupDetailPopup {
 	        public void actionPerformed(ActionEvent e) {
 	            if (group.isSecretRoom()) {
 	                // InputPasswordPopup 인스턴스 생성 및 표시
-	                InputPasswordPopup passwordPopup = new InputPasswordPopup();
+	                InputPasswordPopup passwordPopup = new InputPasswordPopup(group);
 	                passwordPopup.frame.setVisible(true);
 	            } else {
 	                // 여기에 비밀방이 아닐 경우 수행할 추가적인 액션을 넣으세요

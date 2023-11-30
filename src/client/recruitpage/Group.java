@@ -71,7 +71,9 @@ public class Group {
     public boolean isSecretRoom() {
         return isSecretRoom;
     }
-    
+    public String getRoomPassword() {
+        return roomPassword;
+    }
     // 기본 생성자
     public Group() {
     }
