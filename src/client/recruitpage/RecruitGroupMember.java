@@ -91,6 +91,7 @@ public class RecruitGroupMember{
 	}
 	/**
      * Constructor to initialize the RecruitGroupMember interface.
+	 * @param b 
      * @param vis Boolean value to set the visibility of the main page.
      */
 	public RecruitGroupMember(boolean vis) {

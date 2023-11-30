@@ -82,14 +82,14 @@ public class Mypage {
 	public JPanel box;
 	//JPanel main;
 	
-	public static void main(String [] args) {
-		  MainPage mp = new MainPage(true);
-		  //Mypage mypage = new Mypage(true);
-		 
-		  //mp.globPan.add(mypage.get());
-		  //창 크기 변경안해도 뜨게 하는거
-		  //mp.globPan.repaint();
-	   }
+//	public static void main(String [] args) {
+//		  MainPage mp = new MainPage(true);
+//		  //Mypage mypage = new Mypage(true);
+//		 
+//		  //mp.globPan.add(mypage.get());
+//		  //창 크기 변경안해도 뜨게 하는거
+//		  //mp.globPan.repaint();
+//	   }
 
 	public CustomPanel missionProgressPanel;
 	private JLabel ongoingGroupName;
