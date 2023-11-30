@@ -205,11 +205,13 @@ public class MainPage extends JFrame {
    public void changePanel(String panelName) {
 	   
       if (panelName.equals("group")) {
-         /*
+         
     	  RecruitGroupMember r = new RecruitGroupMember(true);
          JPanel p = r.get();
          p = makePan(p);
-         globPan.add(p);*/
+         globPan.add(p);
+         globPan.repaint();
+         globPan.revalidate();
       }
       
       else if (panelName.equals("mygroup")) {

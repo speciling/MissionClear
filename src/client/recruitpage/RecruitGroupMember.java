@@ -86,9 +86,6 @@ public class RecruitGroupMember{
      * Retrieves the main panel of the recruitment interface.
      * @return the main JPanel component of the recruitment interface.
      */
-	//public JPanel get() {
-	//    return a;
-	//}
 	public JPanel get() {
 	      return groupRecruitment;
 	}
@@ -96,7 +93,7 @@ public class RecruitGroupMember{
      * Constructor to initialize the RecruitGroupMember interface.
      * @param vis Boolean value to set the visibility of the main page.
      */
-	public RecruitGroupMember() {
+	public RecruitGroupMember(boolean vis) {
 		super();
 		initializeGroupRecruitment();
 	}
@@ -194,10 +191,10 @@ public class RecruitGroupMember{
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
         groupRecruitment.add(comboBox);
 
-        MainPage mp = new MainPage(true);
-		JPanel a = mp.globPan;
-		a.setLayout(null);
-        a.add(groupRecruitment);
+//        MainPage mp = new MainPage(true);
+//		JPanel a = mp.globPan;
+//		a.setLayout(null);
+//        a.add(groupRecruitment);
         
         JButton backButton = new JButton("");
         backButton.setBackground(new Color(246, 246, 246));
