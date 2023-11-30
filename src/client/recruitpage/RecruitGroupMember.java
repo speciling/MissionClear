@@ -80,7 +80,6 @@ public class RecruitGroupMember{
 	private List<Group> searchList = new ArrayList<>();
 	private JTextField searchTitle;
 	public JPanel groupRecruitment;
-	//JPanel a;
 	private static int panelCount = 0;
 	/**
      * Retrieves the main panel of the recruitment interface.

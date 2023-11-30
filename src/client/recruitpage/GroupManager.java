@@ -1,15 +1,32 @@
 package client.recruitpage;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import client.net.ClientSocket;
+import server.service.Request;
+import server.service.RequestType;
 
 public class GroupManager {
-    private static ArrayList<Group> groupList = new ArrayList<>();
+    private static List<Group> groupList = new ArrayList<>();
 
-    public static void addGroup(Group group) {
-        groupList.add(group);
+    public static boolean addGroup(Group group) {
+    	Request request = new Request(RequestType.CREATENEWGROUP, group.toJSON());
+    	ClientSocket.send(request);
+    	if (ClientSocket.getResult()) {
+    		groupList.add(group);
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
     }
-
-    public static ArrayList<Group> getGroupList() {
+    
+    public static void getRecruitingGroupData() {
+    	groupList = ClientSocket.getRecruitingGroupData();
+    }
+    
+    public static List<Group> getGroupList() {
         return groupList;
     }
 
