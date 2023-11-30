@@ -14,6 +14,7 @@ import client.recruitpage.RecruitGroupMember;
  * @author choyeonwoo
  *
  */
+
 public class MainPage extends JFrame {
 
    public JPanel globPan;
@@ -202,7 +203,7 @@ public class MainPage extends JFrame {
    
 
    public void changePanel(String panelName) {
-	   /*
+	   
       if (panelName.equals("group")) {
          /*
     	  RecruitGroupMember r = new RecruitGroupMember(true);
@@ -217,25 +218,26 @@ public class MainPage extends JFrame {
           p = makePan(p);
           globPan.add(p);*/
          //changePan();//panel 초기화
-       /*  
+       
          DetailMyGroup dg = new DetailMyGroup(true);
          JPanel p = dg.get();
          p = makePan(p);
+         refreshPan();
          globPan.add(p);
+         globPan.repaint();
+         globPan.revalidate();
          
       }
-   */
-      if (panelName.equals("mypage")) {
+   
+      else if (panelName.equals("mypage")) {
     	  Mypage r = new Mypage(true);
     	  JPanel p = r.get();
           p = makePan(p);
+          refreshPan();
           globPan.add(p);
-    	  /*
-         Mypage mp = new Mypage(true);
-         JPanel p = mp.get();
-         p = makePan(p);
-         globPan.add(p);*/
-    	  //Mypage m = new Mypage(true);
+          globPan.repaint();
+          globPan.revalidate();
+
       }
    }
 }
