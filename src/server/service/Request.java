@@ -25,8 +25,6 @@ public class Request {
         try {
             data = (JSONObject) parser.parse(body);
         } catch (ParseException e) {
-            System.out.println(this.type);
-            System.out.println(data);
             e.printStackTrace();
         }
     }

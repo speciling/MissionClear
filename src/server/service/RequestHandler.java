@@ -38,7 +38,6 @@ public class RequestHandler implements Handler{
         // Attach a handler to handle when an event occurs in SocketChannel.
         selectionKey = this.socketChannel.register(selector, SelectionKey.OP_READ);
         selectionKey.attach(this);
-        System.out.println(socketChannel.getLocalAddress());
         selector.wakeup();
     }
 
