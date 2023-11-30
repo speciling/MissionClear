@@ -53,29 +53,6 @@ public class MyGroupList extends MainPage{
 		lblNewLabel.setBounds(13, 22, 156, 35);
 		myGroup.add(lblNewLabel);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(0, 93, 932, 189);
-		myGroup.add(panel);
-		panel.setLayout(null);
-		
-		JLabel title = new JLabel("돈 아껴서 부자되자!");
-		title.setFont(new Font("나눔고딕", Font.BOLD, 20));
-		title.setBounds(26, 12, 232, 35);
-		panel.add(title);
-		
-		JLabel lblNewLabel_1 = new JLabel("<html><b>활동기간</b>: 2023. 09. 10 ~ 2023. 10. 09<br>\r\n<b>활동내용</b>: 매일 매일 사용한 돈 인증<br>\r\n<b>참여인원</b>: 5명</html>");
-		lblNewLabel_1.setFont(new Font("나눔고딕", Font.PLAIN, 18));
-		lblNewLabel_1.setBounds(26, 53, 352, 93);
-		panel.add(lblNewLabel_1);
-		
-		JButton enterDetailMyGroupButton = new JButton("");
-		enterDetailMyGroupButton.setBounds(0, 0, 932, 189);
-		enterDetailMyGroupButton.setBorderPainted(false);
-		enterDetailMyGroupButton.setContentAreaFilled(false);
-		enterDetailMyGroupButton.setFocusPainted(false);
-		panel.add(enterDetailMyGroupButton);
-		
 		
 		MainPage mp = new MainPage(true);
 		JPanel a = mp.globPan;

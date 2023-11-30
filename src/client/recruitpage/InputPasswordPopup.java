@@ -13,7 +13,7 @@ import javax.swing.JPasswordField;
 
 public class InputPasswordPopup {
 
-	private JFrame frame;
+	JFrame frame;
 	protected RoundedPanel inputPasswordPanel;
 	private Group group;
 	private JTextField passwordField;
@@ -22,18 +22,7 @@ public class InputPasswordPopup {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InputPasswordPopup window = new InputPasswordPopup();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the application.
@@ -76,6 +65,12 @@ public class InputPasswordPopup {
 	    enterButton.setBackground(new Color(255, 255, 255));
 	    enterButton.setBorderPainted(false);
 	    inputPasswordPanel.add(enterButton);
+	    
+	    JLabel warningLabel = new JLabel("*비밀번호가 일치하지 않습니다.");
+	    warningLabel.setFont(new Font("나눔고딕", Font.PLAIN, 16));
+	    warningLabel.setForeground(Color.RED);
+	    warningLabel.setBounds(60, 113, 219, 24);
+	    inputPasswordPanel.add(warningLabel);
 	    
 	    
 	}
