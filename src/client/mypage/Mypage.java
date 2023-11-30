@@ -1,6 +1,8 @@
 package client.mypage;
 
 import java.awt.BorderLayout;
+
+import client.login.RoundCornerTextField;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -14,12 +16,14 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 
 import client.MainPage.MainPage;
 import client.login.Login;
 import client.recruitpage.RecruitGroupMember;
+
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -165,11 +169,18 @@ public class Mypage {
         box.add(lblNewLabel_1);
         
         JButton btnNewButton = new JButton("");
+        btnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		changeNickName();
+        	}
+        });
         btnNewButton.setBounds(517, 176, 25, 25);
         btnNewButton.setIcon(new ImageIcon(Mypage.class.getResource("/mypage/pencil.png")));
         btnNewButton.setContentAreaFilled(false);
         btnNewButton.setBorderPainted(false);
         box.add(btnNewButton);
+        //box.getRootPane().add(box, BorderLayout.CENTER);
+        
         
         
         
@@ -185,8 +196,50 @@ public class Mypage {
 	}
 	
     /**서버에 닉네임 변경을 요청하는 함수*/
-    public void changeNickName(String newNickName) {
-    	; //서버에 닉네임 변경을 요청하는 함수
+    public void changeNickName() {
+    	 //서버에 닉네임 변경을 요청하는 함수
+    	JFrame changeNickNamePopUp = new JFrame();
+    	changeNickNamePopUp.setSize(355,240);
+    	changeNickNamePopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//changeNickNamePopUp.getContentPane().setLayout(null);
+        changeNickNamePopUp.setLocation(570, 230);
+		
+		RoundedPanel2 inputNickNamePanel = new RoundedPanel2(20);
+		inputNickNamePanel.setBounds(0,0,339,199);
+		inputNickNamePanel.setForeground(new Color(255,255,255));
+		inputNickNamePanel.setBackground(new Color(255,255,255));
+		changeNickNamePopUp.getContentPane().add(inputNickNamePanel);
+		inputNickNamePanel.setLayout(null);
+		
+		JLabel nicknameLabel = new JLabel("닉네임 변경하기");
+		nicknameLabel.setFont(new Font("나눔고딕", Font.BOLD, 18));
+		nicknameLabel.setBounds(106, 31, 130, 35);
+		inputNickNamePanel.add(nicknameLabel);
+	    
+	    JTextField nicknameField = new  JTextField ();
+	    nicknameField.setBounds(13, 74, 314, 35);
+	    nicknameField.setBackground(new Color(237, 237, 237));
+	    nicknameField.setBorder(null);
+	    inputNickNamePanel.add(nicknameField);
+	    nicknameField.setColumns(10);
+	    
+	    String nickname = nicknameField.getText();
+	    
+	    JButton enterButton = new JButton("");
+	    enterButton.setIcon(new ImageIcon("./resource/mypage/변경하기.png"));
+	    enterButton.setBounds(115, 150, 110, 38);
+	    enterButton.setBackground(new Color(255, 255, 255));
+	    enterButton.setBorderPainted(false);
+	    inputNickNamePanel.add(enterButton);
+	    
+	    enterButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		changeNickNamePopUp.dispose();
+        	}
+        });
+	    
+	    changeNickNamePopUp.setVisible(true);
+	    
     }
     
     /**서버에 프로필 사진 변경을 요청하는 함수*/
@@ -227,6 +280,7 @@ public class Mypage {
     /** 완료된 미션을 보여주는 함수*/
     public void showFinishedMission() {
     	//완료된 미션을 보여주는 함수
+    	
     }
     
 }
