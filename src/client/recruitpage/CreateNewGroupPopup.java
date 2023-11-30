@@ -270,6 +270,11 @@ public class CreateNewGroupPopup {
     	roomPassword.setBounds(202, 617, 119, 32);
     	createPopup.add(roomPassword);
     	
+    	JButton exitButton = new JButton("");
+    	exitButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/exit.png"));
+	    exitButton.setBounds(628, 19, 50, 50);
+    	createPopup.add(exitButton);
+    	
     	creationComplete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	// AddMissionRoom 객체를 생성하면서 제목을 전달
