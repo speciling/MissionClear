@@ -25,7 +25,7 @@ public class ServerDBManager extends DBManager{
 
             createTable("USER", """
                     CREATE TABLE IF NOT EXISTS USER (uid integer primary key, id string not null unique, 
-                    password string not null, nickname string not null, pfp string, groups string default '')""");
+                    password string not null, nickname string not null, pfp string default '', groups string default '')""");
 
             createTable("GROUPS", """
                     CREATE TABLE IF NOT EXISTS GROUPS (gid integer primary key, 
@@ -71,7 +71,7 @@ public class ServerDBManager extends DBManager{
 
     public static JSONObject getUser(String id, String pw) {
         String sql = String.format("""
-                SELECT uid, groups, nickname FROM USER WHERE id='%s' AND password='%s'""", id, pw);
+                SELECT uid, groups, nickname, pfp FROM USER WHERE id='%s' AND password='%s'""", id, pw);
 
         JSONObject result = executeQuery(sql);
 
@@ -209,7 +209,7 @@ public class ServerDBManager extends DBManager{
         JSONObject result = new JSONObject();
         JSONArray recruitingGroups = new JSONArray();
         try (Statement statement = conn.createStatement()){
-            String sql = "SELECT * FROM GROUPS WHERE (startDate <= date('now', 'localtime') AND deadline >= date('now', 'localtime'))";
+            String sql = "SELECT * FROM GROUPS WHERE deadline >= date('now', 'localtime')";
             try (ResultSet resultSet = statement.executeQuery(sql)) {
                 // 열 제목 리스트 생성
                 ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -293,13 +293,13 @@ public class ServerDBManager extends DBManager{
         String title = (String) groupInfo.get("title");
         String description = (String) groupInfo.get("description");
         String mission = (String) groupInfo.get("mission");
-        Integer capacity = (Integer) groupInfo.get("capacity");
-        Integer category = (Integer) groupInfo.get("category");
+        Integer capacity = Integer.parseInt(groupInfo.get("capacity").toString());
+        Integer category = Integer.parseInt(groupInfo.get("category").toString());
         String deadline = (String) groupInfo.get("deadline");
         String startDate = (String) groupInfo.get("startDate");
         String endDate = (String) groupInfo.get("endDate");
         String password = (String) groupInfo.get("password");
-        Integer uid = (Integer) groupInfo.get("uid");
+        Integer uid = Integer.parseInt(groupInfo.get("uid").toString());
 
         JSONObject result = groupInfo;
         String sql = String.format("""

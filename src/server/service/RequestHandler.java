@@ -38,6 +38,7 @@ public class RequestHandler implements Handler{
         // Attach a handler to handle when an event occurs in SocketChannel.
         selectionKey = this.socketChannel.register(selector, SelectionKey.OP_READ);
         selectionKey.attach(this);
+        System.out.println(socketChannel.getLocalAddress());
         selector.wakeup();
     }
 
@@ -217,8 +218,8 @@ public class RequestHandler implements Handler{
     }
 
     private void  createNewGroup(Request request) {
-        ((JSONObject)request.getData().get("groupInfo")).put("users", user.userID);
-        JSONObject result = ServerDBManager.createGroup((JSONObject) request.getData().get("groupInfo"));
+        request.getData().put("users", user.userID);
+        JSONObject result = ServerDBManager.createGroup((JSONObject) request.getData());
         addTask(Request.toByteBuffer(RequestType.CREATENEWGROUP, result));
     }
 

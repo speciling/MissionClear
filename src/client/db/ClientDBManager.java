@@ -55,6 +55,15 @@ public class ClientDBManager extends DBManager {
         return null;
     }
 
+    public static void login(JSONObject data) {
+        Integer uid = Integer.parseInt(data.get("uid").toString());
+        String nickname = data.get("nickname").toString();
+        String pfp = data.get("pfp").toString();
+        String groups = data.get("groups").toString();
+
+        String sql = String.format("INSERT OR REPLACE INTO USER (uid, nickname, pfp, groups) VALUES (%d, '%s', '%s', '%s')", uid, nickname, pfp, groups);
+    }
+
     public static void saveInitData(JSONObject data) {
         JSONArray userData = (JSONArray) data.get("userData");
         for (int i = 0; i < userData.size(); i++) {
@@ -62,16 +71,19 @@ public class ClientDBManager extends DBManager {
             Integer uid = Integer.parseInt(user.get("uid").toString());
             String nickname = (String) user.get("nickname");
             String pfp = (String) user.get("pfp");
-            String fileName = Path.of(pfp).getFileName().toString();
-            pfp = path.toString() + "\\" + fileName;
+            if (!pfp.isEmpty()){
+                String fileName = Path.of(pfp).getFileName().toString();
+                pfp = path.toString() + "\\" + fileName;
+
+                JSONObject object = new JSONObject();
+                object.put("fileName", fileName);
+                ClientSocket.send(new Request(RequestType.GETFILE, object));
+            }
             String groups = user.get("groups").toString();
             String sql = String.format("""
                     INSERT OR REPLACE INTO USER (uid, nickname, pfp, groups) 
                     VALUES (%d, '%s', '%s', '%s')""", uid, nickname, pfp, groups);
             executeSQL(sql);
-            JSONObject object = new JSONObject();
-            object.put("fileName", fileName);
-            ClientSocket.send(new Request(RequestType.GETFILE, object));
         }
 
         JSONArray groupData = (JSONArray) data.get("groupData");
@@ -135,12 +147,12 @@ public class ClientDBManager extends DBManager {
         String title = (String) group.get("title");
         String description = (String) group.get("description");
         String mission = (String) group.get("mission");
-        Integer capacity = (Integer) group.get("capacity");
-        Integer category = (Integer) group.get("category");
+        Integer capacity = Integer.parseInt(group.get("capacity").toString());
+        Integer category = Integer.parseInt(group.get("category").toString());
         String deadline = (String) group.get("deadline");
         String startDate = (String) group.get("startDate");
         String endDate = (String) group.get("endDate");
-        Integer uid = (Integer) group.get("uid");
+        Integer uid = Integer.parseInt(group.get("uid").toString());
 
         String sql = String.format("""
                 INSERT INTO GROUPS 
