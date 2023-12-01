@@ -117,7 +117,7 @@ public class ClientSocket extends Thread{
         if (response != null) {
             switch (response.type){
                 case LOGIN:
-                    if (response.getData().get("resultType").equals(ResultType.SUCCESS))
+                    if (ResultType.of(Integer.parseInt(response.getData().get("resultType").toString())).equals(ResultType.SUCCESS))
                         ClientDBManager.login(response.getData());
                 case SIGNUP:
                 case GETRECRUITINGGROUPDATA:
