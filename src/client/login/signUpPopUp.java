@@ -24,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.DropMode;
 
@@ -213,6 +215,9 @@ public class signUpPopUp {
 		 */
 		
 		JButton signUpButton = new JButton("");
+		/**
+		 * 회원가입 버튼 클릭했을 때 값 검사와 회원가입 시도하는 메소드
+		 */
 		signUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				id = idTextField.getText();
@@ -296,13 +301,25 @@ public class signUpPopUp {
 		else
 			nicknameWarning.setVisible(false);
 	}
-	
+
+	/**
+	 * @param password
+	 * 비밀번호 조건 검사 메소드
+	 */
 	private boolean checkValidPassword(String password) {
 	    // Password should be 16 characters or fewer and contain a combination of letters, special characters, and numbers
 		String passwordRegex = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*()-_=+])[0-9a-zA-Z!@#$%^&*()-_=+]{1,16}$";
 	    return password.matches(passwordRegex);
 	}
-	
+
+	/**
+	 *
+	 * @param id
+	 * @param pw
+	 * @param nickname
+	 *
+	 * 서버에서 회원가입 성공실패 정보를 받아오는 메소드
+	 */
 	public boolean singUp(String id, String pw, String nickname) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);
