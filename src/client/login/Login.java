@@ -17,11 +17,11 @@ import client.recruitpage.RecruitGroupMember;
 import server.db.ResultType;
 import server.service.Request;
 import server.service.RequestType;
-
 /**
  * 
   This class represents the login screen where users can log in by entering their username and password.
  */
+
 public class Login extends JFrame{
 	
 	public static void main(String [] args) {
@@ -33,7 +33,7 @@ public class Login extends JFrame{
 	   }
 	   
 	private RoundCornerTextField idTextField;
-	private JPasswordField passwordField;
+	private RoundCornerPasswordField passwordField;
 	private JLabel loginWarning;
 	private JLabel loginMatchWarning;
 	private JPanel panel;
@@ -109,7 +109,7 @@ public class Login extends JFrame{
         panel.add(passwordLabel);
 
         
-        passwordField = new JPasswordField(20);
+        passwordField = new RoundCornerPasswordField(20);
         passwordField.setBounds(385, 600, 428, 54); /** password input text setting*/
         panel.add(passwordField);
         
@@ -209,11 +209,6 @@ public class Login extends JFrame{
         ClientSocket.send(new Request(RequestType.LOGIN, jsonObject));
         return ClientSocket.getResult();
     }
-	/*
-	void acceptData(Hashmap <int, int>) {
-		;
-	}
-	*/
 	
 	
 }

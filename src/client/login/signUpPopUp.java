@@ -233,16 +233,6 @@ public class signUpPopUp {
                 else {
                 	idRuleWarning.setVisible(true);
                 }
-                
-                // 여기에서 입력된 아이디와 비밀번호를 처리
-                // 예를 들어, 데이터베이스에 저장하거나 작업 수행
-                
-                /*
-                if(checkValue()==0) {
-                JOptionPane.showMessageDialog(frame, "회원가입이 완료되었습니다.", "회원가입 완료", JOptionPane.INFORMATION_MESSAGE);
-                frame.dispose(); // 팝업 창 닫기
-                }
-                */
 			}
 		});
 		signUpButton.setIcon(new ImageIcon(signUpPopUp.class.getResource("/signup/SignUpButton.png")));

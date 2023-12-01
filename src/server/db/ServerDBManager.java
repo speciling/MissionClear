@@ -338,23 +338,26 @@ public class ServerDBManager extends DBManager{
                 SELECT users FROM GROUPS WHERE (gid=%d AND password='%s' AND usercnt<capacity)""", gid, pw);
         String users = ((String)executeQuery(sql).get("users"));
 
-        sql = String.format("""
-                SELECT groups FROM USER WHERE (uid=%d)""", uid);
-        String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
         if(users != null) {
-            users += uid+",";
-            sql = String.format("""
-                    UPDATE GROUPS SET users='%s' WHERE gid=%d""", users, gid);
-            executeSQL(sql);
+            List<Integer> userList = Arrays.stream(users.split(",")).map(Integer::parseInt).toList();
+            if(!userList.contains(uid)){
+                sql = String.format("""
+                        SELECT groups FROM USER WHERE (uid=%d)""", uid);
+                String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
+                users += uid+",";
+                sql = String.format("""
+                        UPDATE GROUPS SET users='%s' WHERE gid=%d""", users, gid);
+                executeSQL(sql);
 
-            sql = String.format("""
-                    UPDATE GROUPS SET usercnt=usercnt+1 WHERE gid='%s'""", gid);
-            executeSQL(sql);
+                sql = String.format("""
+                        UPDATE GROUPS SET usercnt=usercnt+1 WHERE gid='%s'""", gid);
+                executeSQL(sql);
 
-            sql = String.format("""
-                    UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
-            executeSQL(sql);
-            return ResultType.SUCCESS;
+                sql = String.format("""
+                        UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
+                executeSQL(sql);
+                return ResultType.SUCCESS;
+            }
         }
 
         return ResultType.WARNING;
