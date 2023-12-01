@@ -167,7 +167,6 @@ public class RequestHandler implements Handler{
         String id = (String)requestData.get("id");
         String password = (String)requestData.get("password");
         JSONObject result = ServerDBManager.getUser(id, password);
-
         addTask(Request.toByteBuffer(RequestType.LOGIN, result));
 
         if(ResultType.of((Integer) result.get("resultType")).equals(ResultType.SUCCESS)) {
@@ -227,11 +226,12 @@ public class RequestHandler implements Handler{
         String pw = request.getData().get("password").toString();
         ResultType resultType = ServerDBManager.enterGroup(uid, gid, pw);
         if (resultType == ResultType.SUCCESS) {
-            request.getData().put("resultType", resultType);
+            request.getData().put("resultType", resultType.getCode());
+            request.getData().put("uid", user.userID);
             addTask(Request.toByteBuffer(request));
         } else {
             JSONObject result = new JSONObject();
-            result.put("resultType", resultType);
+            result.put("resultType", resultType.getCode());
             addTask(Request.toByteBuffer(RequestType.ENTERGROUP, result));
         }
     }

@@ -128,7 +128,8 @@ public class ClientSocket extends Thread{
                     readQueue.add(response);
                     break;
                 case ENTERGROUP:
-                    ClientDBManager.enterGroup(response.getData());
+                    if (ResultType.of(Integer.parseInt(response.getData().get("resultType").toString())).equals(ResultType.SUCCESS))
+                        ClientDBManager.enterGroup(response.getData());
                     readQueue.add(response);
                     break;
                 case SENDDATA:
