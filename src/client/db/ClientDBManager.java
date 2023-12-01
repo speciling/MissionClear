@@ -240,7 +240,7 @@ public class ClientDBManager extends DBManager {
             String users = rs.getString("users");
             statement.close();
             rs.close();
-            sql = String.format("SELECT * FROM USER WHERE uid in ('%s')", users.substring(0, users.length()-1));
+            sql = String.format("SELECT * FROM USER WHERE uid in (%s)", users.substring(0, users.length()-1));
 
             PreparedStatement statement1 = conn.prepareStatement(sql);
             ResultSet rs1 = statement1.executeQuery();
