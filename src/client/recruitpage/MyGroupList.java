@@ -15,7 +15,7 @@ import javax.swing.JButton;
  * Class representing the list of groups a user is part of.
  * This class extends MainPage and provides a user interface for displaying a list of groups the user is in.
  */
-public class MyGroupList extends MainPage{
+public class MyGroupList{
 
 	private JPanel myGroup;
 
@@ -25,15 +25,15 @@ public class MyGroupList extends MainPage{
      * Retrieves the main panel of the group list interface.
      * @return the main JPanel component of the group list interface.
      */
-	//public JPanel get() {
-	//    return a;
-	//}
+	public JPanel get() {
+	      return myGroup;
+	}
 	 /**
      * Constructor to initialize the MyGroupList interface.
      * @param vis Boolean value to set the visibility of the main page.
      */
 	public MyGroupList(boolean vis) {
-		super(vis);
+		super();
 		initializeMyGroupList();
 	}
 
@@ -42,10 +42,9 @@ public class MyGroupList extends MainPage{
      * This method sets up the layout and components for displaying the list of groups the user is part of.
      */
 	private void initializeMyGroupList() {
-		// TODO Auto-generated method stub
 		myGroup = new JPanel();
 		myGroup.setBackground(new Color(246, 246, 246));
-		myGroup.setBounds(0, 0, 930, 850);
+		myGroup.setBounds(0, 0, 950, 850);
 		myGroup.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("내그룹목록");
@@ -54,9 +53,5 @@ public class MyGroupList extends MainPage{
 		myGroup.add(lblNewLabel);
 		
 		
-		MainPage mp = new MainPage(true);
-		JPanel a = mp.globPan;
-		a.setLayout(null);
-        a.add(myGroup);
 	}
 }
