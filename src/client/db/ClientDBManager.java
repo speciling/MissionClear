@@ -61,11 +61,23 @@ public class ClientDBManager extends DBManager {
         Integer uid = Integer.parseInt(data.get("uid").toString());
         String nickname = data.get("nickname").toString();
         String pfp = data.get("pfp").toString();
+        if (!pfp.isEmpty()) {
+            String fileName = Path.of(pfp).getFileName().toString();
+            pfp = path.toString() + "\\" + fileName;
+        }
         String groups = data.get("groups").toString();
         myUid = uid;
 
         String sql = String.format("INSERT OR REPLACE INTO USER (uid, nickname, pfp, groups) VALUES (%d, '%s', '%s', '%s')", uid, nickname, pfp, groups);
         executeSQL(sql);
+
+        if (!pfp.isEmpty() && !Files.exists(Path.of(pfp))) {
+            JSONObject jsonObject = new JSONObject();
+            String fileName = Path.of(pfp).getFileName().toString();
+            jsonObject.put("fileName", fileName);
+            ClientSocket.send(new Request(RequestType.GETFILE, jsonObject));
+        }
+
     }
 
     public static void saveInitData(JSONObject data) {
@@ -240,14 +252,14 @@ public class ClientDBManager extends DBManager {
             String users = rs.getString("users");
             statement.close();
             rs.close();
-            sql = String.format("SELECT * FROM USER WHERE uid in ('%s')", users.substring(0, users.length()-1));
+            sql = String.format("SELECT * FROM USER WHERE uid in (%s)", users.substring(0, users.length()-1));
 
             PreparedStatement statement1 = conn.prepareStatement(sql);
             ResultSet rs1 = statement1.executeQuery();
             while (rs1.next()) {
                 JSONObject object = new JSONObject();
                 object.put("uid", rs1.getInt("uid"));
-                object.put("nickname", rs1.getInt("nickname"));
+                object.put("nickname", rs1.getString("nickname"));
                 object.put("pfp", rs1.getString("pfp"));
                 result.add(object);
             }

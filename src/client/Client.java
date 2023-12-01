@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import client.db.ClientDBManager;
-import client.DetailMyGroup.DetailMyGroup;
+import client.detailMyGroup.DetailMyGroup;
 import client.MainPage.MainPage;
 import client.login.Login;
 import client.mypage.Mypage;
