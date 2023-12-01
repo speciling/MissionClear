@@ -1,5 +1,10 @@
 package client;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,6 +25,14 @@ public class Client {
           ClientDBManager.init();
           Login login = new Login();
           login.loginpage();
-		  //MainPage a = new MainPage(true);
+          
+          String fontPath = "/NanumGothic.ttf";
+    	  
+    	  try (InputStream fontStream = Client.class.getResourceAsStream(fontPath)) {
+              // InputStream으로부터 Font 객체 생성
+              Font customFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+    	  } catch (IOException | FontFormatException e) {
+              e.printStackTrace();
+          }
 	   }
 }

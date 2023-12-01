@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Insets;
+
 import javax.swing.SwingConstants;
 
 import org.json.simple.JSONObject;
@@ -110,6 +112,8 @@ public class signUpPopUp {
 		idTextField = new JTextField();
 		idTextField.setBackground(new Color(237, 237, 237));
 		idTextField.setBounds(0, 35, 461, 41);
+		idTextField.setFont(new Font("나눔고딕",Font.PLAIN,19));
+		idTextField.setMargin(new Insets(5,5,5,5));
 		idInputPanel.add(idTextField);
 		idTextField.setColumns(10);
 		
@@ -137,6 +141,8 @@ public class signUpPopUp {
 		passwordField.setColumns(16);
 		passwordField.setBackground(new Color(237, 237, 237));
 		passwordField.setBounds(0, 45, 461, 41);
+		passwordField.setMargin(new Insets(5,5,5,5));
+		passwordField.setFont(new Font("나눔고딕",Font.PLAIN,19));
 		pwInputPanel.add(passwordField);
 		
 		passwordWarning = new JLabel("* 비밀번호를 입력해주세요");
@@ -171,6 +177,8 @@ public class signUpPopUp {
 		passwordField_1.setColumns(16);
 		passwordField_1.setBackground(new Color(237, 237, 237));
 		passwordField_1.setBounds(0, 39, 461, 41);
+		passwordField_1.setFont(new Font("나눔고딕",Font.PLAIN,19));
+		passwordField_1.setMargin(new Insets(5,5,5,5));
 		pwCheckPanel.add(passwordField_1);
 		
 		passwordMatchWarning = new JLabel("비밀번호가 일치하지 않습니다.");
@@ -200,6 +208,8 @@ public class signUpPopUp {
 		nicknameTextField.setColumns(10);
 		nicknameTextField.setBackground(new Color(237, 237, 237));
 		nicknameTextField.setBounds(0, 35, 461, 41);
+		nicknameTextField.setFont(new Font("나눔고딕",Font.PLAIN,19));
+		nicknameTextField.setMargin(new Insets(5,5,5,5));
 		nicknamePanel.add(nicknameTextField);
 		
 		nicknameWarning = new JLabel("* 닉네임을 입력해주세요");

@@ -59,6 +59,7 @@ public class MainPage extends JFrame {
       String pfp = myInfo.get("pfp").toString();
       if (!pfp.equals(""))
          this.userPic = myInfo.get("pfp").toString();
+      uid = Integer.parseInt(myInfo.get("uid").toString());
 
       Color mainColor = new Color(56, 183, 255);
       String logoPath = "./resource/MainPage/logo.png";
@@ -243,7 +244,7 @@ public class MainPage extends JFrame {
       }
    
       else if (panelName.equals("mypage")) {
-    	  Mypage r = new Mypage(true);
+    	  Mypage r = new Mypage(uid, userName, userPic);
     	  JPanel p = r.get();
           p = makePan(p);
           refreshPan();
