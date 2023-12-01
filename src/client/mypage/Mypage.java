@@ -3,6 +3,8 @@ package client.mypage;
 import java.awt.BorderLayout;
 
 import client.login.RoundCornerTextField;
+import client.login.signUpPopUp;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -26,7 +28,10 @@ import client.recruitpage.RecruitGroupMember;
 
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -88,7 +93,7 @@ public class Mypage {
 	
 //	public static void main(String [] args) {
 //		  MainPage mp = new MainPage(true);
-//		  //Mypage mypage = new Mypage(true);
+//		  Mypage mypage = new Mypage(true);
 //		 
 //		  //mp.globPan.add(mypage.get());
 //		  //창 크기 변경안해도 뜨게 하는거
@@ -156,6 +161,7 @@ public class Mypage {
         lblNewLabel.setBounds(388, 10, 149, 149);
         lblNewLabel.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		changePFP();
         	}
         });
         lblNewLabel.setIcon(new ImageIcon(Mypage.class.getResource("/mypage/tigerimage.png")));
@@ -224,11 +230,12 @@ public class Mypage {
 	    nicknameField.setColumns(10);
 	    
 	    String nickname = nicknameField.getText();
-	    
+        
 	    JButton enterButton = new JButton("");
-	    enterButton.setIcon(new ImageIcon("./resource/mypage/변경하기.png"));
+	    enterButton.setIcon(new ImageIcon("./resource/mypage/changeButton.png"));
 	    enterButton.setBounds(115, 150, 110, 38);
-	    enterButton.setBackground(new Color(255, 255, 255));
+	    //enterButton.setBackground(new Color(255, 255, 255));
+	    enterButton.setContentAreaFilled(false);
 	    enterButton.setBorderPainted(false);
 	    inputNickNamePanel.add(enterButton);
 	    
@@ -243,8 +250,25 @@ public class Mypage {
     }
     
     /**서버에 프로필 사진 변경을 요청하는 함수*/
-    public void changePFP(File Picture) {
-    	;//서버에 프로필 사진 변경을 요청하는 함수
+    public void changePFP() {
+    	JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(null);
+
+        // 파일을 선택하지 않은 경우 종료합니다.
+        if (result != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        // 선택한 파일을 가져옵니다.
+        File selectedFile = fileChooser.getSelectedFile();
+
+        // 선택한 파일이 사진 파일인지 확인합니다.
+        if (!selectedFile.getName().toLowerCase().endsWith(".jpg") &&
+                !selectedFile.getName().toLowerCase().endsWith(".png")) {
+            JOptionPane.showMessageDialog(null, "사진 파일을 선택하세요.");
+            return;
+        }
+
     }
     
     /**진행중인 미션을 보여주는 함수*/
