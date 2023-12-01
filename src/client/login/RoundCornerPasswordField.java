@@ -1,19 +1,21 @@
 package client.login;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 
+import javax.swing.JFrame;
+import javax.swing.JPasswordField;
 
+public class RoundCornerPasswordField extends JPasswordField {
+	private int arc = 20; // 원하는 모서리 반경 설정
+    private int padding = 5;
 
-/**
- * JTextField의 모서리를 둥글게 하기 위해서 만든 클래스
- */
-public class RoundCornerTextField extends JTextField {
-    private int arc = 20; // 원하는 모서리 반경 설정
-    private int padding=5;
-
-    public RoundCornerTextField(int columns) {
+    public RoundCornerPasswordField(int columns) {
         super(columns);
         setOpaque(false); // 불투명 설정 해제
         setMargin(new Insets(padding, padding, padding, padding));
@@ -41,18 +43,16 @@ public class RoundCornerTextField extends JTextField {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("둥근 텍스트 필드");
+        JFrame frame = new JFrame("둥근 패스워드 필드");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
 
-        RoundCornerTextField textField = new RoundCornerTextField(20);
-        textField.setPreferredSize(new Dimension(200, 30));
-        frame.add(textField);
+        RoundCornerPasswordField passwordField = new RoundCornerPasswordField(20);
+        passwordField.setPreferredSize(new Dimension(200, 30));
+        frame.add(passwordField);
 
         frame.setSize(300, 100);
         frame.setVisible(true);
     }
 }
-
-
 
