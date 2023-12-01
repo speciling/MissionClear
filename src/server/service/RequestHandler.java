@@ -141,6 +141,7 @@ public class RequestHandler implements Handler{
                 if (type == RequestType.CERTIFYMISSION.getCode() || type == RequestType.CHANGEPFP.getCode()) {
                     headerBuffer = ByteBuffer.allocate(4);
                     socketChannel.read(headerBuffer);
+                    headerBuffer.flip();
                     length = headerBuffer.getInt();
 
                     bodyBuffer = ByteBuffer.allocate(length);
@@ -254,8 +255,8 @@ public class RequestHandler implements Handler{
 
     private void changePFP(Request request) {
         ResultType resultType = DBManager.changePFP(request.getData(), request.file);
-        JSONObject result = new JSONObject();
-        result.put("resultType", resultType);
+        JSONObject result = request.getData();
+        result.put("resultType", resultType.getCode());
         addTask(Request.toByteBuffer(RequestType.CHANGEPFP, result));
     }
 
@@ -264,8 +265,8 @@ public class RequestHandler implements Handler{
         String nickname = request.getData().get("nickname").toString();
 
         ResultType resultType = DBManager.changeNickname(uid, nickname);
-        JSONObject result = new JSONObject();
-        result.put("resultType", resultType);
+        JSONObject result = request.getData();
+        result.put("resultType", resultType.getCode());
         addTask(Request.toByteBuffer(RequestType.CHANGENICKNAME, result));
     }
 

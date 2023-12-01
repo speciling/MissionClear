@@ -11,10 +11,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -144,7 +143,7 @@ public class DBManager {
             return -1;
         }
 
-        Path filePath = Path.of(path.toString() + '\\' + "G" + gid + "U" + uid + "certify." + extension);
+        Path filePath = Path.of(path.toString() + '\\' + "G" + gid + "U" + uid + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + "certify." + extension);
         try {
             Files.write(filePath, request.file);
         } catch (IOException e ) {
@@ -153,7 +152,7 @@ public class DBManager {
         String sql = String.format("INSERT INTO G%dPROGRESS (uid, date) VALUES (%d, date('now', 'localtime'))", gid, uid);
         executeSQL(sql);
         request.getData().put("isPic", 1);
-        request.getData().put("message", filePath);
+        request.getData().put("message", filePath.toString());
 
         return saveChatMessage(request.getData());
     }

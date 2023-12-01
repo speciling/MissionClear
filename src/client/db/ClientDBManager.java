@@ -20,15 +20,15 @@ public class ClientDBManager extends DBManager {
 
     public static void init() {
         try {
-            path = Path.of("./missioncleardata/client/pictures");
-            try {
-                Files.createDirectories(path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             path = Path.of("./missioncleardata/client/client.db");
             try{
                 Files.deleteIfExists(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            path = Path.of("./missioncleardata/client/pictures");
+            try {
+                Files.createDirectories(path);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -170,6 +170,14 @@ public class ClientDBManager extends DBManager {
         String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
         sql = String.format("UPDATE USER SET groups='%s' WHERE uid=%d", groups, uid);
         executeSQL(sql);
+
+        sql = String.format("""
+                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message chat not null, isPic integer not null)""", gid);
+        createTable("G"+gid+"CHAT", sql);
+
+        sql = String.format("""
+                    CREATE TABLE IF NOT EXISTS G%sPROGRESS (uid integer not null, date string not null)""", gid);
+        createTable("G"+gid+"PROGRESS", sql);
     }
 
     public static void enterGroup(JSONObject data) {
@@ -193,6 +201,14 @@ public class ClientDBManager extends DBManager {
         sql = String.format("""
                     UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
         executeSQL(sql);
+
+        sql = String.format("""
+                    CREATE TABLE IF NOT EXISTS G%sCHAT (chatId integer primary key, uid integer not null, message chat not null, isPic integer not null)""", gid);
+        createTable("G"+gid+"CHAT", sql);
+
+        sql = String.format("""
+                    CREATE TABLE IF NOT EXISTS G%sPROGRESS (uid integer not null, date string not null)""", gid);
+        createTable("G"+gid+"PROGRESS", sql);
     }
 
     public static JSONObject getUserInfo(int uid) {

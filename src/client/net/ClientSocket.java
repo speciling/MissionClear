@@ -99,6 +99,7 @@ public class ClientSocket extends Thread{
             if (type == RequestType.CERTIFYMISSION.getCode() || type == RequestType.CHANGEPFP.getCode() || type == RequestType.GETFILE.getCode()) {
                 headerBuffer = ByteBuffer.allocate(4);
                 socket.read(headerBuffer);
+                headerBuffer.flip();
                 length = headerBuffer.getInt();
 
                 bodyBuffer = ByteBuffer.allocate(length);
