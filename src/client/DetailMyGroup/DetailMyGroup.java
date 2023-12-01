@@ -9,12 +9,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import client.MainPage.MainPage;
+import client.detailMyGroup.*;
 
 class RoundedPanel2 extends JPanel {
     private int radius;
@@ -68,8 +72,17 @@ public class DetailMyGroup extends JFrame {
          {2,2,2,1,0,0,0,0}};
    int []missionProgRage = {0,0,0,0,0};
    
+   MakeUserData userData = new MakeUserData();
+   HashMap nicknames = userData.nicknames;
+   HashMap pfps = userData.pfps;
+   List<Integer> uids = userData.uids;
+   /*
    String[] username = {"호랑이양말", "임지환", "조연우", "지연우", "최지원"};
    String[] picPath = {"./resource/DetailMyGroup/userPic1.png", "./resource/DetailMyGroup/userPic2.png", "./resource/DetailMyGroup/userPic3.png", "./resource/DetailMyGroup/userPic4.png", "./resource/DetailMyGroup/userPic5.png"};
+   */
+   
+   
+   
    // 세부 미션 수행도 만들기
    //int[username.length][dayCount] detailProgress = {};
    // 0 은 기본값 1은 함 2는 하지 않음
@@ -102,7 +115,8 @@ public class DetailMyGroup extends JFrame {
       title.setBounds(0,0,434,70);
       popup.add(title);
       pan.setBounds(0,70,434,72);
-      popup.add(pan);
+      JPanel temp = pan;
+      popup.add(temp);
        
        // 세부진행도 패널 만들기
        JPanel detailProgressP = new JPanel();
@@ -195,8 +209,9 @@ public class DetailMyGroup extends JFrame {
        userProgressP.setBackground(Color.white);
        
        //각 멤버의 미션수행도 부분 만들기
-       for(int i=0;i<missionProgRage.length;i++) {
-          JPanel j = makeUserProgress(username[i], picPath[i], missionProgRage[i],i);
+       for(int i=0;i<uids.size();i++) {
+    	   int uid = uids.get(i);
+          JPanel j = makeUserProgress(nicknames.get(uid).toString(), pfps.get(uid).toString(), missionProgRage[i],i);
           j.setBounds(0,72*i,390,72);
           userProgressP.add(j);
        }

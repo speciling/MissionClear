@@ -2,9 +2,9 @@ package client.MainPage;
 
 import javax.swing.*;
 import java.awt.*;
-import client.DetailMyGroup.DetailMyGroup;
+import client.detailMyGroup.DetailMyGroup;
 import client.db.ClientDBManager;
-import client.DetailMyGroup.DetailMyGroup;
+import client.detailMyGroup.DetailMyGroup;
 import client.login.Login;
 import client.mypage.Mypage;
 import client.recruitpage.MyGroupList;
@@ -20,8 +20,8 @@ import org.json.simple.JSONObject;
 public class MainPage extends JFrame {
 
    public JPanel globPan;
-   public String userName = "호랑이양말";
-   public String userPic = "./resource/DetailMyGroup/Ellipse3.png";
+   public String userName = "이름을 입력해주세요";
+   public String userPic = "./resource/MainPage/defaultPic.png";
    public Container main;
 
 /**
