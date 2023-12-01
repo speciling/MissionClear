@@ -195,7 +195,7 @@ public class MainPage extends JFrame {
    public void createLogoutPopup() {
       int answer = JOptionPane.showConfirmDialog(this, "로그아웃 하시겠습니까?", "", JOptionPane.YES_NO_OPTION);
       if (answer == JOptionPane.YES_OPTION) {
-         System.out.println("프로그램을 종료합니다.");
+         changePanel("login");
       } else {
          System.out.println("종료를 취소합니다.");
       }
@@ -250,7 +250,11 @@ public class MainPage extends JFrame {
           globPan.add(p);
           globPan.repaint();
           globPan.revalidate();
-
+      }
+      else if(panelName.equals("login")) {
+    	  Login l = new Login();
+    	  l.loginpage();
+    	  this.dispose();
       }
    }
 }

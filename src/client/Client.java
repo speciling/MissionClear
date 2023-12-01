@@ -13,12 +13,12 @@ import client.net.ClientSocket;
 import client.recruitpage.MyGroupList;
 import client.recruitpage.RecruitGroupMember;
 
-public class Client {/*
+public class Client {
 	  public static void main(String [] args) {
           ClientSocket socket = new ClientSocket("172.31.99.182",8080);
           socket.start();
           ClientDBManager.init();
           Login login = new Login();
           login.loginpage();
-	   }*/
+	   }
 }
