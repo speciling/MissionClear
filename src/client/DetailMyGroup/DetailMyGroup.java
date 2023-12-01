@@ -13,8 +13,14 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.json.simple.JSONObject;
 
 import client.MainPage.MainPage;
+import client.net.ClientSocket;
+import server.service.Request;
+import server.service.RequestType;
 
 class RoundedPanel2 extends JPanel {
     private int radius;
@@ -381,22 +387,7 @@ public class DetailMyGroup extends JFrame {
       
       
       authMission.addActionListener(event -> {
-         JFileChooser jfc = new JFileChooser();
-           int returnVal = jfc.showSaveDialog(null);
-           if(returnVal == 0) {
-               File file = jfc.getSelectedFile();
-               try {
-                   authPicPath = file.getPath();
-                   //System.out.println(authPicPath);
-                   }
-               catch(Exception e) {
-                   e.printStackTrace();
-                  }
-               }
-           else
-           {
-               System.out.println("파일 열기를 취소하였습니다.");
-           }
+         missionPic();
        
       });
       
@@ -416,6 +407,38 @@ public class DetailMyGroup extends JFrame {
    }
    
    
+   public void missionPic() {
+       JFileChooser fileChooser = new JFileChooser();
+
+       // Create a filter to show only image files (jpg and png)
+       FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "jpg", "png");
+       fileChooser.setFileFilter(imageFilter);
+
+       int result = fileChooser.showOpenDialog(null);
+
+       // 파일을 선택하지 않은 경우 종료합니다.
+       if (result != JFileChooser.APPROVE_OPTION) {
+           return;
+       }
+
+       // 선택한 파일을 가져옵니다.
+       File selectedFile = fileChooser.getSelectedFile();
+
+       // 선택한 파일이 사진 파일인지 확인합니다.
+       if (!selectedFile.getName().toLowerCase().endsWith(".jpg") &&
+               !selectedFile.getName().toLowerCase().endsWith(".png")) {
+           JOptionPane.showMessageDialog(null, "사진 파일을 선택하세요.");
+           return;
+       }
+       
+       String filePath = selectedFile.getAbsolutePath();
+       /*
+       JSONObject a = new JSONObject();
+       a.put("filePath", filePath);
+       Request request = new Request(RequestType.CHANGEPFP,a);
+       ClientSocket.send(request);
+       */
+   }
    
    public static void main(String [] args) {
        MainPage a = new MainPage(true);

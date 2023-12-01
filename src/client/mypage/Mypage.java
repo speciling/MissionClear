@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import client.login.RoundCornerTextField;
 import client.login.signUpPopUp;
+import client.net.ClientSocket;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,7 +26,8 @@ import javax.swing.JSeparator;
 import client.MainPage.MainPage;
 import client.login.Login;
 import client.recruitpage.RecruitGroupMember;
-
+import server.service.Request;
+import server.service.RequestType;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,6 +38,9 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.json.simple.JSONObject;
 
 /**
  * @author 최지원
@@ -89,46 +94,24 @@ public class Mypage {
 
 
 	public JPanel box;
-	//JPanel main;
-	
-//	public static void main(String [] args) {
-//		  MainPage mp = new MainPage(true);
-//		  Mypage mypage = new Mypage(true);
-//		 
-//		  //mp.globPan.add(mypage.get());
-//		  //창 크기 변경안해도 뜨게 하는거
-//		  //mp.globPan.repaint();
-//	   }
-
 	public CustomPanel missionProgressPanel;
 	private JLabel ongoingGroupName;
 	public RoundedPanel2 missionInProgress;
+	private JTextField nicknameField;
+	private String newnickname;
 
     public JPanel get() {
     	return box;
-
     }
 	
     /**
      * 화면에 보이게 하기 위한 생성자
      * @param vis
      */
-    public Mypage(boolean vis) {
-    	//super(vis);
-    	initializeMypage();
-    }
-    /**
-     * ui메소드
-     */
-    private void initializeMypage() {
-		// TODO Auto-generated method stub
+    public Mypage(int uid, String nickname, String picPath) {
     	box = new JPanel();    	
-        
-        //JPanel mypagePanel = new JPanel();
         box.setBackground(new Color(246, 246, 246));
-
         box.setBounds(0,0,943,781);
-
         box.setLayout(null);
         
         missionInProgress = new RoundedPanel2(32);
@@ -164,12 +147,13 @@ public class Mypage {
         		changePFP();
         	}
         });
-        lblNewLabel.setIcon(new ImageIcon(Mypage.class.getResource("/mypage/tigerimage.png")));
+        
+        lblNewLabel.setIcon(new ImageIcon(picPath));
         lblNewLabel.setContentAreaFilled(false);
         lblNewLabel.setBorderPainted(false);
         box.add(lblNewLabel);
         
-        JLabel lblNewLabel_1 = new JLabel("호랑이양말 님");
+        JLabel lblNewLabel_1 = new JLabel(nickname+" 님");
         lblNewLabel_1.setBounds(384, 171, 124, 35);
         lblNewLabel_1.setFont(new Font("나눔고딕", Font.BOLD, 20));
         box.add(lblNewLabel_1);
@@ -185,20 +169,7 @@ public class Mypage {
         btnNewButton.setContentAreaFilled(false);
         btnNewButton.setBorderPainted(false);
         box.add(btnNewButton);
-        //box.getRootPane().add(box, BorderLayout.CENTER);
-        
-        
-        
-        
-//        MainPage mp = new MainPage(true);
-//        JPanel main = mp.globPan;
-//        main.setLayout(null);
-//        main.add(box); 
-//        
-       // nav=mypagePanel;
-        //setVisible(false);
-		
-        //frame.setVisible(true);
+
 	}
 	
     /**서버에 닉네임 변경을 요청하는 함수*/
@@ -222,36 +193,46 @@ public class Mypage {
 		nicknameLabel.setBounds(106, 31, 130, 35);
 		inputNickNamePanel.add(nicknameLabel);
 	    
-	    JTextField nicknameField = new  JTextField ();
+	    nicknameField = new JTextField();
 	    nicknameField.setBounds(13, 74, 314, 35);
 	    nicknameField.setBackground(new Color(237, 237, 237));
 	    nicknameField.setBorder(null);
 	    inputNickNamePanel.add(nicknameField);
 	    nicknameField.setColumns(10);
 	    
-	    String nickname = nicknameField.getText();
+	    
         
 	    JButton enterButton = new JButton("");
 	    enterButton.setIcon(new ImageIcon("./resource/mypage/changeButton.png"));
 	    enterButton.setBounds(115, 150, 110, 38);
-	    //enterButton.setBackground(new Color(255, 255, 255));
 	    enterButton.setContentAreaFilled(false);
 	    enterButton.setBorderPainted(false);
 	    inputNickNamePanel.add(enterButton);
 	    
 	    enterButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		newnickname = nicknameField.getText();
+        		JSONObject a = new JSONObject();
+        		a.put("nickname", newnickname);
+        		System.out.println(newnickname);
+        		Request request = new Request(RequestType.CHANGENICKNAME,a);
+        		ClientSocket.send(request);
         		changeNickNamePopUp.dispose();
         	}
         });
 	    
 	    changeNickNamePopUp.setVisible(true);
-	    
     }
+
     
     /**서버에 프로필 사진 변경을 요청하는 함수*/
     public void changePFP() {
-    	JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Create a filter to show only image files (jpg and png)
+        FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "jpg", "png");
+        fileChooser.setFileFilter(imageFilter);
+
         int result = fileChooser.showOpenDialog(null);
 
         // 파일을 선택하지 않은 경우 종료합니다.
@@ -268,7 +249,12 @@ public class Mypage {
             JOptionPane.showMessageDialog(null, "사진 파일을 선택하세요.");
             return;
         }
-
+        
+        String filePath = selectedFile.getAbsolutePath();
+        JSONObject a = new JSONObject();
+		a.put("filePath", filePath);
+		Request request = new Request(RequestType.CHANGEPFP,a);
+		ClientSocket.send(request);
     }
     
     /**진행중인 미션을 보여주는 함수*/
