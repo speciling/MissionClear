@@ -11,6 +11,9 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 
+/**
+ * 비밀번호 입력 텍스트필드 모서리 둥글게 하는 클래스
+ */
 public class RoundCornerPasswordField extends JPasswordField {
 	private int arc = 20; // 원하는 모서리 반경 설정
     private int padding = 5;

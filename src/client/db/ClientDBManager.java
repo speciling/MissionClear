@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ClientDBManager extends DBManager {
@@ -230,6 +231,32 @@ public class ClientDBManager extends DBManager {
         return executeQuery(sql);
     }
 
+    public static JSONArray getGroupUsers(int gid) {
+        JSONArray result = new JSONArray();
+        String sql = String.format("SELECT users FROM GROUPS WHERE gid=%d", gid);
+        try{
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            String users = rs.getString("users");
+            statement.close();
+            rs.close();
+            sql = String.format("SELECT * FROM USER WHERE uid in (%s)", users.substring(0, users.length()-1));
+
+            PreparedStatement statement1 = conn.prepareStatement(sql);
+            ResultSet rs1 = statement1.executeQuery();
+            while (rs1.next()) {
+                JSONObject object = new JSONObject();
+                object.put("uid", rs1.getInt("uid"));
+                object.put("nickname", rs1.getInt("nickname"));
+                object.put("pfp", rs1.getString("pfp"));
+                result.add(object);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static Integer[] getMyGroupList() {
         return null;
     }
@@ -238,15 +265,41 @@ public class ClientDBManager extends DBManager {
         return null;
     }
 
-    public static JSONObject getGroupProgress(int gid) {
-
-        return null;
+    public static JSONArray getGroupProgress(int gid) {
+        JSONArray result = new JSONArray();
+        String sql = String.format("SELECT * FROM G%dPROGRESS", gid);
+        try{
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                JSONObject progress = new JSONObject();
+                progress.put("uid", rs.getInt("uid"));
+                progress.put("date", rs.getString("date"));
+                result.add(progress);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public static JSONArray getChatData(int gid) {
         JSONArray result = new JSONArray();
-        String sql = String.format("""
-                SELECT * FROM G%dCHAT ORDER BY chatId DESC LIMIT 50""");
+        String sql = String.format("SELECT * FROM G%dCHAT ORDER BY chatId DESC LIMIT 50", gid);
+        try{
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                JSONObject chat = new JSONObject();
+                chat.put("uid", rs.getInt("uid"));
+                chat.put("isPic", rs.getInt("isPic"));
+                chat.put("message", rs.getString("message"));
+                chat.put("chatId", rs.getInt("chatId"));
+                result.add(chat);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 

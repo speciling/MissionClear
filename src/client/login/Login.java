@@ -8,6 +8,8 @@ import org.json.simple.JSONObject;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
 
 import client.db.ClientDBManager;
@@ -37,6 +39,7 @@ public class Login extends JFrame{
 	private JLabel loginWarning;
 	private JLabel loginMatchWarning;
 	private JPanel panel;
+	private JFrame frame;
 	
 	  /**
      * loginpage 띄우는 메소드
@@ -46,7 +49,7 @@ public class Login extends JFrame{
 		/**
 		 frame setting
 		 */
-		JFrame frame=new JFrame("전체화면");
+		frame=new JFrame("전체화면");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1200,850);
 		
@@ -121,11 +124,11 @@ public class Login extends JFrame{
         signUpButton.setMargin(new Insets(0, 0, 0, 0));
         signUpButton.setContentAreaFilled(false);
         signUpButton.setBorderPainted(false);
-        /** button click event*/
+        /** 회원가입 버튼을 눌렀을 때 효과 */
         signUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	/** popup dialog method*/
+            	/** 회원가입 팝업 띄우는 메소드 */
                 signUpPopUp su = new signUpPopUp(); 
                 su.createSignPopUp();
             }
@@ -137,15 +140,15 @@ public class Login extends JFrame{
          id, pw warning
          */
         loginWarning = new JLabel("아이디 또는 비밀번호를 입력해주세요");
-        loginWarning.setBounds(476,683,300,50);
+        loginWarning.setBounds(460,683,300,50);
         loginWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
         loginWarning.setForeground(Color.red);
         loginWarning.setVisible(false);
         panel.add(loginWarning);
         
         loginMatchWarning = new JLabel("아이디 또는 비밀번호가 틀렸습니다");
-        loginMatchWarning.setBounds(476,683,300,48);
-        loginMatchWarning.setFont(new Font("나눔고딕", Font.PLAIN, 25));
+        loginMatchWarning.setBounds(470,683,300,50);
+        loginMatchWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
         loginMatchWarning.setForeground(Color.red);
         loginMatchWarning.setVisible(false);
         panel.add(loginMatchWarning);
@@ -165,25 +168,33 @@ public class Login extends JFrame{
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	String id=idTextField.getText();
-            	char[] passwordChars=passwordField.getPassword();
-            	String password=new String(passwordChars);
-            	
-            	if(checkValid(id,password)) {
-	            	if(login(id, password)) {
-	            		MainPage mp = new MainPage(true);
-	            		mp.changePanel("group");
-	            		frame.dispose();
-	            		//System.out.println("Success");
-	            	}
-	            	else {
-	            		loginMatchWarning.setVisible(true);
-	            	}
-            	}
+                performLogin();
             }
         });
+
         panel.add(loginButton);
-		
+
+		/**
+		 * 엔터만 쳐도 로그인이 되도록 하는 효과
+		 */
+		idTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    performLogin();
+                }
+            }
+        });
+        
+        passwordField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    performLogin();
+                }
+            }
+        });
+        
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -214,7 +225,26 @@ public class Login extends JFrame{
         ClientSocket.send(new Request(RequestType.LOGIN, jsonObject));
         return ClientSocket.getResult();
     }
-	
+
+	/**
+	 * 로그인 시도했을 때 조건에 맞을 시에만 로그인이 되도록 하는 메소드
+	 * 조건에 맞지 않으면 경고메시지를 출력함.
+	 */
+	private void performLogin() {
+	    String id = idTextField.getText();
+	    char[] passwordChars = passwordField.getPassword();
+	    String password = new String(passwordChars);
+
+	    if (checkValid(id, password)) {
+	        if (login(id, password)) {
+	            MainPage mp = new MainPage(true);
+	            mp.changePanel("group");
+	            frame.dispose();
+	        } else {
+	            loginMatchWarning.setVisible(true);
+	        }
+	    }
+	}
 	
 }
 
