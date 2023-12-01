@@ -62,6 +62,7 @@ public class ClientDBManager extends DBManager {
         String groups = data.get("groups").toString();
 
         String sql = String.format("INSERT OR REPLACE INTO USER (uid, nickname, pfp, groups) VALUES (%d, '%s', '%s', '%s')", uid, nickname, pfp, groups);
+        executeSQL(sql);
     }
 
     public static void saveInitData(JSONObject data) {
@@ -92,16 +93,16 @@ public class ClientDBManager extends DBManager {
         for (int i = 0; i < groupData.size(); i++) {
             JSONObject group = (JSONObject) groupData.get(i);
             Integer gid = Integer.parseInt(group.get("gid").toString());
-            String title = (String) group.get("title");
-            String description = (String) group.get("description");
-            String mission = (String) group.get("mission");
+            String title = group.get("title").toString();
+            String description = group.get("description").toString();
+            String mission = group.get("mission").toString();
             Integer capacity = Integer.parseInt(group.get("capacity").toString());
             Integer category = Integer.parseInt(group.get("category").toString());
             Integer usercnt = Integer.parseInt(group.get("usercnt").toString());
-            String deadline = (String) group.get("deadline");
-            String startDate = (String) group.get("startDate");
-            String endDate = (String) group.get("endDate");
-            String users = (String) group.get("users");
+            String deadline = group.get("deadline").toString();
+            String startDate = group.get("startDate").toString();
+            String endDate = group.get("endDate").toString();
+            String users = group.get("users").toString();
             String sql = String.format("""
                     INSERT OR REPLACE INTO GROUPS (gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users) 
                     VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
