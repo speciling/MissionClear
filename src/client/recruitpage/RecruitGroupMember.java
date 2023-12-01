@@ -185,15 +185,29 @@ public class RecruitGroupMember{
         searchTitle.setColumns(10);
         groupRecruitment.add(missionRoomCreate);
         
+        searchTitle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performSearch();
+            }
+        });
+        
         JLabel searchCategory = new JLabel("카테고리 선택");
         searchCategory.setBounds(50, 81, 110, 35);
         searchCategory.setFont(new Font("\uB098\uB214\uACE0\uB515", searchCategory.getFont().getStyle() | Font.BOLD, searchCategory.getFont().getSize() + 6));
         groupRecruitment.add(searchCategory);
+        
         comboBox = new JComboBox<>();
         comboBox.setBounds(180, 82, 121, 35);
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
         groupRecruitment.add(comboBox);
-
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performSearch(); // 카테고리 선택 시 검색 수행
+            }
+        });
+        
         JButton backButton = new JButton("");
         backButton.setBackground(new Color(246, 246, 246));
         backButton.setBorderPainted(false);
