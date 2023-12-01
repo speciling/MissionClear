@@ -120,8 +120,7 @@ public class DetailMyGroup extends JFrame {
       title.setBounds(0,0,434,70);
       popup.add(title);
       pan.setBounds(0,70,434,72);
-      JPanel temp = pan;
-      popup.add(temp);
+      popup.add(pan);
        
        // 세부진행도 패널 만들기
        JPanel detailProgressP = new JPanel();
@@ -149,7 +148,10 @@ public class DetailMyGroup extends JFrame {
       
       
    }
-   
+   public JPanel tempPanel(String name, String path, int rage) {
+	   JPanel p = makeUserProgress(name,path,rage,1);
+	   return p;
+   }
    public JPanel makeUserProgress(String name, String path, int rage, int i) {
       JPanel make = new JPanel();
       make.setBackground(Color.white);
@@ -188,8 +190,9 @@ public class DetailMyGroup extends JFrame {
        down.add(progressBar);
        
        userPic.addActionListener(event -> {
-           createProgressDetailPopup(i, make);
-           //make.refreshPan();
+    	   JPanel t = tempPanel(name,path,rage);
+           createProgressDetailPopup(i, t);
+           
        });
        
       return make;
