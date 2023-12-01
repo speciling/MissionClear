@@ -21,6 +21,7 @@ public class MainPage extends JFrame {
 
    public JPanel globPan;
    public String userName = "이름을 입력해주세요";
+   public int uid;
    public String userPic = "./resource/MainPage/defaultPic.png";
    public Container main;
 
