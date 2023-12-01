@@ -96,14 +96,17 @@ public class RecruitGroupMember{
 	public RecruitGroupMember(boolean vis) {
 		super();
 		initializeGroupRecruitment();
-		loadMissionRooms(); 
+		loadGroupsFromServerAndDisplay(); 
 	}
-	private void loadMissionRooms() {
-        List<Group> groups = GroupManager.getGroupList(); // 모든 그룹 데이터를 가져옴
+	private void loadGroupsFromServerAndDisplay() {
+        GroupManager.getRecruitingGroupData(); // 서버에서 데이터를 가져옴
+        List<Group> groups = GroupManager.getGroupList(); // 현재 등록된 모든 그룹의 데이터를 가져옴
         for (Group group : groups) {
+            // 각 그룹에 대해 UI 패널을 생성하고 화면에 추가
             AddMissionRoom missionRoomPanel = new AddMissionRoom(group);
             addToGroupRecruitment(missionRoomPanel.getPanel()); // 패널을 UI에 추가
         }
+        // 필요한 경우 UI 업데이트 메소드 호출
     }
 	/**
      * Initializes and sets up the group recruitment interface.
