@@ -279,6 +279,20 @@ public class CreateNewGroupPopup {
 	    exitButton.setFocusPainted(false); // 포커스 테두리 제거
     	createPopup.add(exitButton);
     	
+    	JLabel warningLabel_1 = new JLabel("* 날짜정보를 다시 입력해주세요.");
+    	warningLabel_1.setForeground(Color.RED);
+    	warningLabel_1.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+    	warningLabel_1.setBounds(145, 435, 200, 20);
+    	warningLabel_1.setVisible(false);
+    	createPopup.add(warningLabel_1);
+    	
+    	JLabel warningLabel_2 = new JLabel("* 날짜정보를 다시 입력해주세요.");
+    	warningLabel_2.setForeground(Color.RED);
+    	warningLabel_2.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+    	warningLabel_2.setBounds(145, 511, 200, 20);
+    	warningLabel_2.setVisible(false);
+    	createPopup.add(warningLabel_2);
+    	
     	exitButton.addActionListener(new ActionListener() {
     	    public void actionPerformed(ActionEvent e) {
     	        frame.dispose(); // 현재 프레임을 닫음
@@ -288,7 +302,19 @@ public class CreateNewGroupPopup {
     	creationComplete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	// AddMissionRoom 객체를 생성하면서 제목을 전달
-            	
+            	if (!isValidDateInput(recruitmentDeadlineYear.getText(), recruitmentDeadlineMonth.getText(), recruitmentDeadlineDay.getText())) {
+                    warningLabel_1.setVisible(true);
+                    return;
+                } else {
+                    warningLabel_1.setVisible(false);
+                }
+            	if (!isValidActivityPeriod(recruitmentStartDateYear.getText(), recruitmentStartDateMonth.getText(), recruitmentStartDateDay.getText())
+                        || !isValidActivityPeriod(recruitmentEndDateYear.getText(), recruitmentEndDateMonth.getText(), recruitmentEndDateDay.getText())) {
+                        warningLabel_2.setVisible(true);
+                        return;
+                    } else {
+                        warningLabel_2.setVisible(false);
+                    }
             	String missionTitle = title.getText();
             	String missionDescription = description.getText();
             	String missionContent = mission.getText();// Fetch the mission description text
@@ -336,8 +362,34 @@ public class CreateNewGroupPopup {
 
                 frame.dispose(); // 현재 프레임 닫기
             }
-        });    }
+        });   
+    	}
+    private boolean isValidDateInput(String year, String month, String day) {
+        try {
+            int yearValue = Integer.parseInt(year);
+            int monthValue = Integer.parseInt(month);
+            int dayValue = Integer.parseInt(day);
 
+            // 필요한 경우 추가적인 유효성 검사 수행
+
+            return true; // 예외가 발생하지 않고 입력이 유효한 경우
+        } catch (NumberFormatException e) {
+            return false; // 파싱이 실패하면 입력이 유효하지 않음
+        }
+    }
+    private boolean isValidActivityPeriod(String year, String month, String day) {
+        try {
+            int yearValue = Integer.parseInt(year);
+            int monthValue = Integer.parseInt(month);
+            int dayValue = Integer.parseInt(day);
+
+            // 필요한 경우 추가적인 유효성 검사 수행
+
+            return true; // 예외가 발생하지 않고 입력이 유효한 경우
+        } catch (NumberFormatException e) {
+            return false; // 파싱이 실패하면 입력이 유효하지 않음
+        }
+    }
     /**
      * Gets the frame of the popup window.
      * @return The JFrame object of this popup.

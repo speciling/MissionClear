@@ -96,7 +96,15 @@ public class RecruitGroupMember{
 	public RecruitGroupMember(boolean vis) {
 		super();
 		initializeGroupRecruitment();
+		loadMissionRooms(); 
 	}
+	private void loadMissionRooms() {
+        List<Group> groups = GroupManager.getGroupList(); // 모든 그룹 데이터를 가져옴
+        for (Group group : groups) {
+            AddMissionRoom missionRoomPanel = new AddMissionRoom(group);
+            addToGroupRecruitment(missionRoomPanel.getPanel()); // 패널을 UI에 추가
+        }
+    }
 	/**
      * Initializes and sets up the group recruitment interface.
      */
@@ -191,11 +199,6 @@ public class RecruitGroupMember{
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
         groupRecruitment.add(comboBox);
 
-//        MainPage mp = new MainPage(true);
-//		JPanel a = mp.globPan;
-//		a.setLayout(null);
-//        a.add(groupRecruitment);
-        
         JButton backButton = new JButton("");
         backButton.setBackground(new Color(246, 246, 246));
         backButton.setBorderPainted(false);
@@ -240,7 +243,7 @@ public class RecruitGroupMember{
 	private void performSearch() {
 	    String searchText = searchTitle.getText().trim().toLowerCase();
 	    if (searchText.equals("원하는 미션방을 검색할 수 있어요!")) {
-	        searchText = ""; // 기본 텍스트인 경우 검색 텍스트를 빈 문자열로 설정합니다.
+	        searchText = ""; // 기본 텍스트인 경우 검색 텍스트를	 빈 문자열로 설정합니다.
 	    }
 	    String selectedCategory = comboBox.getSelectedItem().toString(); // comboBox에서 선택된 카테고리를 가져옵니다.
 
