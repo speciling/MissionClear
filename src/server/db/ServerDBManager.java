@@ -234,7 +234,7 @@ public class ServerDBManager extends DBManager{
                             e.printStackTrace();
                         }
                     });
-                    group.put("isSecret", group.get("password") != null);
+                    group.put("isSecret", !group.get("password").equals(""));
                     group.remove("password");
                     recruitingGroups.add(group);
                 }
