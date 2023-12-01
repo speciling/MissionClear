@@ -1,4 +1,4 @@
-package client.DetailMyGroup;
+package client.detailMyGroup;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
