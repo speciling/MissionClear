@@ -165,43 +165,6 @@ public class ServerDBManager extends DBManager{
         }
         result.put("progressData", progressData);
 
-        JSONArray recruitingGroups = new JSONArray();
-        try (Statement statement = conn.createStatement()){
-            String sql = "SELECT * FROM GROUPS WHERE deadline >= date('now', 'localtime')";
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
-                // 열 제목 리스트 생성
-                ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-                int numCols = resultSetMetaData.getColumnCount();
-                List<String> colNames = IntStream.range(0, numCols)
-                        .mapToObj(i -> {
-                            try {
-                                return resultSetMetaData.getColumnName(i + 1);
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                                return "?";
-                            }
-                        })
-                        .toList();
-                // 각 열을 JSON 객체로 만들어 result에 저장
-                while (resultSet.next()) {
-                    JSONObject group = new JSONObject();
-                    colNames.forEach(cn -> {
-                        try {
-                            group.put(cn, resultSet.getObject(cn));
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    group.put("isSecret", group.get("password") != null);
-                    group.remove("password");
-                    recruitingGroups.add(group);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        result.put("recruitingGroups", recruitingGroups);
-
         return result;
     }
 
@@ -370,7 +333,7 @@ public class ServerDBManager extends DBManager{
             byte[] file = Files.readAllBytes(Path.of(fileName));
             request.file = file;
         } catch (IOException e) {
-            request.getData().put("resultType", ResultType.WARNING);
+            request.getData().put("resultType", ResultType.WARNING.getCode());
         }
     }
 }

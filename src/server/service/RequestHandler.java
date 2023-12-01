@@ -133,7 +133,7 @@ public class RequestHandler implements Handler{
                 int length = headerBuffer.getInt();
 
                 ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
-                socketChannel.read(bodyBuffer);
+                while (socketChannel.read(bodyBuffer) > 0);
                 bodyBuffer.flip();
                 String body = new String(bodyBuffer.array());
                 Request request = new Request(type, body);
@@ -145,7 +145,7 @@ public class RequestHandler implements Handler{
                     length = headerBuffer.getInt();
 
                     bodyBuffer = ByteBuffer.allocate(length);
-                    socketChannel.read(bodyBuffer);
+                    while (socketChannel.read(bodyBuffer) > 0);
                     bodyBuffer.flip();
                     request.file = bodyBuffer.array();
                 }
