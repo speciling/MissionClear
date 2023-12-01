@@ -45,8 +45,9 @@ public class GroupDetailPopup {
 	void initialize() {
 		frame = new JFrame();
 		frame.setSize(422, 425);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setLocationRelativeTo(null);
 		
 		groupDetailPopupPanel = new RoundedPanel(20); 
 		groupDetailPopupPanel.setBounds(0, 0, 406, 387);

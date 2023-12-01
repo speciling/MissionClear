@@ -76,9 +76,9 @@ public class CreateNewGroupPopup {
     public void initialize() {
     	setFrame(new JFrame());
     	getFrame().setSize(691, 760);
-    	getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	getFrame().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	getFrame().getContentPane().setLayout(null);
-    	
+    	getFrame().setLocationRelativeTo(null);
     	
     	RoundedPanel createPopup = new RoundedPanel(30); // 모서리 반경을 20으로 설정
     	createPopup.setBounds(0, 0, 675, 721);

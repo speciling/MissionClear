@@ -80,19 +80,11 @@ public class RecruitGroupMember{
 	private List<Group> searchList = new ArrayList<>();
 	private JTextField searchTitle;
 	public JPanel groupRecruitment;
-	private static int panelCount = 0;
-	/**
-     * Retrieves the main panel of the recruitment interface.
-     * @return the main JPanel component of the recruitment interface.
-     */
+	
 	public JPanel get() {
 	      return groupRecruitment;
 	}
-	/**
-     * Constructor to initialize the RecruitGroupMember interface.
-	 * @param b 
-     * @param vis Boolean value to set the visibility of the main page.
-     */
+	
 	public RecruitGroupMember(boolean vis) {
 		super();
 		initializeGroupRecruitment();

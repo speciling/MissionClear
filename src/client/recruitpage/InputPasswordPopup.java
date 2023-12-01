@@ -30,9 +30,10 @@ public class InputPasswordPopup {
     private void initialize() {
         frame = new JFrame();
         frame.setSize(355, 240);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(null);
-
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		frame.setLocationRelativeTo(null);
+		
         inputPasswordPanel = new RoundedPanel(20);
         inputPasswordPanel.setBounds(0, 0, 339, 199);
         inputPasswordPanel.setForeground(new Color(255, 255, 255));
