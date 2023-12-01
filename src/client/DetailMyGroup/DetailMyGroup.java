@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import client.MainPage.MainPage;
 
@@ -169,6 +170,7 @@ public class DetailMyGroup extends JFrame {
        
        userPic.addActionListener(event -> {
            createProgressDetailPopup(i, make);
+           //make.refreshPan();
        });
        
       return make;
@@ -178,7 +180,7 @@ public class DetailMyGroup extends JFrame {
       missionProgressPanel.setLayout(null);
       missionProgressPanel.setForeground(new Color(255, 255, 255));
       missionProgressPanel.setBackground(new Color(255, 255, 255));
-       missionProgressPanel.setBounds(510, 20, 390, 490);
+      missionProgressPanel.setBounds(510, 20, 390, 490);
       ff.add(missionProgressPanel);
        
        JLabel progressL = new JLabel("진행도 보기");
@@ -211,6 +213,92 @@ public class DetailMyGroup extends JFrame {
         missionProgressPanel.revalidate();
         missionProgressPanel.repaint();
 */
+   }
+   
+   public JPanel chatBox(int x, int num, int userID, int chatID) {
+	   JPanel chatBox = new JPanel();
+	   chatBox.setBackground(Color.white);
+	   chatBox.setLayout(null);
+	   chatBox.setBounds(0, 95*num, x, 95);
+	   
+	   ImageIcon chatUserPic = new ImageIcon("./resource/DetailMyGroup/userPic1.png");
+	   JLabel chatUserPicL = new JLabel(chatUserPic);
+	   chatUserPicL.setBounds(10,10,60,60);
+	   chatBox.add(chatUserPicL);
+	   
+	   JLabel chatUserName = new JLabel("호랑이 양말");
+	   chatUserName.setBounds(80,10,300,20);
+	   chatUserName.setFont(new Font("나눔고딕",Font.BOLD, 16));
+	   chatBox.add(chatUserName);
+	   
+	   JLabel chattingL = new JLabel("테스트 채팅입니다.");
+	   chattingL.setBounds(90,21,350,60);
+	   chattingL.setFont(new Font("나눔고딕",Font.PLAIN, 18));
+	   chatBox.add(chattingL);
+
+	   return chatBox;
+   }
+   
+   // 채팅부분을 구성하는 함수
+   public void chatting() {
+      // 채팅 JPanel
+      RoundedPanel2 chatPan = new RoundedPanel2(32);
+      chatPan.setLayout(null);
+      chatPan.setBounds(20,100,455,410);
+      ff.add(chatPan);
+      chatPan.setForeground(Color.white);
+      
+      // 자세히보기 버튼
+      JButton showMore = new JButton("자세히 보기 >");
+      showMore.setFont(new Font("나눔고딕",Font.PLAIN, 15));
+      showMore.setContentAreaFilled(false);
+      showMore.setBorderPainted(false);
+      showMore.setBounds(325,5,130,35);
+      chatPan.add(showMore);
+      showMore.addActionListener(event -> {
+         JFrame showMoreF = new JFrame();
+         showMoreF.setVisible(true);
+         showMoreF.setSize(900,700);
+         
+         JScrollPane p = new JScrollPane(chatBox(1,900,1,1), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+         showMoreF.add(p);
+      
+      
+      });
+      
+      // 채팅부분 JPanel
+      JPanel chatPart = new JPanel();
+      //chatPart.setLayout();
+      chatPart.setLayout(null);
+      chatPart.setBounds(20,45,415,285);
+      chatPan.add(chatPart);
+      
+      // 메세지를 보내는 부분
+      RoundedPanel2 sendMessage = new RoundedPanel2(15);
+      sendMessage.setLayout(null);
+      sendMessage.setBounds(20,340,415,50);
+      sendMessage.setForeground(new Color(239,239,239));
+      chatPan.add(sendMessage);
+      
+      ImageIcon sendIcon = new ImageIcon("./resource/DetailMyGroup/sendButton.png");
+      JButton sendButton = new JButton(sendIcon);
+      sendMessage.add(sendButton);
+      sendButton.setBounds(370,8,33,33);
+      sendButton.setContentAreaFilled(false);
+      sendButton.setBorderPainted(false);
+      JTextField inputText = new JTextField(){
+           @Override
+           public void setBorder(Border border) {}};
+      inputText.setBounds(10,0,360,50);
+      inputText.setFont(new Font("나눔고딕",Font.PLAIN, 15));
+      inputText.setOpaque(false);
+      sendMessage.add(inputText);
+      
+      for(int k=0;k<3;k++)
+      {
+    	  chatPart.add(chatBox(415,k,1,1));
+      }
+      
    }
    
    public DetailMyGroup(boolean vis) {
@@ -311,6 +399,8 @@ public class DetailMyGroup extends JFrame {
            }
        
       });
+      
+      chatting();
 
       //System.out.println(savePath);
       
@@ -327,6 +417,8 @@ public class DetailMyGroup extends JFrame {
    
    
    
-   
+   public static void main(String [] args) {
+       MainPage a = new MainPage(true);
+	   }
    
 }

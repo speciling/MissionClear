@@ -2,12 +2,14 @@ package client.MainPage;
 
 import javax.swing.*;
 import java.awt.*;
-
+import client.DetailMyGroup.DetailMyGroup;
+import client.db.ClientDBManager;
 import client.DetailMyGroup.DetailMyGroup;
 import client.login.Login;
 import client.mypage.Mypage;
 import client.recruitpage.MyGroupList;
 import client.recruitpage.RecruitGroupMember;
+import org.json.simple.JSONObject;
 
 /**
  * 로그인 후 모든 페이지를 관리하는 메인페이지이다
@@ -52,6 +54,12 @@ public class MainPage extends JFrame {
       initializeMainPage();
    }
    public void initializeMainPage() {
+      JSONObject myInfo = ClientDBManager.getMyInfo();
+      this.userName = myInfo.get("nickname").toString();
+      String pfp = myInfo.get("pfp").toString();
+      if (!pfp.equals(""))
+         this.userPic = myInfo.get("pfp").toString();
+
       Color mainColor = new Color(56, 183, 255);
       String logoPath = "./resource/MainPage/logo.png";
 

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientDBManager extends DBManager {
+    public static int myUid;
 
     public static void init() {
         try {
@@ -60,6 +61,7 @@ public class ClientDBManager extends DBManager {
         String nickname = data.get("nickname").toString();
         String pfp = data.get("pfp").toString();
         String groups = data.get("groups").toString();
+        myUid = uid;
 
         String sql = String.format("INSERT OR REPLACE INTO USER (uid, nickname, pfp, groups) VALUES (%d, '%s', '%s', '%s')", uid, nickname, pfp, groups);
         executeSQL(sql);
@@ -217,7 +219,10 @@ public class ClientDBManager extends DBManager {
         return executeQuery(sql);
     }
 
-    public static JSONObject getMyInfo(int uid) { return null; }
+    public static JSONObject getMyInfo() {
+        String sql = String.format("SELECT * FROM USER WHERE uid=%d", myUid);
+        return executeQuery(sql);
+    }
 
     public static JSONObject getGroupInfo(int gid) {
         String sql = String.format("""
