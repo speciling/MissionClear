@@ -57,14 +57,16 @@ public class signUpPopUp {
 		frame = new JFrame();
 		frame.setBackground(new Color(255, 255, 255));
 		frame.setBounds(353, 132, 550, 609);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		frame.setLocation(340,108);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		frame.setLocationRelativeTo(null);
+		//frame.setLocationRelativeTo(null);
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
+		
 		
 		JLabel signUpTitle = new JLabel("회원가입");
 		signUpTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -226,13 +228,15 @@ public class signUpPopUp {
                 	if(password.length()!=0)
                 		passwordRuleWarning.setVisible(true);
                 }
+                if(id.length()!=0) {
+                	if(singUp(id,password,nickname)) {
+                		frame.dispose();
+                	}
+                	else {
+                    	idRuleWarning.setVisible(true);
+                    }
+                }
                 
-                if(singUp(id,password,nickname)) {
-                	frame.dispose();
-                }
-                else {
-                	idRuleWarning.setVisible(true);
-                }
 			}
 		});
 		signUpButton.setIcon(new ImageIcon(signUpPopUp.class.getResource("/signup/SignUpButton.png")));
@@ -257,12 +261,6 @@ public class signUpPopUp {
         //frame.add(SignUpButton, BorderLayout.SOUTH);
         //frame.pack();
         frame.setVisible(true);
-	}
-	
-	/** 소켓과 연결하는 함수*/
-	private void signUp(String id, String pw, String nickname) {
-		//return false;
-		//이 안에서 소켓에서 받아온거를 트루펄스해서 여기서 경고문구까지 띄우기
 	}
 	
 	/** 아이디필드와 비밀번호필드가 잘 채워져있는지 검사하는 메소드*/

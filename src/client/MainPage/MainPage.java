@@ -3,7 +3,7 @@ package client.MainPage;
 import javax.swing.*;
 import java.awt.*;
 
-import client.detailMyGroup.DetailMyGroup;
+import client.DetailMyGroup.DetailMyGroup;
 import client.login.Login;
 import client.mypage.Mypage;
 import client.recruitpage.MyGroupList;

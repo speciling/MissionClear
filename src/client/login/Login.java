@@ -71,7 +71,7 @@ public class Login extends JFrame{
 		 text setting
 		 */
 		JLabel textLabel=new JLabel("다같이 재밌게 하는 목표달성!");
-		textLabel.setBounds(416,305,420,100);
+		textLabel.setBounds(405,298,420,90);
 		textLabel.setFont(new Font("나눔고딕", Font.BOLD,32));
 		textLabel.setForeground(Color.white);
 		textLabel.setOpaque(false);
@@ -79,8 +79,8 @@ public class Login extends JFrame{
 		
 		
 		JLabel login=new JLabel("로그인");
-		login.setBounds(553,365,95,90);
-		login.setFont(new Font("나눔고딕", Font.BOLD,32));
+		login.setBounds(553,360,120,100);
+		login.setFont(new Font("나눔고딕", Font.BOLD,36));
 		login.setForeground(Color.white);
 		login.setOpaque(false);
 		panel.add(login);
@@ -90,7 +90,7 @@ public class Login extends JFrame{
 		 */
 		
 		JLabel idLabel = new JLabel("ID");
-		idLabel.setBounds(405,445,30,35);
+		idLabel.setBounds(392,445,30,35);
 		idLabel.setFont(new Font("나눔고딕", Font.BOLD,24));
 		idLabel.setForeground(Color.white);
 		panel.add(idLabel);
@@ -99,22 +99,24 @@ public class Login extends JFrame{
 		idTextField = new RoundCornerTextField(20);
         idTextField.setBackground(new Color(255, 255, 255));
         idTextField.setBounds(385, 489, 428, 54); 
+        idTextField.setFont(new Font("나눔고딕", Font.PLAIN, 16));
         panel.add(idTextField);
 
         /** password field text setting*/
         JLabel passwordLabel = new JLabel("PW");
-        passwordLabel.setBounds(399, 556, 40, 35); 
-        passwordLabel.setFont(new Font("나눔고딕", Font.PLAIN,24));
+        passwordLabel.setBounds(392, 556, 40, 35); 
+        passwordLabel.setFont(new Font("나눔고딕", Font.BOLD,24));
 		passwordLabel.setForeground(Color.white);
         panel.add(passwordLabel);
 
         
         passwordField = new RoundCornerPasswordField(20);
         passwordField.setBounds(385, 600, 428, 54); /** password input text setting*/
+        passwordField.setFont(new Font("나눔고딕",Font.PLAIN,16));
         panel.add(passwordField);
         
         JButton signUpButton = new JButton("회원가입");
-        signUpButton.setFont(new Font("나눔고딕", Font.PLAIN, 16));
+        signUpButton.setFont(new Font("나눔고딕", Font.BOLD, 16));
         signUpButton.setBounds(572, 665, 70, 30); /** signup button*/
         signUpButton.setMargin(new Insets(0, 0, 0, 0));
         signUpButton.setContentAreaFilled(false);
@@ -141,7 +143,7 @@ public class Login extends JFrame{
         loginWarning.setVisible(false);
         panel.add(loginWarning);
         
-        loginMatchWarning = new JLabel("아이디 또는 비밀번호가 틀렸습니다..");
+        loginMatchWarning = new JLabel("아이디 또는 비밀번호가 틀렸습니다");
         loginMatchWarning.setBounds(476,683,300,48);
         loginMatchWarning.setFont(new Font("나눔고딕", Font.PLAIN, 25));
         loginMatchWarning.setForeground(Color.red);
@@ -167,17 +169,17 @@ public class Login extends JFrame{
             	char[] passwordChars=passwordField.getPassword();
             	String password=new String(passwordChars);
             	
-            	checkValid();
-            	if(login(id, password)) {
-            		MainPage mp = new MainPage(true);
-            		mp.changePanel("group");
-            		frame.dispose();
-            		//System.out.println("Success");
+            	if(checkValid(id,password)) {
+	            	if(login(id, password)) {
+	            		MainPage mp = new MainPage(true);
+	            		mp.changePanel("group");
+	            		frame.dispose();
+	            		//System.out.println("Success");
+	            	}
+	            	else {
+	            		loginMatchWarning.setVisible(true);
+	            	}
             	}
-            	else {
-            		loginMatchWarning.setVisible(true);
-            	}
-            	
             }
         });
         panel.add(loginButton);
@@ -190,13 +192,16 @@ public class Login extends JFrame{
 	/**
      * id, pw valid check method
      */
-	private void checkValid() {
+	private boolean checkValid(String id,String password) {
 		/**id, pw check*/
-		if(idTextField.getText().trim().length()==0||passwordField.getPassword().length==0) {
+		if(id.trim().length()==0||password.length()==0) {
 			loginWarning.setVisible(true); 
+			return false;
 		}
-		else
+		else {
 			loginWarning.setVisible(false);
+			return true;
+		}
 	}
 	/**
      * try login and return success
