@@ -276,6 +276,7 @@ public class ClientDBManager extends DBManager {
                 group.put("mission", rs.getString("mission"));
                 group.put("capacity", rs.getInt("capacity"));
                 group.put("category", rs.getInt("category"));
+                group.put("usercnt", rs.getInt("usercnt"));
                 group.put("deadline", rs.getString("deadline"));
                 group.put("startDate", rs.getString("startDate"));
                 group.put("endDate", rs.getString("endDate"));
@@ -301,6 +302,7 @@ public class ClientDBManager extends DBManager {
                 group.put("mission", rs.getString("mission"));
                 group.put("capacity", rs.getInt("capacity"));
                 group.put("category", rs.getInt("category"));
+                group.put("usercnt", rs.getInt("usercnt"));
                 group.put("deadline", rs.getString("deadline"));
                 group.put("startDate", rs.getString("startDate"));
                 group.put("endDate", rs.getString("endDate"));
