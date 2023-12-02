@@ -2,6 +2,7 @@ package client.mypage;
 
 import java.awt.*;
 
+import client.db.ClientDBManager;
 import client.login.RoundCornerTextField;
 import client.net.ClientSocket;
 
@@ -14,14 +15,18 @@ import java.io.File;
 import javax.swing.*;
 
 import client.MainPage.MainPage;
+import client.recruitpage.Group;
 import server.service.Request;
 import server.service.RequestType;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.List;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.json.simple.JSONObject;
+
+import static client.db.ClientDBManager.getMyGroupList;
 
 /**
  * @author 최지원
@@ -109,6 +114,7 @@ public class Mypage {
         missionInProgress.add(lblNewLabel_2_1);
 	    
 	    showOngoingMission();
+
        
         RoundedPanel2 missionended = new RoundedPanel2(32);
         missionended.setBounds(476, 249, 420, 462);
@@ -256,28 +262,37 @@ public class Mypage {
     
     /**진행중인 미션을 보여주는 함수*/
     public void showOngoingMission() {
-    	
-    	missionProgressPanel = new CustomPanel();
-	    missionProgressPanel.setBackground(new Color(255, 255, 255));
-	    missionProgressPanel.setBounds(23, 56, 374, 107);
-	    missionInProgress.add(missionProgressPanel);
-	    missionProgressPanel.setLayout(null);
-	    
-	    ongoingGroupName = new JLabel();
-	    ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
-	    ongoingGroupName.setText("돈 아껴서 부자되자");
-	    ongoingGroupName.setBounds(12, 10, 265, 35);
-	    missionProgressPanel.add(ongoingGroupName);
-	    
-    	int progressValue = 50;
 
-      
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setStringPainted(true);
-        progressBar.setValue(progressValue);
-        progressBar.setBounds(12, 55, 304, 30);
+        int x=23, y=56;
+        List<Group> groupList = ClientDBManager.getMyGroupList();
+        for(int i=0;i<groupList.size();i++){
+            missionProgressPanel = new CustomPanel();
+            missionProgressPanel.setBackground(new Color(255, 255, 255));
 
-        missionProgressPanel.add(progressBar);
+
+            missionProgressPanel.setBounds(x, y, 374, 107);
+            missionInProgress.add(missionProgressPanel);
+            missionProgressPanel.setLayout(null);
+
+            ongoingGroupName = new JLabel();
+            ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
+            ongoingGroupName.setText("돈 아껴서 부자되자");
+            ongoingGroupName.setBounds(12, 10, 265, 35);
+            missionProgressPanel.add(ongoingGroupName);
+
+            int progressValue = 50;
+
+
+            JProgressBar progressBar = new JProgressBar();
+            progressBar.setStringPainted(true);
+            progressBar.setValue(progressValue);
+            progressBar.setBounds(12, 55, 304, 30);
+
+            missionProgressPanel.add(progressBar);
+
+            y+=110;
+        }
+
         missionProgressPanel.revalidate();
         missionProgressPanel.repaint();
     }
@@ -287,7 +302,38 @@ public class Mypage {
     /** 완료된 미션을 보여주는 함수*/
     public void showFinishedMission() {
         //완료된 미션을 보여주는 함수
+        int x=506, y=56;
+        List<Group> groupList = ClientDBManager.getMyEndedGroupList();
+        for(int i=0 ; i<groupList.size() ; i++){
+            missionProgressPanel = new CustomPanel();
+            missionProgressPanel.setBackground(new Color(255, 255, 255));
 
+
+            missionProgressPanel.setBounds(x, y, 374, 107);
+            missionInProgress.add(missionProgressPanel);
+            missionProgressPanel.setLayout(null);
+
+            ongoingGroupName = new JLabel();
+            ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
+            ongoingGroupName.setText("돈 아껴서 부자되자");
+            ongoingGroupName.setBounds(12, 10, 265, 35);
+            missionProgressPanel.add(ongoingGroupName);
+
+            int progressValue = 50;
+
+
+            JProgressBar progressBar = new JProgressBar();
+            progressBar.setStringPainted(true);
+            progressBar.setValue(progressValue);
+            progressBar.setBounds(12, 55, 304, 30);
+
+            missionProgressPanel.add(progressBar);
+
+            y+=110;
+        }
+
+        missionProgressPanel.revalidate();
+        missionProgressPanel.repaint();
     }
 }
 

@@ -242,14 +242,12 @@ public class Login extends JFrame{
 
 	    if (checkValid(id, password)) {
 	        if (login(id, password)) {
-				System.out.println(3);
 				JSONObject jsonObject = new JSONObject();
 				ClientSocket.send(new Request(RequestType.SENDDATA, jsonObject));
 				ClientSocket.getResult();
 	            MainPage mp = new MainPage(true);
 	            mp.changePanel("group");
 	            frame.dispose();
-				System.out.println(4);
 	        } else {
 	            loginMatchWarning.setVisible(true);
 	        }
