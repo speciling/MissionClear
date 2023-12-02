@@ -11,11 +11,11 @@ import client.db.ClientDBManager;
 public class MakeUserData {
 	public HashMap<Integer,String> nicknames = new HashMap<Integer,String>(){{}};
 	public HashMap<Integer,String> pfps = new HashMap<Integer,String>(){{}};
-	int gid=2;
-	List<Integer> uids = new Vector<Integer>();
+	//int gid=2;
+	public List<Integer> uids = new Vector<Integer>();
 	
-	
-	public MakeUserData() {
+	public MakeUserData(){}
+	public MakeUserData(int gid) {
 		JSONArray usersData = ClientDBManager.getGroupUsers(gid);
 		for(int i=0;i<usersData.size();i++) {		
 			JSONObject user = (JSONObject) usersData.get(i);		

@@ -77,16 +77,17 @@ public class DetailMyGroup extends JFrame {
          {2,2,2,1,0,0,0,0}};
    int []missionProgRage = {0,0,0,0,0};
    
-   MakeUserData userData = new MakeUserData();
+   int gid = 2;
+   MakeUserData userData = new MakeUserData(gid);
    HashMap nicknames = userData.nicknames;
    HashMap pfps = userData.pfps;
    List<Integer> uids = userData.uids;
-   /*
-   String[] username = {"호랑이양말", "임지환", "조연우", "지연우", "최지원"};
-   String[] picPath = {"./resource/DetailMyGroup/userPic1.png", "./resource/DetailMyGroup/userPic2.png", "./resource/DetailMyGroup/userPic3.png", "./resource/DetailMyGroup/userPic4.png", "./resource/DetailMyGroup/userPic5.png"};
-   */
    
-   
+   MakeChatData chatData = new MakeChatData(gid);
+   HashMap chatUid = chatData.uid;
+   HashMap chatMessage = chatData.message;
+   HashMap chatIsPic = chatData.isPic;
+   List<Integer> chatids = chatData.chatids;
    
    // 세부 미션 수행도 만들기
    //int[username.length][dayCount] detailProgress = {};
@@ -223,42 +224,51 @@ public class DetailMyGroup extends JFrame {
           j.setBounds(0,72*i,390,72);
           userProgressP.add(j);
        }
-        /*
-       JButton detailProg = new JButton();
-       detailProg.setBounds(0,0,390,490);
-       detailProg.setBorderPainted(false);
-       detailProg.setFocusPainted(false);
-       detailProg.setOpaque(false);
-       missionProgressPanel.add(detailProg);
-       
-      
-        missionProgressPanel.add(progressBar);
-        missionProgressPanel.revalidate();
-        missionProgressPanel.repaint();
-*/
    }
    
-   public JPanel chatBox(int x, int num, int userID, int chatID) {
+   public JPanel chatBox(int x, int num, int cid) {
 	   JPanel chatBox = new JPanel();
 	   chatBox.setBackground(Color.white);
 	   chatBox.setLayout(null);
 	   chatBox.setBounds(0, 95*num, x, 95);
 	   
-	   ImageIcon chatUserPic = new ImageIcon("./resource/DetailMyGroup/userPic1.png");
+	   int userID = (int)chatUid.get(cid);
+	   String userPicPathChat = pfps.get(userID).toString();
+	   String userNicknameChat = nicknames.get(userID).toString();
+	   String messageChat = chatMessage.get(cid).toString();
+	   
+	   ImageIcon chatUserPic = new ImageIcon(userPicPathChat);
 	   JLabel chatUserPicL = new JLabel(chatUserPic);
 	   chatUserPicL.setBounds(10,10,60,60);
 	   chatBox.add(chatUserPicL);
-	   
-	   JLabel chatUserName = new JLabel("호랑이 양말");
+	   JLabel chatUserName = new JLabel(userNicknameChat);
 	   chatUserName.setBounds(80,10,300,20);
 	   chatUserName.setFont(new Font("나눔고딕",Font.BOLD, 16));
 	   chatBox.add(chatUserName);
 	   
-	   JLabel chattingL = new JLabel("테스트 채팅입니다.");
-	   chattingL.setBounds(90,21,350,60);
-	   chattingL.setFont(new Font("나눔고딕",Font.PLAIN, 18));
-	   chatBox.add(chattingL);
-
+	   int isPic = (int)chatIsPic.get(cid);
+	   if(isPic==0)//채팅일때
+	   {
+		   JLabel chattingL = new JLabel(messageChat);
+		   chattingL.setBounds(90,21,x-100,60);
+		   chattingL.setFont(new Font("나눔고딕",Font.PLAIN, 18));
+		   chatBox.add(chattingL);
+	   }
+	   else if(isPic==1)//인증일때
+	   {
+		   JLabel chattingL = new JLabel(userNicknameChat+"님이 오늘의 미션을 인증하였습니다.");
+		   chattingL.setBounds(90,21,x-100,60);
+		   chattingL.setFont(new Font("나눔고딕",Font.BOLD, 18));
+		   chatBox.add(chattingL);
+		   if (x==900)//큰 사이즈일 때
+		   {
+			   chatBox.setBounds(0, 95*num, x, 400);
+			   ImageIcon authPicIcon = new ImageIcon(messageChat);
+			   JLabel authPicShow = new JLabel(authPicPath);
+			   authPicShow.setBounds(90,85,x-100,300);
+			   chatBox.add(authPicShow);
+			   }
+	   }	   
 	   return chatBox;
    }
    
@@ -283,7 +293,17 @@ public class DetailMyGroup extends JFrame {
          showMoreF.setVisible(true);
          showMoreF.setSize(900,700);
          
-         JScrollPane p = new JScrollPane(chatBox(1,900,1,1), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+         ////////////////////////////////////
+         int idx = chatids.size();
+         JScrollPane p = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        // p.setLayout(new )
+         showMoreF.add(p);
+         int num = 0;
+         for(idx=idx-1;idx>=0;idx--) 
+         {
+        	 int cid = chatids.get(idx);
+        	 p.add(chatBox(900,num,cid));
+         }
          showMoreF.add(p);
       
       
@@ -317,9 +337,16 @@ public class DetailMyGroup extends JFrame {
       inputText.setOpaque(false);
       sendMessage.add(inputText);
       
-      for(int k=0;k<3;k++)
+      for(int k=2;k>=0;k--)
       {
-    	  chatPart.add(chatBox(415,k,1,1));
+    	  try {
+    	  int cid = chatids.get(k);
+    	  chatPart.add(chatBox(415,k,cid));
+    	  }
+    	  catch(Exception e) {
+    		  e.printStackTrace();
+    		  System.out.println("index error");
+    		  }
       }
       
    }
