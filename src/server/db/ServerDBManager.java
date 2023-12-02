@@ -3,8 +3,11 @@ package server.db;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.service.Request;
+import server.service.RequestType;
+import server.user.User;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
@@ -93,7 +96,7 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
-    public static JSONObject getInitData(List<Integer> groups) {
+    public static JSONObject getInitData(List<Integer> groups, Queue<ByteBuffer> writeQueue) {
         JSONObject result = new JSONObject();
         JSONArray myGroups = new JSONArray();
         Set<Integer> userSet = new HashSet<>();
@@ -111,7 +114,22 @@ public class ServerDBManager extends DBManager{
         for (int uid: userList) {
             JSONObject user = getUser(uid);
             String pfpPath = user.get("pfp").toString();
-            user.replace("pfp", Path.of(pfpPath).getFileName().toString());
+            String fileName = Path.of(pfpPath).getFileName().toString();
+            user.replace("pfp", fileName);
+            if (!fileName.equals("")){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("fileName", fileName);
+                fileName =  path.toString() + "\\" + fileName;
+                Request request = new Request(RequestType.GETFILE, jsonObject);
+                try {
+                    byte[] file = Files.readAllBytes(Path.of(fileName));
+                    request.file = file;
+                    request.getData().put("resultType", ResultType.SUCCESS.getCode());
+                } catch (IOException e) {
+                    request.getData().put("resultType", ResultType.WARNING.getCode());
+                }
+                writeQueue.add(Request.toByteBuffer(request));
+            }
             users.add(user);
         }
         result.put("userData", users);

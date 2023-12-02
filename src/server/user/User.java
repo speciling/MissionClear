@@ -28,6 +28,12 @@ public class User {
             group.registerUser(this);
     }
 
+    public void enterGroup(int gid) {
+        Group group = Group.get(gid);
+        groupList.add(group);
+        group.registerUser(this);
+    }
+
     public void send(ByteBuffer data) {
         requestHandler.addTask(data);
     }

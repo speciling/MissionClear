@@ -180,7 +180,6 @@ public class RequestHandler implements Handler{
                     bodyBuffer = ByteBuffer.allocate(length);
                     while (bodyBuffer.remaining() > 0)
                         socketChannel.read(bodyBuffer);
-                    System.out.println("사진 길이: " + length + "  버퍼 크기: " + bodyBuffer.position());
                     bodyBuffer.flip();
                     request.file = bodyBuffer.array();
                 }
@@ -204,7 +203,6 @@ public class RequestHandler implements Handler{
         String password = (String)requestData.get("password");
         JSONObject result = ServerDBManager.getUser(id, password);
         addTask(Request.toByteBuffer(RequestType.LOGIN, result));
-        System.out.println("로그인 결과: " + result.toJSONString());
 
         if(ResultType.of((Integer) result.get("resultType")).equals(ResultType.SUCCESS)) {
             String groups = "";
@@ -226,7 +224,7 @@ public class RequestHandler implements Handler{
                 }
             }
 
-            JSONObject initData = ServerDBManager.getInitData(gidList);
+            JSONObject initData = ServerDBManager.getInitData(gidList, this.writeQueue);
             addTask(Request.toByteBuffer(RequestType.SENDDATA, initData));
 
             this.user = new User((Integer)result.get("uid"), gidList, this);
@@ -263,6 +261,9 @@ public class RequestHandler implements Handler{
         int uid = user.userID, gid = Integer.parseInt(request.getData().get("gid").toString());
         String pw = request.getData().get("password").toString();
         JSONObject result = ServerDBManager.enterGroup(uid, gid, pw);
+        if (Integer.parseInt(result.get("resultType").toString()) == ResultType.SUCCESS.getCode()) {
+            this.user.enterGroup(gid);
+        }
         addTask(Request.toByteBuffer(RequestType.ENTERGROUP, result));
     }
 
@@ -278,8 +279,10 @@ public class RequestHandler implements Handler{
         int chatId = DBManager.saveCertifyPicture(request);
         int gid = Integer.parseInt(request.getData().get("gid").toString());
         request.getData().put("chatId", chatId);
-        for (User user: Group.get(gid).getConnectedUserList())
-            user.send(Request.toByteBuffer(request));
+        for (User user: Group.get(gid).getConnectedUserList()){
+            ByteBuffer byteBuffer = Request.toByteBuffer(request);
+            user.send(byteBuffer);
+        }
     }
 
     private void changePFP(Request request) {
