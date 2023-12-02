@@ -69,7 +69,7 @@ public class MyGroupList {
         groupListPanel.setBackground(new Color(246, 246, 246));
         
         List<Group> groups = ClientDBManager.getMyGroupList();
-        int panelY = 13; 
+        int panelY = 5; 
         for (Group group : groups) {
             AddMyGroup addMyGroup = new AddMyGroup(group);
             JPanel addGroupPanel = addMyGroup.getPanel();
@@ -77,7 +77,7 @@ public class MyGroupList {
             addGroupPanel.setBounds(13, panelY, addGroupPanel.getWidth(), addGroupPanel.getHeight());
             groupListPanel.add(addGroupPanel);
 
-            panelY += PANEL_HEIGHT + 10; // 10은 패널 간의 간격
+            panelY += PANEL_HEIGHT + 5; // 10은 패널 간의 간격
         }
         groupListPanel.setPreferredSize(new Dimension(930, panelY));
 

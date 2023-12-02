@@ -63,6 +63,15 @@ public class AddMyGroup {
 		personnelPanel.setBounds(26, 113, 352, 25);
 		addGroupPanel.add(personnelPanel);
 		
+		JLabel category = new JLabel(group.getCategory());
+	    category.setForeground(new Color(56, 183, 255));
+	    category.setHorizontalAlignment(JLabel.CENTER);
+	    category.setFont(new Font("나눔고딕", Font.PLAIN, 17));
+	    category.setBounds(780, 144, 90, 35);
+	    Color customColor = new Color(56, 183, 255);
+	    category.setBorder(new RoundedBorder(10, customColor));
+	    addGroupPanel.add(category);
+	    
 		JButton detailEnterButton = new JButton("");
 		detailEnterButton.setBounds(0, 0, 890, 189);
 		detailEnterButton.setContentAreaFilled(false);

@@ -172,7 +172,7 @@ public class ServerDBManager extends DBManager{
         JSONObject result = new JSONObject();
         JSONArray recruitingGroups = new JSONArray();
         try (Statement statement = conn.createStatement()){
-            String sql = "SELECT * FROM GROUPS WHERE deadline >= date('now', 'localtime')";
+            String sql = "SELECT * FROM GROUPS WHERE (deadline > date('now', 'localtime') AND usercnt < capacity)";
             try (ResultSet resultSet = statement.executeQuery(sql)) {
                 // 열 제목 리스트 생성
                 ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -296,12 +296,15 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
-    public static ResultType enterGroup(int uid, int gid, String pw){
+    public static JSONObject enterGroup(int uid, int gid, String pw){
         String sql = String.format("""
-                SELECT users FROM GROUPS WHERE (gid=%d AND password='%s' AND usercnt<capacity)""", gid, pw);
-        String users = ((String)executeQuery(sql).get("users"));
+                SELECT * FROM GROUPS WHERE (gid=%d AND password='%s' AND usercnt<capacity)""", gid, pw);
+        JSONObject result = executeQuery(sql);
+        String users = ((String)result.get("users"));
 
         if(users != null) {
+            result.remove("password");
+            result.put("uid", uid);
             List<Integer> userList = Arrays.stream(users.split(",")).map(Integer::parseInt).toList();
             if(!userList.contains(uid)){
                 sql = String.format("""
@@ -319,11 +322,11 @@ public class ServerDBManager extends DBManager{
                 sql = String.format("""
                         UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
                 executeSQL(sql);
-                return ResultType.SUCCESS;
+                return result;
             }
         }
 
-        return ResultType.WARNING;
+        return result;
     }
 
     public static void getFile(Request request) {
