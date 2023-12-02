@@ -104,7 +104,7 @@ public class Group {
         this.description = data.get("description").toString();
         this.mission = data.get("mission").toString();
         this.recruitmentCapacity = Integer.parseInt(data.get("capacity").toString());
-        int category = Integer.parseInt(data.get("capacity").toString());
+        int category = Integer.parseInt(data.get("category").toString());
         this.category = (category==0?"챌린지":(category==1?"스터디":(category==2?"다이어트":"기타")));
         String[] deadline = data.get("deadline").toString().split("-");
         this.recruitmentDeadlineYear = deadline[0];
@@ -119,7 +119,9 @@ public class Group {
         this.recruitmentEndDateMonth = endDate[1];
         this.recruitmentEndDateDay = endDate[2];
         this.roomPassword = null;
-        this.isSecretRoom = Boolean.parseBoolean(data.get("isSecret").toString());
+        Object isSecret = data.get("isSecret");
+        if (isSecret != null)
+            this.isSecretRoom = Boolean.parseBoolean(isSecret.toString());
     }
 
     public JSONObject toJSON() {
