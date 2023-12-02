@@ -14,7 +14,7 @@ public class GroupManager {
     	Request request = new Request(RequestType.CREATENEWGROUP, group.toJSON());
     	ClientSocket.send(request);
     	if (ClientSocket.getResult()) {
-    		groupList.add(group);
+    		getRecruitingGroupData();
     		return true;
     	}
     	else {
