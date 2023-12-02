@@ -20,13 +20,12 @@ public class User {
         for (int gid : gidList) {
             Group group = Group.get(gid);
             groupList.add(group);
-            group.registerUser(this);
         }
-        connect();
     }
 
     public void connect() {
-
+        for (Group group : groupList)
+            group.registerUser(this);
     }
 
     public void send(ByteBuffer data) {

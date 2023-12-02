@@ -1,6 +1,5 @@
 package server.service;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.db.DBManager;
 import server.db.ResultType;
@@ -8,20 +7,22 @@ import server.db.ServerDBManager;
 import server.group.Group;
 import server.user.User;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.nio.file.Path;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.stream.Collectors;
 
+/**
+ * {@code RequestHandler}는 {@code Handler} 인터페이스를 구현하는 클래스로, 클라이언트의 요청을 처리합니다.
+ *
+ * @see Handler
+ *
+ * @author 지연우
+ */
 public class RequestHandler implements Handler{
     private static final int READING = 0, SENDING = 1;
 
@@ -32,6 +33,15 @@ public class RequestHandler implements Handler{
     private User user;
 
 
+    /**
+     * {@code RequestHandler}의 생성자
+     *
+     * @param selector       이 핸들러를 등록할 {@code Selector} 객체
+     * @param socketChannel  클라이언트와의 통신을 담당하는 {@code SocketChannel}
+     * @throws IOException   입출력 예외가 발생할 경우 던지집니다.
+     *
+     * @author 지연우
+     */
     RequestHandler(Selector selector, SocketChannel socketChannel) throws IOException {
         this.socketChannel = socketChannel;
         this.socketChannel.configureBlocking(false);
@@ -41,6 +51,11 @@ public class RequestHandler implements Handler{
         selector.wakeup();
     }
 
+    /**
+     * RequsetHandler 객체의 상태에 따라 요청을 읽어오고, 필요한 함수를 호출하거나, 요청을 보내는 메소드
+     *
+     * @author 지연우
+     */
     @Override
     public void handle() {
         if (state == SENDING) {
@@ -48,51 +63,67 @@ public class RequestHandler implements Handler{
         } else {
             Request request = getRequest();
             if (request != null) {
-                switch (request.type) {
-                    case LOGIN:
-                        login(request);
-                        break;
-                    case SIGNUP:
-                        signUp(request);
-                        break;
-                    case SENDDATA:
-                        sendData(request);
-                        break;
-                    case GETRECRUITINGGROUPDATA:
-                        getRecruitingGroupData(request);
-                        break;
-                    case CREATENEWGROUP:
-                        createNewGroup(request);
-                        break;
-                    case ENTERGROUP:
-                        enterGroup(request);
-                        break;
-                    case CHAT:
-                        chat(request);
-                        break;
-                    case CERTIFYMISSION:
-                        certifyMission(request);
-                        break;
-                    case CHANGEPFP:
-                        changePFP(request);
-                        break;
-                    case CHANGENICKNAME:
-                        changeNickname(request);
-                        break;
-                    case GETFILE:
-                        getFile(request);
-                        break;
+                try {
+                    switch (request.type) {
+                        case LOGIN:
+                            login(request);
+                            break;
+                        case SIGNUP:
+                            signUp(request);
+                            break;
+                        case SENDDATA:
+                            sendData(request);
+                            break;
+                        case GETRECRUITINGGROUPDATA:
+                            getRecruitingGroupData(request);
+                            break;
+                        case CREATENEWGROUP:
+                            createNewGroup(request);
+                            break;
+                        case ENTERGROUP:
+                            enterGroup(request);
+                            break;
+                        case CHAT:
+                            chat(request);
+                            break;
+                        case CERTIFYMISSION:
+                            certifyMission(request);
+                            break;
+                        case CHANGEPFP:
+                            changePFP(request);
+                            break;
+                        case CHANGENICKNAME:
+                            changeNickname(request);
+                            break;
+                        case GETFILE:
+                            getFile(request);
+                            break;
+                    }
+                } catch (Exception e) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("resultType", ResultType.WARNING.getCode());
+                    addTask(Request.toByteBuffer(request.type, jsonObject));
                 }
             }
         }
     }
 
+    /**
+     * {@code ByteBuffer} 데이터를 전송 대기열에 추가하고 상태를 SENDING으로 변경합니다
+     *
+     * @param data  전송 대기열에 추가할 데이터를 담은 {@code ByteBuffer} 객체입니다.
+     */
     public void addTask(ByteBuffer data) {
         writeQueue.add(data);
         selectionKey.interestOps(SelectionKey.OP_WRITE);
         state = SENDING;
     }
 
+    /**
+     * 전송 대기열의 데이터 1개를 클라이언트에게 전송합니다. 전송 대기열이 비어있따면 상태를 READING으로 변경합니다.
+     *
+     *
+     */
     private void send() {
         if (writeQueue.isEmpty()) {
             selectionKey.interestOps(SelectionKey.OP_READ);
@@ -137,6 +168,7 @@ public class RequestHandler implements Handler{
                     socketChannel.read(bodyBuffer);
                 bodyBuffer.flip();
                 String body = new String(bodyBuffer.array());
+                System.out.println(type+body);
                 Request request = new Request(type, body);
 
                 if (type == RequestType.CERTIFYMISSION.getCode() || type == RequestType.CHANGEPFP.getCode()) {
@@ -148,6 +180,7 @@ public class RequestHandler implements Handler{
                     bodyBuffer = ByteBuffer.allocate(length);
                     while (bodyBuffer.remaining() > 0)
                         socketChannel.read(bodyBuffer);
+                    System.out.println("사진 길이: " + length + "  버퍼 크기: " + bodyBuffer.position());
                     bodyBuffer.flip();
                     request.file = bodyBuffer.array();
                 }
@@ -171,6 +204,7 @@ public class RequestHandler implements Handler{
         String password = (String)requestData.get("password");
         JSONObject result = ServerDBManager.getUser(id, password);
         addTask(Request.toByteBuffer(RequestType.LOGIN, result));
+        System.out.println("로그인 결과: " + result.toJSONString());
 
         if(ResultType.of((Integer) result.get("resultType")).equals(ResultType.SUCCESS)) {
             String groups = "";
@@ -228,16 +262,8 @@ public class RequestHandler implements Handler{
     private void enterGroup(Request request) {
         int uid = user.userID, gid = Integer.parseInt(request.getData().get("gid").toString());
         String pw = request.getData().get("password").toString();
-        ResultType resultType = ServerDBManager.enterGroup(uid, gid, pw);
-        if (resultType == ResultType.SUCCESS) {
-            request.getData().put("resultType", resultType.getCode());
-            request.getData().put("uid", user.userID);
-            addTask(Request.toByteBuffer(request));
-        } else {
-            JSONObject result = new JSONObject();
-            result.put("resultType", resultType.getCode());
-            addTask(Request.toByteBuffer(RequestType.ENTERGROUP, result));
-        }
+        JSONObject result = ServerDBManager.enterGroup(uid, gid, pw);
+        addTask(Request.toByteBuffer(RequestType.ENTERGROUP, result));
     }
 
     private void chat(Request request) {
