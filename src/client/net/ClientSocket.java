@@ -136,6 +136,9 @@ public class ClientSocket extends Thread{
                     break;
                 case SENDDATA:
                     ClientDBManager.saveInitData(response.getData());
+                    JSONObject result = new JSONObject();
+                    result.put("resultType", ResultType.SUCCESS.getCode());
+                    readQueue.add(new Request(RequestType.SENDDATA, result));
                     break;
                 case CHAT:
                     ClientDBManager.saveChatMessage(response.getData());
