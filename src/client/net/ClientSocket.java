@@ -91,7 +91,8 @@ public class ClientSocket extends Thread{
             int length = headerBuffer.getInt();
 
             ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
-            while (socket.read(bodyBuffer) > 0);
+            while (bodyBuffer.remaining() > 0)
+                socket.read(bodyBuffer);
             bodyBuffer.flip();
             String body = new String(bodyBuffer.array());
             Request request = new Request(type, body);
@@ -104,7 +105,8 @@ public class ClientSocket extends Thread{
 
 
                 bodyBuffer = ByteBuffer.allocate(length);
-                while (socket.read(bodyBuffer) > 0);
+                while (bodyBuffer.remaining() > 0)
+                    socket.read(bodyBuffer);
                 bodyBuffer.flip();
                 request.file = bodyBuffer.array();
             }
