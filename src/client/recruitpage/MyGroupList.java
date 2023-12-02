@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import client.MainPage.MainPage;
+import client.db.ClientDBManager;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -61,7 +63,7 @@ public class MyGroupList {
         groupList.setBounds(13, 22, 156, 35);
         myGroup.add(groupList);
 
-        List<Group> groups = GroupManager.getGroupList();
+        List<Group> groups = ClientDBManager.getMyGroupList();
         for (Group group : groups) {
             AddMyGroup addMyGroup = new AddMyGroup(group);
             JPanel addGroupPanel = addMyGroup.getPanel();

@@ -8,6 +8,7 @@ public class Group {
     private String description;
     private String mission;
     private int recruitmentCapacity;
+    private int usercount;
     private String category;
     private String recruitmentDeadlineYear;
     private String recruitmentDeadlineMonth;
@@ -41,6 +42,9 @@ public class Group {
     }
     public int getCapacity() {
         return recruitmentCapacity;
+    }
+    public int getUserCount() {
+        return usercount;
     }
     public String getCategory() {
     	return category;
@@ -79,11 +83,12 @@ public class Group {
     }
 
     // 모든 필드를 포함한 생성자
-    public Group(String title, String description, String mission, int recruitmentCapacity, String category, String recruitmentDeadlineYear, String recruitmentDeadlineMonth, String recruitmentDeadlineDay, String recruitmentStartDateYear, String recruitmentStartDateMonth, String recruitmentStartDateDay, String recruitmentEndDateYear, String recruitmentEndDateMonth, String recruitmentEndDateDay, String roomPassword, boolean isSecretRoom ) {
+    public Group(String title, String description, String mission, int recruitmentCapacity, int usercount, String category, String recruitmentDeadlineYear, String recruitmentDeadlineMonth, String recruitmentDeadlineDay, String recruitmentStartDateYear, String recruitmentStartDateMonth, String recruitmentStartDateDay, String recruitmentEndDateYear, String recruitmentEndDateMonth, String recruitmentEndDateDay, String roomPassword, boolean isSecretRoom ) {
         this.title = title;
         this.description = description;
         this.mission = mission;
         this.recruitmentCapacity = recruitmentCapacity;
+        this.usercount = usercount;
         this.category = category;
         this.recruitmentDeadlineYear = recruitmentDeadlineYear;
         this.recruitmentDeadlineMonth = recruitmentDeadlineMonth;
@@ -107,6 +112,7 @@ public class Group {
         int category = Integer.parseInt(data.get("category").toString());
         this.category = (category==0?"챌린지":(category==1?"스터디":(category==2?"다이어트":"기타")));
         String[] deadline = data.get("deadline").toString().split("-");
+        this.usercount = Integer.parseInt(data.get("usercnt").toString());
         this.recruitmentDeadlineYear = deadline[0];
         this.recruitmentDeadlineMonth = deadline[1];
         this.recruitmentDeadlineDay = deadline[2];
