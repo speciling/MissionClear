@@ -133,7 +133,8 @@ public class RequestHandler implements Handler{
                 int length = headerBuffer.getInt();
 
                 ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
-                while (socketChannel.read(bodyBuffer) > 0);
+                while (bodyBuffer.remaining() > 0)
+                    socketChannel.read(bodyBuffer);
                 bodyBuffer.flip();
                 String body = new String(bodyBuffer.array());
                 Request request = new Request(type, body);
@@ -145,7 +146,8 @@ public class RequestHandler implements Handler{
                     length = headerBuffer.getInt();
 
                     bodyBuffer = ByteBuffer.allocate(length);
-                    while (socketChannel.read(bodyBuffer) > 0);
+                    while (bodyBuffer.remaining() > 0)
+                        socketChannel.read(bodyBuffer);
                     bodyBuffer.flip();
                     request.file = bodyBuffer.array();
                 }
@@ -209,6 +211,7 @@ public class RequestHandler implements Handler{
     }
 
     private void sendData(Request request) {
+        this.user.connect();
     }
 
     private void getRecruitingGroupData(Request request) {
@@ -257,7 +260,7 @@ public class RequestHandler implements Handler{
         ResultType resultType = DBManager.changePFP(request.getData(), request.file);
         JSONObject result = request.getData();
         result.put("resultType", resultType.getCode());
-        addTask(Request.toByteBuffer(RequestType.CHANGEPFP, result));
+        addTask(Request.toByteBuffer(request));
     }
 
     private void  changeNickname(Request request) {
