@@ -65,6 +65,8 @@ public class MainPage extends JFrame {
       Color mainColor = new Color(56, 183, 255);
       String logoPath = "./resource/MainPage/logo.png";
 
+      setResizable(false);
+
       main = getContentPane();
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
       setSize(new Dimension(1210,880));
