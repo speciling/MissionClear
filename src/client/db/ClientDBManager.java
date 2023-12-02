@@ -269,12 +269,32 @@ public class ClientDBManager extends DBManager {
         return result;
     }
 
-    public static Integer[] getMyGroupList() {
-        return null;
+    public static List<Integer> getMyGroupList() {
+        List<Integer> groupList = new ArrayList<>();
+        String sql = "SELECT gid FROM GROUPS WHERE (endDate >= date('now', 'localtime'))";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            ResultSet rs = statement.executeQuery();
+            while (rs.next())
+                groupList.add(rs.getInt("gid"));
+            rs.close();
+        }catch (SQLException e) {
+            e.printStackTrace();;
+        }
+        return groupList;
     }
 
-    public static Integer[] getMyEndedGroupList() {
-        return null;
+    public static List<Integer> getMyEndedGroupList() {
+        List<Integer> groupList = new ArrayList<>();
+        String sql = "SELECT gid FROM GROUPS WHERE endDate < date('now', 'localtime')";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            ResultSet rs = statement.executeQuery();
+            while (rs.next())
+                groupList.add(rs.getInt("gid"));
+            rs.close();
+        }catch (SQLException e) {
+            e.printStackTrace();;
+        }
+        return groupList;
     }
 
     public static JSONArray getGroupProgress(int gid) {
