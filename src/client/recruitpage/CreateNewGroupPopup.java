@@ -300,6 +300,13 @@ public class CreateNewGroupPopup {
     	warningLabel_3.setVisible(false);
     	createPopup.add(warningLabel_3);
     	
+    	JLabel warningLabel_4 = new JLabel("*비밀번호를 다시 입력해주세요.");
+    	warningLabel_4.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+    	warningLabel_4.setForeground(Color.RED);
+    	warningLabel_4.setBounds(347, 588, 200, 20);
+    	warningLabel_4.setVisible(false);
+    	createPopup.add(warningLabel_4);
+    	
     	exitButton.addActionListener(new ActionListener() {
     	    public void actionPerformed(ActionEvent e) {
     	        frame.dispose(); // 현재 프레임을 닫음
@@ -322,12 +329,18 @@ public class CreateNewGroupPopup {
                 } else {
                     warningLabel_2.setVisible(false);
                 }
-//            	if (!secretRoom.isSelected() && !openRoom.isSelected()) {
-//                    warningLabel_3.setVisible(true);
-//                    return; 
-//                } else {
-//                    warningLabel_3.setVisible(false);
-//                }
+            	if (!secretRoom.isSelected() && !openRoom.isSelected()) {
+                    warningLabel_3.setVisible(true);
+                    return; 
+                } else {
+                    warningLabel_3.setVisible(false);
+                }
+            	if (secretRoom.isSelected() && !isValidPassword(roomPassword.getText())) {
+                    warningLabel_4.setVisible(true);
+                    return; // Stop further processing
+                } else {
+                    warningLabel_4.setVisible(false);
+                }
             	String missionTitle = title.getText();
             	String missionDescription = description.getText();
             	String missionContent = mission.getText();// Fetch the mission description text
@@ -374,6 +387,10 @@ public class CreateNewGroupPopup {
             }
         });   
     	}
+    private boolean isValidPassword(String password) {
+        return password.matches("\\d{4}"); // Regex to check for exactly 4 digits
+    }
+
     private boolean isValidDateInput(String year, String month, String day) {
         try {
             int yearValue = Integer.parseInt(year);
