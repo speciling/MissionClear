@@ -22,6 +22,10 @@ public class Group {
     private String roomPassword;
     private boolean isSecretRoom;
 
+    
+    public int getGid() {
+    	return gid;
+    }
     public String getTitle() {
         return title;
     }
@@ -83,12 +87,11 @@ public class Group {
     }
 
     // 모든 필드를 포함한 생성자
-    public Group(String title, String description, String mission, int recruitmentCapacity, int usercount, String category, String recruitmentDeadlineYear, String recruitmentDeadlineMonth, String recruitmentDeadlineDay, String recruitmentStartDateYear, String recruitmentStartDateMonth, String recruitmentStartDateDay, String recruitmentEndDateYear, String recruitmentEndDateMonth, String recruitmentEndDateDay, String roomPassword, boolean isSecretRoom ) {
+    public Group(String title, String description, String mission, int recruitmentCapacity,String category, String recruitmentDeadlineYear, String recruitmentDeadlineMonth, String recruitmentDeadlineDay, String recruitmentStartDateYear, String recruitmentStartDateMonth, String recruitmentStartDateDay, String recruitmentEndDateYear, String recruitmentEndDateMonth, String recruitmentEndDateDay, String roomPassword, boolean isSecretRoom ) {
         this.title = title;
         this.description = description;
         this.mission = mission;
         this.recruitmentCapacity = recruitmentCapacity;
-        this.usercount = usercount;
         this.category = category;
         this.recruitmentDeadlineYear = recruitmentDeadlineYear;
         this.recruitmentDeadlineMonth = recruitmentDeadlineMonth;

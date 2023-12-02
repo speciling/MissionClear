@@ -140,8 +140,8 @@ public class AddMissionRoom {
 	    
 	    detailPopup.addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	            MyGroupList myGroupList = MyGroupList.getInstance(); // MyGroupList 인스턴스 가져오기
-	            GroupDetailPopup popup = new GroupDetailPopup(group, myGroupList); // 생성자 호출 시 MyGroupList도 전달
+
+	            GroupDetailPopup popup = new GroupDetailPopup(group); // 생성자 호출 시 MyGroupList도 전달
 	            popup.initialize();
 	            popup.getFrame().setVisible(true);
 	        }

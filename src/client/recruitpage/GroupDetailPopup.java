@@ -13,6 +13,13 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+
+import org.json.simple.JSONObject;
+
+import client.net.ClientSocket;
+import server.service.Request;
+import server.service.RequestType;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -32,7 +39,7 @@ public class GroupDetailPopup {
      * Constructor for GroupDetailPopup.
      * Initializes the UI components of the popup.
      */
-	public GroupDetailPopup(Group group, MyGroupList myGroupList) {
+	public GroupDetailPopup(Group group) {
         this.group = group;
         this.myGroupList = myGroupList;
         initialize();
@@ -119,9 +126,33 @@ public class GroupDetailPopup {
 	                // 비밀방 관련 처리
 	                InputPasswordPopup passwordPopup = new InputPasswordPopup(group);
 	                passwordPopup.frame.setVisible(true);
+	                
+	                JSONObject data = new JSONObject();
+	            	data.put("gid", group.getGid());
+	            	Request request = new Request(RequestType.ENTERGROUP, data);
+	        
+	            	ClientSocket.send(request);
+	            	if(ClientSocket.getResult()) {
+	            		// 방이동
+	            	}
+	            	else {
+	            		// 경고문구
+	            	}
 	            } else {
 	                // 비밀방이 아닌 경우
-	            	myGroupList.addNewGroup(group); 
+	            	JSONObject data = new JSONObject();
+	            	data.put("gid", group.getGid());
+	            	Request request = new Request(RequestType.ENTERGROUP, data);
+	        
+	            	ClientSocket.send(request);
+	            	
+	            	if(ClientSocket.getResult()) {
+	            		// 방이동	
+	            	}
+	            	else {
+	            		// 경고문구
+	            	}
+	            	
 	            }
 	        }
 	    });
