@@ -20,7 +20,7 @@ public class MakeChatData {
 		JSONArray chatData = ClientDBManager.getChatData(gid);	
 		for(int i=0;i<chatData.size();i++) {		
 			JSONObject chat = (JSONObject) chatData.get(i);
-			int chatidChat = Integer.parseInt(chat.get("chatid").toString());
+			int chatidChat = Integer.parseInt(chat.get("chatId").toString());
 			chatids.add(chatidChat);
 			
 			int uidChat = Integer.parseInt(chat.get("uid").toString());	
