@@ -3,6 +3,8 @@ package client.detailMyGroup;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.time.temporal.ChronoUnit;
@@ -110,6 +112,7 @@ public class DetailMyGroup extends JFrame {
       JFrame popupF = new JFrame();
       popupF.setSize(434,307);
       popupF.setVisible(true);
+      popupF.setLocation(570,230);
       
       JPanel popup = new JPanel();
       popup.setBackground(Color.white);
@@ -158,7 +161,6 @@ public class DetailMyGroup extends JFrame {
       JPanel make = new JPanel();
       make.setBackground(Color.white);
       make.setLayout(null);
-      //make.setBounds(0,y,390,72);
       
       ImageIcon userPicIcon = new ImageIcon(path);
       JButton userPic = new JButton(userPicIcon);
@@ -226,12 +228,11 @@ public class DetailMyGroup extends JFrame {
           userProgressP.add(j);
        }
    }
-   
+   public int picnum = 0;
    public JPanel chatBox(int x, int num, int cid) {
 	   JPanel chatBox = new JPanel();
 	   chatBox.setBackground(Color.white);
 	   chatBox.setLayout(null);
-	   chatBox.setBounds(0, 95*num, x, 95);
 	   
 	   int userID = (int)chatUid.get(cid);
 	   String userPicPathChat = pfps.get(userID).toString();
@@ -248,26 +249,31 @@ public class DetailMyGroup extends JFrame {
 	   chatBox.add(chatUserName);
 	   
 	   int isPic = (int)chatIsPic.get(cid);
+	   if((isPic==1)&&(x==900)) {chatBox.setBounds(0, 95*num+305*picnum, x, 400);}
+	   else if(x==900) {chatBox.setBounds(0, 95*num+305*picnum, x, 95);}
+	   else {chatBox.setBounds(0, 95*num, x, 95);}
+	   
 	   if(isPic==0)//채팅일때
 	   {
 		   JLabel chattingL = new JLabel(messageChat);
 		   chattingL.setBounds(90,21,x-100,60);
 		   chattingL.setFont(new Font("나눔고딕",Font.PLAIN, 18));
 		   chatBox.add(chattingL);
+		   
 	   }
 	   else if(isPic==1)//인증일때
 	   {
 		   JLabel chattingL = new JLabel(userNicknameChat+"님이 오늘의 미션을 인증하였습니다.");
 		   chattingL.setBounds(90,21,x-100,60);
-		   chattingL.setFont(new Font("나눔고딕",Font.BOLD, 14));
+		   chattingL.setFont(new Font("나눔고딕",Font.BOLD, 15));
 		   chatBox.add(chattingL);
 		   if (x==900)//큰 사이즈일 때
 		   {
-			   chatBox.setBounds(0, 95*num, x, 400);
-			   ImageIcon authPicIcon = new ImageIcon(messageChat);
-			   JLabel authPicShow = new JLabel(authPicPath);
-			   authPicShow.setBounds(90,85,x-100,300);
-			   chatBox.add(authPicShow);
+			   ImageIcon authPic900 = new ImageIcon(messageChat);
+			   JLabel authPicShow900 = new JLabel(authPic900);
+			   authPicShow900.setBounds(100,100,700,250);
+			   chatBox.add(authPicShow900);
+			   picnum++;
 			   }
 	   }	   
 	   return chatBox;
@@ -290,36 +296,47 @@ public class DetailMyGroup extends JFrame {
       showMore.setBounds(325,5,130,35);
       chatPan.add(showMore);
       
-      
-      
-      showMore.addActionListener(event -> {/*
-    	  SwingUtilities.invokeLater(() -> {
-              JFrame frame = new JFrame();
-              frame.setSize(300, 200);
-
-              JPanel contentPanel = new JPanel();
-              int idx = chatids.size();
-              int num =0;
-              for(idx=idx-1;idx>=0;idx--) 
-              {
-             	 int cid = chatids.get(idx);
-             	 contentPanel.add(chatBox(900,num,cid), BorderLayout.CENTER);
-             	 num++;
-              }
-              contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-
-              // 여러 컴포넌트를 contentPanel에 추가
-              JScrollPane scrollPane = new JScrollPane(contentPanel);
-              scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-              frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
-              //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-              frame.setVisible(true);
-          });*/
-    	  
+      showMore.addActionListener(event -> {
          JFrame showMoreF = new JFrame();
          showMoreF.setVisible(true);
-         showMoreF.setSize(900,700);
+         showMoreF.setSize(900,800);
+         showMoreF.setLocation(200, 100);
+         
+         
+         showMoreF.setLayout(null);
+      // 메세지를 보내는 부분
+         RoundedPanel2 sendMessage = new RoundedPanel2(15);
+         sendMessage.setLayout(null);
+         sendMessage.setBounds(20,700,840,50); //
+         sendMessage.setForeground(new Color(239,239,239));
+         showMoreF.add(sendMessage);
+         
+         ImageIcon sendIcon = new ImageIcon("./resource/DetailMyGroup/sendButton.png");
+         JButton sendButton900 = new JButton(sendIcon);
+         
+         sendMessage.add(sendButton900);
+         sendButton900.setBounds(815,8,33,33); //
+         sendButton900.setContentAreaFilled(false);
+         sendButton900.setBorderPainted(false);
+         JTextField inputText = new JTextField(){
+              @Override
+              public void setBorder(Border border) {}};
+         inputText.setBounds(10,0,360,50);
+         inputText.setFont(new Font("나눔고딕",Font.PLAIN, 15));
+         inputText.setOpaque(false);
+         sendMessage.add(inputText);
+         sendButton900.addActionListener(event900 -> {
+             JSONObject j = new JSONObject();
+             String message = inputText.getText();
+             j.put("message", message);  // j.put("FilePath", message);
+             j.put("isPic",0);
+             j.put("gid",gid);
+             Request r = new Request(RequestType.CHAT,j);
+             ClientSocket.send(r);    
+            });
+         
+         
+         
          
          int idx = chatids.size();//50
          
@@ -332,10 +349,9 @@ public class DetailMyGroup extends JFrame {
         	 int cid = chatids.get(idx);
         	 chatMoreBox.add(chatBox(900,num,cid), BorderLayout.CENTER);
         	 num++;
-        	 System.out.println(num);
          }
-         chatMoreBox.setPreferredSize(new Dimension(900,5000));
-         JScrollPane p = new JScrollPane( chatMoreBox,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+         chatMoreBox.setPreferredSize(new Dimension(900,95*num+305*picnum));
+         JScrollPane p = new JScrollPane(chatMoreBox,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
          p.setViewportView(chatMoreBox);
          showMoreF.add(p, BorderLayout.CENTER);
          JScrollBar verticalBar = p.getVerticalScrollBar();
@@ -349,17 +365,14 @@ public class DetailMyGroup extends JFrame {
                  this.thumbColor = new Color(180, 180, 180); // 썸의 색상 설정
                  this.trackColor = new Color(246, 246, 246); // 트랙의 색상 설정
              }
-
              @Override
              protected JButton createDecreaseButton(int orientation) {
                  return createZeroButton();
              }
-
              @Override
              protected JButton createIncreaseButton(int orientation) {
                  return createZeroButton();
              }
-
              private JButton createZeroButton() {
                  JButton button = new JButton();
                  button.setPreferredSize(new Dimension(0, 0));
@@ -368,19 +381,8 @@ public class DetailMyGroup extends JFrame {
                  return button;
              }
          });
-         
-          JLabel add = new JLabel();//
-         add.setSize(1,900);//
-         /*
-         showMoreF.add(add,BorderLayout.EAST);
-         showMoreF.add(add,BorderLayout.WEST);
-         chatMoreBox.add(add,BorderLayout.EAST);
-         chatMoreBox.add(add,BorderLayout.WEST);*/
-         //p.setBackground(Color.black);
-         //p.setBounds(0,0,900,700);
-         //showMoreF.add(p);
-      
-      
+          JLabel add = new JLabel();
+         add.setSize(1,900);
       });
       
       // 채팅부분 JPanel
@@ -399,7 +401,7 @@ public class DetailMyGroup extends JFrame {
       
       ImageIcon sendIcon = new ImageIcon("./resource/DetailMyGroup/sendButton.png");
       JButton sendButton = new JButton(sendIcon);
-     
+      
       sendMessage.add(sendButton);
       sendButton.setBounds(370,8,33,33);
       sendButton.setContentAreaFilled(false);
