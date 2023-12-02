@@ -140,12 +140,13 @@ public class AddMissionRoom {
 	    
 	    detailPopup.addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	            // GroupDetailPopup 인스턴스 생성 및 프레임 표시
-	            GroupDetailPopup popup = new GroupDetailPopup(group);
+	            MyGroupList myGroupList = MyGroupList.getInstance(); // MyGroupList 인스턴스 가져오기
+	            GroupDetailPopup popup = new GroupDetailPopup(group, myGroupList); // 생성자 호출 시 MyGroupList도 전달
 	            popup.initialize();
 	            popup.getFrame().setVisible(true);
 	        }
 	    });
+
 	    addMissionRoomPanel.add(detailPopup);
 	    
 	    JLabel recruitmentCapacity = new JLabel("<html><b>모집인원:</b> " + group.getCapacity() + "명<br></html>");

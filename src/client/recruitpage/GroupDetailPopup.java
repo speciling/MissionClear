@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
  * This class is responsible for displaying the detailed information of a group in a popup window.
  */
 public class GroupDetailPopup {
-
+	private MyGroupList myGroupList;
 	private JFrame frame;
 	protected RoundedPanel groupDetailPopupPanel;
 	private Group group;
@@ -32,11 +32,11 @@ public class GroupDetailPopup {
      * Constructor for GroupDetailPopup.
      * Initializes the UI components of the popup.
      */
-	public GroupDetailPopup(Group group) {
-		this.group = group;
-		initialize();
-	}
-
+	public GroupDetailPopup(Group group, MyGroupList myGroupList) {
+        this.group = group;
+        this.myGroupList = myGroupList;
+        initialize();
+    }
 
     /**
      * Initializes the contents of the popup window.
@@ -116,14 +116,16 @@ public class GroupDetailPopup {
 	    enterButton.addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
 	            if (group.isSecretRoom()) {
-	                // InputPasswordPopup 인스턴스 생성 및 표시
+	                // 비밀방 관련 처리
 	                InputPasswordPopup passwordPopup = new InputPasswordPopup(group);
 	                passwordPopup.frame.setVisible(true);
 	            } else {
-	                // 여기에 비밀방이 아닐 경우 수행할 추가적인 액션을 넣으세요
+	                // 비밀방이 아닌 경우
+	            	myGroupList.addNewGroup(group); 
 	            }
 	        }
 	    });
+
 	    groupDetailPopupPanel.add(enterButton);
 	}
 
