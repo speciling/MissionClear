@@ -198,20 +198,22 @@ public class ClientDBManager extends DBManager {
     public static void enterGroup(JSONObject data) {
         int uid = Integer.parseInt(data.get("uid").toString());
         int gid = Integer.parseInt(data.get("gid").toString());
-
-        String sql = String.format("SELECT users FROM GROUPS WHERE gid=%d", gid);
-        String users = ((String)executeQuery(sql).get("users")) + uid + ",";
+        String title = data.get("title").toString();
+        String description = data.get("description").toString();
+        String mission = data.get("mission").toString();
+        Integer capacity = Integer.parseInt(data.get("capacity").toString());
+        Integer category = Integer.parseInt(data.get("category").toString());
+        Integer usercnt = Integer.parseInt(data.get("usercnt").toString());
+        String deadline = data.get("deadline").toString();
+        String startDate = data.get("startDate").toString();
+        String endDate = data.get("endDate").toString();
+        String users = data.get("users").toString();
+        String sql = String.format("""
+                    INSERT INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
+        createTable("G"+gid+"CHAT", sql);
 
         sql = String.format("SELECT groups FROM USER WHERE uid=%d", uid);
         String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
-
-        sql = String.format("""
-                    UPDATE GROUPS SET users='%s' WHERE gid=%d""", users, gid);
-        executeSQL(sql);
-
-        sql = String.format("""
-                    UPDATE GROUPS SET usercnt=usercnt+1 WHERE gid='%s'""", gid);
-        executeSQL(sql);
 
         sql = String.format("""
                     UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
