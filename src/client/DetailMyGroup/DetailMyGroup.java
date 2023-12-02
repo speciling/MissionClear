@@ -288,30 +288,73 @@ public class DetailMyGroup extends JFrame {
       showMore.setBorderPainted(false);
       showMore.setBounds(325,5,130,35);
       chatPan.add(showMore);
+      
+      
+      
       showMore.addActionListener(event -> {
+    	  SwingUtilities.invokeLater(() -> {
+              JFrame frame = new JFrame();
+              frame.setSize(300, 200);
+
+              JPanel contentPanel = new JPanel();
+              int idx = chatids.size();
+              int num =0;
+              for(idx=idx-1;idx>=0;idx--) 
+              {
+             	 int cid = chatids.get(idx);
+             	 contentPanel.add(chatBox(900,num,cid), BorderLayout.CENTER);
+             	 num++;
+              }
+              contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
+              // 여러 컴포넌트를 contentPanel에 추가
+              JScrollPane scrollPane = new JScrollPane(contentPanel);
+              scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+              frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+              //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+              frame.setVisible(true);
+          });
+    	  /*
          JFrame showMoreF = new JFrame();
          showMoreF.setVisible(true);
          showMoreF.setSize(900,700);
          
-         ////////////////////////////////////
-         int idx = chatids.size();
-         JScrollPane p = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        // p.setLayout(new )
-         showMoreF.add(p);
+         int idx = chatids.size();//50
+         
+         JPanel chatMoreBox = new JPanel();
+         chatMoreBox.setLayout(new BorderLayout());
          int num = 0;
+         JScrollPane p = new JScrollPane( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+         
          for(idx=idx-1;idx>=0;idx--) 
          {
         	 int cid = chatids.get(idx);
-        	 p.add(chatBox(900,num,cid));
+        	 p.add(chatBox(900,num,cid), BorderLayout.CENTER);
+        	 num++;
+        	 System.out.println(num);
          }
-         showMoreF.add(p);
-      
+         p.setViewportView(chatMoreBox);
+         showMoreF.add(p, BorderLayout.CENTER);
+         
+         
+          JLabel add = new JLabel();//
+         add.setSize(1,900);//
+         
+         showMoreF.add(add,BorderLayout.EAST);
+         showMoreF.add(add,BorderLayout.WEST);
+         chatMoreBox.add(add,BorderLayout.EAST);
+         chatMoreBox.add(add,BorderLayout.WEST);
+         //p.setBackground(Color.black);
+         //p.setBounds(0,0,900,700);
+         //showMoreF.add(p);
+      */
       
       });
       
       // 채팅부분 JPanel
       JPanel chatPart = new JPanel();
-      //chatPart.setLayout();
+      chatPart.setBackground(Color.white);
       chatPart.setLayout(null);
       chatPart.setBounds(20,45,415,285);
       chatPan.add(chatPart);
@@ -337,11 +380,13 @@ public class DetailMyGroup extends JFrame {
       inputText.setOpaque(false);
       sendMessage.add(inputText);
       
+      int a=0;
       for(int k=2;k>=0;k--)
       {
     	  try {
     	  int cid = chatids.get(k);
-    	  chatPart.add(chatBox(415,k,cid));
+    	  chatPart.add(chatBox(415,a,cid));
+    	  a++;
     	  }
     	  catch(Exception e) {
     		  e.printStackTrace();
