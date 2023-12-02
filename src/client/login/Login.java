@@ -2,7 +2,7 @@ package client.login;
 
 import java.awt.*;
 
-import client.CustomFont;
+//import client.CustomFont;
 import client.MainPage.*;
 import client.recruitpage.*;
 import org.json.simple.JSONObject;
@@ -75,10 +75,10 @@ public class Login extends JFrame{
 		/**
 		 text setting
 		 */
-		CustomFont customFont = new CustomFont();
+		//CustomFont customFont = new CustomFont();
 		JLabel textLabel=new JLabel("다같이 재밌게 하는 목표달성!");
 		textLabel.setBounds(405,298,420,90);
-		textLabel.setFont(customFont.deriveFont(32));
+		textLabel.setFont(new Font("나눔고딕",Font.BOLD,32));
 		textLabel.setForeground(Color.white);
 		textLabel.setOpaque(false);
 		panel.add(textLabel);
