@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import org.json.simple.JSONObject;
 
@@ -258,7 +259,7 @@ public class DetailMyGroup extends JFrame {
 	   {
 		   JLabel chattingL = new JLabel(userNicknameChat+"님이 오늘의 미션을 인증하였습니다.");
 		   chattingL.setBounds(90,21,x-100,60);
-		   chattingL.setFont(new Font("나눔고딕",Font.BOLD, 18));
+		   chattingL.setFont(new Font("나눔고딕",Font.BOLD, 14));
 		   chatBox.add(chattingL);
 		   if (x==900)//큰 사이즈일 때
 		   {
@@ -291,7 +292,7 @@ public class DetailMyGroup extends JFrame {
       
       
       
-      showMore.addActionListener(event -> {
+      showMore.addActionListener(event -> {/*
     	  SwingUtilities.invokeLater(() -> {
               JFrame frame = new JFrame();
               frame.setSize(300, 200);
@@ -314,8 +315,8 @@ public class DetailMyGroup extends JFrame {
               frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
               //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
               frame.setVisible(true);
-          });
-    	  /*
+          });*/
+    	  
          JFrame showMoreF = new JFrame();
          showMoreF.setVisible(true);
          showMoreF.setSize(900,700);
@@ -325,30 +326,60 @@ public class DetailMyGroup extends JFrame {
          JPanel chatMoreBox = new JPanel();
          chatMoreBox.setLayout(new BorderLayout());
          int num = 0;
-         JScrollPane p = new JScrollPane( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
          
          for(idx=idx-1;idx>=0;idx--) 
          {
         	 int cid = chatids.get(idx);
-        	 p.add(chatBox(900,num,cid), BorderLayout.CENTER);
+        	 chatMoreBox.add(chatBox(900,num,cid), BorderLayout.CENTER);
         	 num++;
         	 System.out.println(num);
          }
+         chatMoreBox.setPreferredSize(new Dimension(900,5000));
+         JScrollPane p = new JScrollPane( chatMoreBox,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
          p.setViewportView(chatMoreBox);
          showMoreF.add(p, BorderLayout.CENTER);
-         
+         JScrollBar verticalBar = p.getVerticalScrollBar();
+         verticalBar.setPreferredSize(new Dimension(15, 0)); // 스크롤바의 너비 설정
+         verticalBar.setUnitIncrement(16); // 단위 증가량을 16픽셀로 설정
+
+         // 스크롤바의 썸 부분을 더 돋보이게 하는 색상으로 변경
+         verticalBar.setUI(new BasicScrollBarUI() {
+             @Override
+             protected void configureScrollBarColors() {
+                 this.thumbColor = new Color(180, 180, 180); // 썸의 색상 설정
+                 this.trackColor = new Color(246, 246, 246); // 트랙의 색상 설정
+             }
+
+             @Override
+             protected JButton createDecreaseButton(int orientation) {
+                 return createZeroButton();
+             }
+
+             @Override
+             protected JButton createIncreaseButton(int orientation) {
+                 return createZeroButton();
+             }
+
+             private JButton createZeroButton() {
+                 JButton button = new JButton();
+                 button.setPreferredSize(new Dimension(0, 0));
+                 button.setMinimumSize(new Dimension(0, 0));
+                 button.setMaximumSize(new Dimension(0, 0));
+                 return button;
+             }
+         });
          
           JLabel add = new JLabel();//
          add.setSize(1,900);//
-         
+         /*
          showMoreF.add(add,BorderLayout.EAST);
          showMoreF.add(add,BorderLayout.WEST);
          chatMoreBox.add(add,BorderLayout.EAST);
-         chatMoreBox.add(add,BorderLayout.WEST);
+         chatMoreBox.add(add,BorderLayout.WEST);*/
          //p.setBackground(Color.black);
          //p.setBounds(0,0,900,700);
          //showMoreF.add(p);
-      */
+      
       
       });
       
@@ -368,6 +399,7 @@ public class DetailMyGroup extends JFrame {
       
       ImageIcon sendIcon = new ImageIcon("./resource/DetailMyGroup/sendButton.png");
       JButton sendButton = new JButton(sendIcon);
+     
       sendMessage.add(sendButton);
       sendButton.setBounds(370,8,33,33);
       sendButton.setContentAreaFilled(false);
@@ -379,6 +411,16 @@ public class DetailMyGroup extends JFrame {
       inputText.setFont(new Font("나눔고딕",Font.PLAIN, 15));
       inputText.setOpaque(false);
       sendMessage.add(inputText);
+      sendButton.addActionListener(event -> {
+          JSONObject j = new JSONObject();
+          String message = inputText.getText();
+          j.put("message", message);  // j.put("FilePath", message);
+          j.put("isPic",0);
+          j.put("gid",gid);
+          Request r = new Request(RequestType.CHAT,j);
+          ClientSocket.send(r);    
+         });
+         
       
       int a=0;
       for(int k=2;k>=0;k--)
@@ -481,18 +523,6 @@ public class DetailMyGroup extends JFrame {
       });
       
       chatting();
-
-      //System.out.println(savePath);
-      
-      
-      
-      //g = mp.makePan(g);
-      //add.add(g);
-      
-      
-      //setVisible(false);
-      
-      
    }
    
    
@@ -520,13 +550,14 @@ public class DetailMyGroup extends JFrame {
            return;
        }
        
+       JSONObject j = new JSONObject();
        String filePath = selectedFile.getAbsolutePath();
-       /*
-       JSONObject a = new JSONObject();
-       a.put("filePath", filePath);
-       Request request = new Request(RequestType.CHANGEPFP,a);
-       ClientSocket.send(request);
-       */
+       j.put("filePath", filePath);  // j.put("FilePath", message);
+       j.put("isPic",1);
+       j.put("gid",gid);
+       Request r = new Request(RequestType.CERTIFYMISSION,j);
+       ClientSocket.send(r); 
+       
    }
    
    public static void main(String [] args) {
