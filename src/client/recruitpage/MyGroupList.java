@@ -76,7 +76,7 @@ public class MyGroupList {
     public void addNewGroup(Group group) {
         AddMyGroup addMyGroup = new AddMyGroup(group); // AddMyGroup 인스턴스 생성
         JPanel addGroupPanel = addMyGroup.getPanel(); // addGroupPanel 가져오기
-
+        
         // addGroupPanel의 위치와 크기 설정
         addGroupPanel.setBounds(0, nextPanelY, addGroupPanel.getWidth(), addGroupPanel.getHeight());
         addedPanels.add(addGroupPanel); // 패널 목록에 추가
