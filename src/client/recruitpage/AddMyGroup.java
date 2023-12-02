@@ -6,8 +6,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 import java.awt.Font;
+import javax.swing.JButton;
 
 public class AddMyGroup {
 
@@ -19,7 +21,7 @@ public class AddMyGroup {
 	
 
 	/**
-	 * Create the application.
+	 * @wbp.parser.constructor
 	 */
 	public AddMyGroup() {
 		initialize();
@@ -34,12 +36,14 @@ public class AddMyGroup {
 	 */
 	private void initialize() {
 		addGroupPanel =  new RoundedPanel(0); 
-		addGroupPanel.setBounds(0, 0, 943, 189);
+		addGroupPanel.setBounds(0, 0, 890, 189);
 		addGroupPanel.setForeground(new Color(255, 255, 255));
 		addGroupPanel.setBackground(new Color(255, 255, 255));
 		addGroupPanel.setLayout(null);
 		
-		JLabel missionTitleLabel = new JLabel("돈 아껴서 부자되자!");
+		addGroupPanel.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
+
+		JLabel missionTitleLabel = new JLabel(group.getTitle());
 		missionTitleLabel.setFont(new Font("나눔고딕", Font.BOLD, 25));
 		missionTitleLabel.setBounds(26, 12, 232, 35);
 		addGroupPanel.add(missionTitleLabel);
@@ -54,10 +58,17 @@ public class AddMyGroup {
 		missionLabel.setBounds(26, 83, 352, 25);
 		addGroupPanel.add(missionLabel);
 		
-		JLabel personnelPanel = new JLabel("참여인원");
+		JLabel personnelPanel = new JLabel("<html><b>참여인원</b>: " + group.getUserCount() + "명");
 		personnelPanel.setFont(new Font("나눔고딕", Font.PLAIN, 15));
 		personnelPanel.setBounds(26, 113, 352, 25);
 		addGroupPanel.add(personnelPanel);
+		
+		JButton detailEnterButton = new JButton("");
+		detailEnterButton.setBounds(0, 0, 890, 189);
+		detailEnterButton.setContentAreaFilled(false);
+		detailEnterButton.setBorderPainted(false);
+		addGroupPanel.add(detailEnterButton);
+		addGroupPanel.add(detailEnterButton);
 		
 	}
 	/**
@@ -67,5 +78,4 @@ public class AddMyGroup {
     public JPanel getPanel() {
         return addGroupPanel;
     }
-	
 }

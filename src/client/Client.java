@@ -25,14 +25,5 @@ public class Client {
           ClientDBManager.init();
           Login login = new Login();
           login.loginpage();
-          
-          String fontPath = "/NanumGothic.ttf";
-    	  
-    	  try (InputStream fontStream = Client.class.getResourceAsStream(fontPath)) {
-              // InputStream으로부터 Font 객체 생성
-              Font customFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
-    	  } catch (IOException | FontFormatException e) {
-              e.printStackTrace();
-          }
 	   }
 }

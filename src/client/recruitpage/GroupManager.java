@@ -29,6 +29,8 @@ public class GroupManager {
     public static List<Group> getGroupList() {
         return groupList;
     }
+    
+
 
     // 최신 Group 객체를 반환하는 메서드
     public static Group getLatestGroup() {

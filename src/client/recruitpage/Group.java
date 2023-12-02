@@ -8,6 +8,7 @@ public class Group {
     private String description;
     private String mission;
     private int recruitmentCapacity;
+    private int usercount;
     private String category;
     private String recruitmentDeadlineYear;
     private String recruitmentDeadlineMonth;
@@ -21,6 +22,10 @@ public class Group {
     private String roomPassword;
     private boolean isSecretRoom;
 
+    
+    public int getGid() {
+    	return gid;
+    }
     public String getTitle() {
         return title;
     }
@@ -41,6 +46,9 @@ public class Group {
     }
     public int getCapacity() {
         return recruitmentCapacity;
+    }
+    public int getUserCount() {
+        return usercount;
     }
     public String getCategory() {
     	return category;
@@ -79,7 +87,7 @@ public class Group {
     }
 
     // 모든 필드를 포함한 생성자
-    public Group(String title, String description, String mission, int recruitmentCapacity, String category, String recruitmentDeadlineYear, String recruitmentDeadlineMonth, String recruitmentDeadlineDay, String recruitmentStartDateYear, String recruitmentStartDateMonth, String recruitmentStartDateDay, String recruitmentEndDateYear, String recruitmentEndDateMonth, String recruitmentEndDateDay, String roomPassword, boolean isSecretRoom ) {
+    public Group(String title, String description, String mission, int recruitmentCapacity,String category, String recruitmentDeadlineYear, String recruitmentDeadlineMonth, String recruitmentDeadlineDay, String recruitmentStartDateYear, String recruitmentStartDateMonth, String recruitmentStartDateDay, String recruitmentEndDateYear, String recruitmentEndDateMonth, String recruitmentEndDateDay, String roomPassword, boolean isSecretRoom ) {
         this.title = title;
         this.description = description;
         this.mission = mission;
@@ -104,9 +112,10 @@ public class Group {
         this.description = data.get("description").toString();
         this.mission = data.get("mission").toString();
         this.recruitmentCapacity = Integer.parseInt(data.get("capacity").toString());
-        int category = Integer.parseInt(data.get("capacity").toString());
+        int category = Integer.parseInt(data.get("category").toString());
         this.category = (category==0?"챌린지":(category==1?"스터디":(category==2?"다이어트":"기타")));
         String[] deadline = data.get("deadline").toString().split("-");
+        this.usercount = Integer.parseInt(data.get("usercnt").toString());
         this.recruitmentDeadlineYear = deadline[0];
         this.recruitmentDeadlineMonth = deadline[1];
         this.recruitmentDeadlineDay = deadline[2];
@@ -119,7 +128,9 @@ public class Group {
         this.recruitmentEndDateMonth = endDate[1];
         this.recruitmentEndDateDay = endDate[2];
         this.roomPassword = null;
-        this.isSecretRoom = Boolean.parseBoolean(data.get("isSecret").toString());
+        Object isSecret = data.get("isSecret");
+        if (isSecret != null)
+            this.isSecretRoom = Boolean.parseBoolean(isSecret.toString());
     }
 
     public JSONObject toJSON() {

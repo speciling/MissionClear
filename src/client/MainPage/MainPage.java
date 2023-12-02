@@ -84,7 +84,11 @@ public class MainPage extends JFrame {
       JLabel userNameInfo = new JLabel(userName+" 님");
       userNameInfo.setFont(new Font("나눔고딕", Font.BOLD, 20));
       ImageIcon userPicIcon = new ImageIcon(userPic);
-      JLabel userPicInfo = new JLabel(userPicIcon);
+      Image img = userPicIcon.getImage();
+      Image updateImg = img.getScaledInstance(58,58,Image.SCALE_SMOOTH);
+      ImageIcon updateIcon=new ImageIcon(updateImg);
+
+      JLabel userPicInfo = new JLabel(updateIcon);
       loc.add(userNameInfo);
       loc.add(userPicInfo);
       loc.setBackground(Color.white);

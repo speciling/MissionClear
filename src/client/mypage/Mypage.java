@@ -1,43 +1,24 @@
 package client.mypage;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import client.login.RoundCornerTextField;
-import client.login.signUpPopUp;
 import client.net.ClientSocket;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
+import javax.swing.*;
 
 import client.MainPage.MainPage;
-import client.login.Login;
-import client.recruitpage.RecruitGroupMember;
 import server.service.Request;
 import server.service.RequestType;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-
-import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.json.simple.JSONObject;
@@ -99,6 +80,7 @@ public class Mypage {
 	public RoundedPanel2 missionInProgress;
 	private JTextField nicknameField;
 	private String newnickname;
+    private String filePath;
 
     public JPanel get() {
     	return box;
@@ -106,7 +88,7 @@ public class Mypage {
 	
     /**
      * 화면에 보이게 하기 위한 생성자
-     * @param vis
+     *
      */
     public Mypage(int uid, String nickname, String picPath) {
     	box = new JPanel();    	
@@ -139,25 +121,32 @@ public class Mypage {
         lblNewLabel_2.setFont(new Font("나눔고딕", Font.BOLD, 20));
         lblNewLabel_2.setBounds(158, 10, 102, 35);
         missionended.add(lblNewLabel_2);
-       
-        JButton lblNewLabel = new JButton("");
-        lblNewLabel.setBounds(388, 10, 149, 149);
-        lblNewLabel.addActionListener(new ActionListener() {
+
+
+        JButton PFPButton = new JButton();
+        PFPButton.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+        PFPButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		changePFP();
         	}
         });
-        
-        lblNewLabel.setIcon(new ImageIcon(picPath));
-        lblNewLabel.setContentAreaFilled(false);
-        lblNewLabel.setBorderPainted(false);
-        box.add(lblNewLabel);
-        
+        ImageIcon icon = new ImageIcon(picPath);
+        Image img = icon.getImage();
+        Image updateImg = img.getScaledInstance(149,149,Image.SCALE_SMOOTH);
+        ImageIcon updateIcon = new ImageIcon(updateImg);
+
+        PFPButton.setIcon(updateIcon);
+        PFPButton.setBounds(388, 10, 149, 149);
+        PFPButton.setHorizontalAlignment(PFPButton.CENTER);
+        PFPButton.setContentAreaFilled(false);
+        PFPButton.setBorderPainted(false);
+        box.add(PFPButton);
+
         JLabel lblNewLabel_1 = new JLabel(nickname+" 님");
         lblNewLabel_1.setBounds(384, 171, 124, 35);
         lblNewLabel_1.setFont(new Font("나눔고딕", Font.BOLD, 20));
         box.add(lblNewLabel_1);
-        
+
         JButton btnNewButton = new JButton("");
         btnNewButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -171,13 +160,13 @@ public class Mypage {
         box.add(btnNewButton);
 
 	}
-	
+
     /**서버에 닉네임 변경을 요청하는 함수*/
     public void changeNickName() {
     	 //서버에 닉네임 변경을 요청하는 함수
     	JFrame changeNickNamePopUp = new JFrame();
     	changeNickNamePopUp.setSize(355,240);
-    	changeNickNamePopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	changeNickNamePopUp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		//changeNickNamePopUp.getContentPane().setLayout(null);
         changeNickNamePopUp.setLocation(570, 230);
 		
@@ -208,19 +197,26 @@ public class Mypage {
 	    enterButton.setContentAreaFilled(false);
 	    enterButton.setBorderPainted(false);
 	    inputNickNamePanel.add(enterButton);
-	    
-	    enterButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		newnickname = nicknameField.getText();
-        		JSONObject a = new JSONObject();
-        		a.put("nickname", newnickname);
-        		System.out.println(newnickname);
-        		Request request = new Request(RequestType.CHANGENICKNAME,a);
-        		ClientSocket.send(request);
-        		changeNickNamePopUp.dispose();
-        	}
+
+        nicknameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    enterButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            newnickname = nicknameField.getText();
+                            JSONObject a = new JSONObject();
+                            a.put("nickname", newnickname);
+                            System.out.println(newnickname);
+                            Request request = new Request(RequestType.CHANGENICKNAME,a);
+                            ClientSocket.send(request);
+                            changeNickNamePopUp.dispose();
+                        }
+                    });
+                }
+            }
         });
-	    
+
 	    changeNickNamePopUp.setVisible(true);
     }
 
@@ -250,7 +246,8 @@ public class Mypage {
             return;
         }
         
-        String filePath = selectedFile.getAbsolutePath();
+        filePath = selectedFile.getAbsolutePath();
+
         JSONObject a = new JSONObject();
 		a.put("filePath", filePath);
 		Request request = new Request(RequestType.CHANGEPFP,a);
@@ -276,47 +273,21 @@ public class Mypage {
 
       
         JProgressBar progressBar = new JProgressBar();
-        progressBar.setStringPainted(true); 
-        progressBar.setValue(progressValue); 
+        progressBar.setStringPainted(true);
+        progressBar.setValue(progressValue);
         progressBar.setBounds(12, 55, 304, 30);
 
         missionProgressPanel.add(progressBar);
         missionProgressPanel.revalidate();
         missionProgressPanel.repaint();
     }
-    
-    
-    
+
+
+
     /** 완료된 미션을 보여주는 함수*/
     public void showFinishedMission() {
-    	//완료된 미션을 보여주는 함수
-    	
+        //완료된 미션을 보여주는 함수
+
     }
-    
 }
 
-/** 이미지패널 클래스*/
-
-class ImagePanel extends JPanel{
-	   private Image img;
-	   
-	   public ImagePanel(Image img) {
-	      this.img = img;
-	      setSize(new Dimension(img.getWidth(null), img.getHeight(null)));
-	      setPreferredSize(new Dimension(img.getWidth(null), img.getHeight(null)));
-	      setLayout(null);
-	   }
-	   
-	   public int getWidth() {
-	      return img.getWidth(null);
-	   }
-	   
-	   public int getHeight() {
-	      return img.getHeight(null);
-	   }   
-	   
-	   public void paintComponent(Graphics g) {
-	      g.drawImage(img, 0, 0, null);
-	   }
-	   
-	}

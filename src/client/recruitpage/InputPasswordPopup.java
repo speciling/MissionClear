@@ -10,6 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JTextField;
+
+import org.json.simple.JSONObject;
+
+import client.net.ClientSocket;
+import server.service.Request;
+import server.service.RequestType;
+
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
@@ -87,13 +94,25 @@ public class InputPasswordPopup {
                 // 입력된 비밀번호 확인
                 String enteredPassword = new String(passwordField.getPassword());
 
+                JSONObject data = new JSONObject();
+                data.put("gid", group.getGid());
+                data.put("password", enteredPassword);
+                Request request = new Request(RequestType.ENTERGROUP, data);
+                
+                ClientSocket.send(request);
                 // 비밀번호 검증
-                if (enteredPassword.equals(group.getRoomPassword())) {
-                    // 비밀번호가 일치하는 경우
+            
+                    // 서버에 참여 요청 보내기
+                if(ClientSocket.getResult()) {
+                       // 참여 성공, 그룹 목록 새로고침
                     warningLabel.setVisible(false);
-                    // 여기에 비밀번호가 맞을 때 수행할 로직 추가
-                } else {
-                    // 비밀번호가 일치하지 않거나 입력되지 않은 경우
+                    MyGroupList myGroupList = new MyGroupList(true);
+                    myGroupList.refreshGroupList();
+                    frame.dispose(); // 팝업 닫기
+                    }
+                    
+                 else {
+                    // 비밀번호가 일치	하지 않거나 입력되지 않은 경우
                     warningLabel.setVisible(true);
                 }
             }

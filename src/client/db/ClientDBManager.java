@@ -198,20 +198,22 @@ public class ClientDBManager extends DBManager {
     public static void enterGroup(JSONObject data) {
         int uid = Integer.parseInt(data.get("uid").toString());
         int gid = Integer.parseInt(data.get("gid").toString());
-
-        String sql = String.format("SELECT users FROM GROUPS WHERE gid=%d", gid);
-        String users = ((String)executeQuery(sql).get("users")) + uid + ",";
+        String title = data.get("title").toString();
+        String description = data.get("description").toString();
+        String mission = data.get("mission").toString();
+        Integer capacity = Integer.parseInt(data.get("capacity").toString());
+        Integer category = Integer.parseInt(data.get("category").toString());
+        Integer usercnt = Integer.parseInt(data.get("usercnt").toString());
+        String deadline = data.get("deadline").toString();
+        String startDate = data.get("startDate").toString();
+        String endDate = data.get("endDate").toString();
+        String users = data.get("users").toString();
+        String sql = String.format("""
+                    INSERT INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
+        createTable("G"+gid+"CHAT", sql);
 
         sql = String.format("SELECT groups FROM USER WHERE uid=%d", uid);
         String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";
-
-        sql = String.format("""
-                    UPDATE GROUPS SET users='%s' WHERE gid=%d""", users, gid);
-        executeSQL(sql);
-
-        sql = String.format("""
-                    UPDATE GROUPS SET usercnt=usercnt+1 WHERE gid='%s'""", gid);
-        executeSQL(sql);
 
         sql = String.format("""
                     UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
@@ -234,12 +236,6 @@ public class ClientDBManager extends DBManager {
 
     public static JSONObject getMyInfo() {
         String sql = String.format("SELECT * FROM USER WHERE uid=%d", myUid);
-        return executeQuery(sql);
-    }
-
-    public static JSONObject getGroupInfo(int gid) {
-        String sql = String.format("""
-                SELECT * FROM GROUPS WHERE gid=%d""", gid);
         return executeQuery(sql);
     }
 
@@ -269,13 +265,25 @@ public class ClientDBManager extends DBManager {
         return result;
     }
 
-    public static List<Integer> getMyGroupList() {
-        List<Integer> groupList = new ArrayList<>();
-        String sql = "SELECT gid FROM GROUPS WHERE (endDate >= date('now', 'localtime'))";
+    public static List<Group> getMyGroupList() {
+        List<Group> groupList = new ArrayList<>();
+        String sql = "SELECT * FROM GROUPS WHERE (endDate >= date('now', 'localtime'))";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
-            while (rs.next())
-                groupList.add(rs.getInt("gid"));
+            while (rs.next()){
+                JSONObject group = new JSONObject();
+                group.put("gid", rs.getInt("gid"));
+                group.put("title", rs.getString("title"));
+                group.put("description", rs.getString("description"));
+                group.put("mission", rs.getString("mission"));
+                group.put("capacity", rs.getInt("capacity"));
+                group.put("category", rs.getInt("category"));
+                group.put("usercnt", rs.getInt("usercnt"));
+                group.put("deadline", rs.getString("deadline"));
+                group.put("startDate", rs.getString("startDate"));
+                group.put("endDate", rs.getString("endDate"));
+                groupList.add(new Group(group));
+            }
             rs.close();
         }catch (SQLException e) {
             e.printStackTrace();;
@@ -283,13 +291,25 @@ public class ClientDBManager extends DBManager {
         return groupList;
     }
 
-    public static List<Integer> getMyEndedGroupList() {
-        List<Integer> groupList = new ArrayList<>();
-        String sql = "SELECT gid FROM GROUPS WHERE endDate < date('now', 'localtime')";
+    public static List<Group> getMyEndedGroupList() {
+        List<Group> groupList = new ArrayList<>();
+        String sql = "SELECT * FROM GROUPS WHERE (endDate < date('now', 'localtime'))";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
-            while (rs.next())
-                groupList.add(rs.getInt("gid"));
+            while (rs.next()){
+                JSONObject group = new JSONObject();
+                group.put("gid", rs.getInt("gid"));
+                group.put("title", rs.getString("title"));
+                group.put("description", rs.getString("description"));
+                group.put("mission", rs.getString("mission"));
+                group.put("capacity", rs.getInt("capacity"));
+                group.put("category", rs.getInt("category"));
+                group.put("usercnt", rs.getInt("usercnt"));
+                group.put("deadline", rs.getString("deadline"));
+                group.put("startDate", rs.getString("startDate"));
+                group.put("endDate", rs.getString("endDate"));
+                groupList.add(new Group(group));
+            }
             rs.close();
         }catch (SQLException e) {
             e.printStackTrace();;

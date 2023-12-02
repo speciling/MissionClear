@@ -2,7 +2,7 @@ package client.login;
 
 import java.awt.*;
 
-//import client.CustomFont;
+import client.CustomFont;
 import client.MainPage.*;
 import client.recruitpage.*;
 import org.json.simple.JSONObject;
@@ -54,6 +54,7 @@ public class Login extends JFrame{
 		frame=new JFrame("전체화면");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1200,850);
+		frame.setResizable(false);
 		
 		panel = new JPanel();
 		Color backgroundColor = new Color(56,183,255);
@@ -79,6 +80,7 @@ public class Login extends JFrame{
 		JLabel textLabel=new JLabel("다같이 재밌게 하는 목표달성!");
 		textLabel.setBounds(405,298,420,90);
 		textLabel.setFont(new Font("나눔고딕",Font.BOLD,32));
+		//textLabel.setFont(customFont.deriveFont(32));
 		textLabel.setForeground(Color.white);
 		textLabel.setOpaque(false);
 		panel.add(textLabel);
@@ -240,12 +242,14 @@ public class Login extends JFrame{
 
 	    if (checkValid(id, password)) {
 	        if (login(id, password)) {
+				System.out.println(3);
 				JSONObject jsonObject = new JSONObject();
 				ClientSocket.send(new Request(RequestType.SENDDATA, jsonObject));
 				ClientSocket.getResult();
 	            MainPage mp = new MainPage(true);
 	            mp.changePanel("group");
 	            frame.dispose();
+				System.out.println(4);
 	        } else {
 	            loginMatchWarning.setVisible(true);
 	        }
