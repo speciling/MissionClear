@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+
 import client.MainPage.MainPage;
 import client.db.ClientDBManager;
 
@@ -13,7 +15,9 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
-import javax.swing.JScrollPane; 
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI; 
 
 /**
  * Class representing the list of groups a user is part of.
@@ -79,8 +83,40 @@ public class MyGroupList {
 
         JScrollPane scrollPane = new JScrollPane(groupListPanel);
         scrollPane.setBounds(10, 70, 930, 760);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         myGroup.add(scrollPane);
+        
+        JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
+        verticalBar.setPreferredSize(new Dimension(15, 0)); // 스크롤바의 너비 설정
+        verticalBar.setUnitIncrement(16); // 단위 증가량을 16픽셀로 설정
+
+        // 스크롤바의 썸 부분을 더 돋보이게 하는 색상으로 변경
+        verticalBar.setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(180, 180, 180); // 썸의 색상 설정
+                this.trackColor = new Color(246, 246, 246); // 트랙의 색상 설정
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                return createZeroButton();
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return createZeroButton();
+            }
+
+            private JButton createZeroButton() {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(0, 0));
+                button.setMinimumSize(new Dimension(0, 0));
+                button.setMaximumSize(new Dimension(0, 0));
+                return button;
+            }
+        });
+
     }
 
     public void refreshGroupList() {

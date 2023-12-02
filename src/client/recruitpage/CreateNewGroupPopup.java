@@ -293,6 +293,13 @@ public class CreateNewGroupPopup {
     	warningLabel_2.setVisible(false);
     	createPopup.add(warningLabel_2);
     	
+    	JLabel warningLabel_3 = new JLabel("*비밀방 여부를 선택해주세요.");
+    	warningLabel_3.setForeground(Color.RED);
+    	warningLabel_3.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+    	warningLabel_3.setBounds(347, 588, 200, 20);
+    	warningLabel_3.setVisible(false);
+    	createPopup.add(warningLabel_3);
+    	
     	exitButton.addActionListener(new ActionListener() {
     	    public void actionPerformed(ActionEvent e) {
     	        frame.dispose(); // 현재 프레임을 닫음
@@ -309,12 +316,18 @@ public class CreateNewGroupPopup {
                     warningLabel_1.setVisible(false);
                 }
             	if (!isValidActivityPeriod(recruitmentStartDateYear.getText(), recruitmentStartDateMonth.getText(), recruitmentStartDateDay.getText())
-                        || !isValidActivityPeriod(recruitmentEndDateYear.getText(), recruitmentEndDateMonth.getText(), recruitmentEndDateDay.getText())) {
-                        warningLabel_2.setVisible(true);
-                        return;
-                    } else {
-                        warningLabel_2.setVisible(false);
-                    }
+                    || !isValidActivityPeriod(recruitmentEndDateYear.getText(), recruitmentEndDateMonth.getText(), recruitmentEndDateDay.getText())) {
+                    warningLabel_2.setVisible(true);
+                    return;
+                } else {
+                    warningLabel_2.setVisible(false);
+                }
+//            	if (!secretRoom.isSelected() && !openRoom.isSelected()) {
+//                    warningLabel_3.setVisible(true);
+//                    return; 
+//                } else {
+//                    warningLabel_3.setVisible(false);
+//                }
             	String missionTitle = title.getText();
             	String missionDescription = description.getText();
             	String missionContent = mission.getText();// Fetch the mission description text
