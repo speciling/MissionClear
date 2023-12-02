@@ -343,7 +343,7 @@ public class RecruitGroupMember{
 	    }
 
 	    panel.setBounds(left, top, panel.getWidth(), panel.getHeight());
-	    dynamicPanel.add(panel); // Add panel to dynamicPanel instead of groupRecruitment
+	    dynamicPanel.add(panel);
 	}
 
 	

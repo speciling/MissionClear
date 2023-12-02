@@ -355,11 +355,8 @@ public class CreateNewGroupPopup {
                 	    roomPassword.getText(), // roomPassword 필드 추가
                 	    isSecretRoom 
                 	);                // RecruitGroupMember의 frame에 패널 추가
-                if (GroupManager.addGroup(group)) {
-                	AddMissionRoom addMissionRoom = new AddMissionRoom(group);
-                	recruitGroupMember.addToGroupRecruitment(addMissionRoom.getPanel());                	
-                }
-
+                GroupManager.addGroup(group);
+               	
                 frame.dispose(); // 현재 프레임 닫기
             }
         });   

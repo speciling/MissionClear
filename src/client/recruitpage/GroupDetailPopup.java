@@ -41,7 +41,6 @@ public class GroupDetailPopup {
      */
 	public GroupDetailPopup(Group group) {
         this.group = group;
-        this.myGroupList = myGroupList;
         initialize();
     }
 
@@ -127,27 +126,19 @@ public class GroupDetailPopup {
 	                InputPasswordPopup passwordPopup = new InputPasswordPopup(group);
 	                passwordPopup.frame.setVisible(true);
 	                
-	                JSONObject data = new JSONObject();
-	            	data.put("gid", group.getGid());
-	            	Request request = new Request(RequestType.ENTERGROUP, data);
-	        
-	            	ClientSocket.send(request);
-	            	if(ClientSocket.getResult()) {
-	            		// 방이동
-	            	}
-	            	else {
-	            		// 경고문구
-	            	}
 	            } else {
 	                // 비밀방이 아닌 경우
 	            	JSONObject data = new JSONObject();
 	            	data.put("gid", group.getGid());
+	            	data.put("password", "");
 	            	Request request = new Request(RequestType.ENTERGROUP, data);
 	        
 	            	ClientSocket.send(request);
 	            	
 	            	if(ClientSocket.getResult()) {
 	            		// 방이동	
+	            		MyGroupList myGroupList = new MyGroupList(true);
+	                    myGroupList.refreshGroupList();
 	            	}
 	            	else {
 	            		// 경고문구

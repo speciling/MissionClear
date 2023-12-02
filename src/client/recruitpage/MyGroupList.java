@@ -19,9 +19,9 @@ import javax.swing.JButton;
  */
 public class MyGroupList {
     private JPanel myGroup;
-    private List<JPanel> addedPanels = new ArrayList<>();
-    private int nextPanelY = 93; // 첫 패널의 Y 위치
-    private final int PANEL_HEIGHT = 189; // 각 패널의 높이
+    public List<JPanel> addedPanels = new ArrayList<>();
+    public int nextPanelY = 93; // 첫 패널의 Y 위치
+    public final int PANEL_HEIGHT = 189; // 각 패널의 높이
 
     /**
      * Retrieves the main panel of the group list interface.
@@ -38,6 +38,7 @@ public class MyGroupList {
     public MyGroupList(boolean vis) {
         super();
         initializeMyGroupList();
+        
     }
 
    
@@ -68,5 +69,22 @@ public class MyGroupList {
             nextPanelY += PANEL_HEIGHT;
         }
     }
+
+    public void refreshGroupList() {
+        List<Group> groups = ClientDBManager.getMyGroupList();
+        for (Group group : groups) {
+            AddMyGroup addMyGroup = new AddMyGroup(group);
+            JPanel addGroupPanel = addMyGroup.getPanel();
+
+            addGroupPanel.setBounds(0, nextPanelY, addGroupPanel.getWidth(), addGroupPanel.getHeight());
+            myGroup.add(addGroupPanel);
+
+            nextPanelY += PANEL_HEIGHT;
+        }
+        // UI 갱신
+        myGroup.revalidate();
+        myGroup.repaint();
+    }
+
 
 }
