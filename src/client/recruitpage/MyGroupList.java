@@ -1,6 +1,7 @@
 package client.recruitpage;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JScrollPane; 
 
 /**
  * Class representing the list of groups a user is part of.
@@ -54,20 +56,31 @@ public class MyGroupList {
         myGroup.setLayout(null);
 
         JLabel groupList = new JLabel("내그룹목록");
-        groupList.setFont(new Font("나눔고딕", Font.BOLD, 20));
+        groupList.setFont(new Font("나눔고딕", Font.BOLD, 32));
         groupList.setBounds(13, 22, 156, 35);
         myGroup.add(groupList);
 
+        JPanel groupListPanel = new JPanel();
+        groupListPanel.setLayout(null);
+        groupListPanel.setBackground(new Color(246, 246, 246));
+        
         List<Group> groups = ClientDBManager.getMyGroupList();
+        int panelY = 13; 
         for (Group group : groups) {
             AddMyGroup addMyGroup = new AddMyGroup(group);
             JPanel addGroupPanel = addMyGroup.getPanel();
 
-            addGroupPanel.setBounds(0, nextPanelY, addGroupPanel.getWidth(), addGroupPanel.getHeight());
-            myGroup.add(addGroupPanel);
+            addGroupPanel.setBounds(13, panelY, addGroupPanel.getWidth(), addGroupPanel.getHeight());
+            groupListPanel.add(addGroupPanel);
 
-            nextPanelY += PANEL_HEIGHT;
+            panelY += PANEL_HEIGHT + 10; // 10은 패널 간의 간격
         }
+        groupListPanel.setPreferredSize(new Dimension(930, panelY));
+
+        JScrollPane scrollPane = new JScrollPane(groupListPanel);
+        scrollPane.setBounds(10, 70, 930, 760);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        myGroup.add(scrollPane);
     }
 
     public void refreshGroupList() {

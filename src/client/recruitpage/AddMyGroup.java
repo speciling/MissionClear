@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 import java.awt.Font;
 
@@ -19,7 +20,7 @@ public class AddMyGroup {
 	
 
 	/**
-	 * Create the application.
+	 * @wbp.parser.constructor
 	 */
 	public AddMyGroup() {
 		initialize();
@@ -39,6 +40,8 @@ public class AddMyGroup {
 		addGroupPanel.setBackground(new Color(255, 255, 255));
 		addGroupPanel.setLayout(null);
 		
+		addGroupPanel.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
+
 		JLabel missionTitleLabel = new JLabel("돈 아껴서 부자되자!");
 		missionTitleLabel.setFont(new Font("나눔고딕", Font.BOLD, 25));
 		missionTitleLabel.setBounds(26, 12, 232, 35);

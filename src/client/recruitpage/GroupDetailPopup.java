@@ -139,6 +139,7 @@ public class GroupDetailPopup {
 	            		// 방이동	
 	            		MyGroupList myGroupList = new MyGroupList(true);
 	                    myGroupList.refreshGroupList();
+	                    frame.dispose();
 	            	}
 	            	else {
 	            		// 경고문구
