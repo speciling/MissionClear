@@ -237,12 +237,6 @@ public class ClientDBManager extends DBManager {
         return executeQuery(sql);
     }
 
-    public static JSONObject getGroupInfo(int gid) {
-        String sql = String.format("""
-                SELECT * FROM GROUPS WHERE gid=%d""", gid);
-        return executeQuery(sql);
-    }
-
     public static JSONArray getGroupUsers(int gid) {
         JSONArray result = new JSONArray();
         String sql = String.format("SELECT users FROM GROUPS WHERE gid=%d", gid);
@@ -269,13 +263,24 @@ public class ClientDBManager extends DBManager {
         return result;
     }
 
-    public static List<Integer> getMyGroupList() {
-        List<Integer> groupList = new ArrayList<>();
-        String sql = "SELECT gid FROM GROUPS WHERE (endDate >= date('now', 'localtime'))";
+    public static List<Group> getMyGroupList() {
+        List<Group> groupList = new ArrayList<>();
+        String sql = "SELECT * FROM GROUPS WHERE (endDate >= date('now', 'localtime'))";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
-            while (rs.next())
-                groupList.add(rs.getInt("gid"));
+            while (rs.next()){
+                JSONObject group = new JSONObject();
+                group.put("gid", rs.getInt("gid"));
+                group.put("title", rs.getString("title"));
+                group.put("description", rs.getString("description"));
+                group.put("mission", rs.getString("mission"));
+                group.put("capacity", rs.getInt("capacity"));
+                group.put("category", rs.getInt("category"));
+                group.put("deadline", rs.getString("deadline"));
+                group.put("startDate", rs.getString("startDate"));
+                group.put("endDate", rs.getString("endDate"));
+                groupList.add(new Group(group));
+            }
             rs.close();
         }catch (SQLException e) {
             e.printStackTrace();;
@@ -283,13 +288,24 @@ public class ClientDBManager extends DBManager {
         return groupList;
     }
 
-    public static List<Integer> getMyEndedGroupList() {
-        List<Integer> groupList = new ArrayList<>();
-        String sql = "SELECT gid FROM GROUPS WHERE endDate < date('now', 'localtime')";
+    public static List<Group> getMyEndedGroupList() {
+        List<Group> groupList = new ArrayList<>();
+        String sql = "SELECT * FROM GROUPS WHERE (endDate < date('now', 'localtime'))";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
-            while (rs.next())
-                groupList.add(rs.getInt("gid"));
+            while (rs.next()){
+                JSONObject group = new JSONObject();
+                group.put("gid", rs.getInt("gid"));
+                group.put("title", rs.getString("title"));
+                group.put("description", rs.getString("description"));
+                group.put("mission", rs.getString("mission"));
+                group.put("capacity", rs.getInt("capacity"));
+                group.put("category", rs.getInt("category"));
+                group.put("deadline", rs.getString("deadline"));
+                group.put("startDate", rs.getString("startDate"));
+                group.put("endDate", rs.getString("endDate"));
+                groupList.add(new Group(group));
+            }
             rs.close();
         }catch (SQLException e) {
             e.printStackTrace();;
