@@ -49,15 +49,11 @@ class RoundedPanel2 extends JPanel {
 
 public class DetailMyGroup extends JFrame {
 	String authPicPath;
-	
 	Group groupData;
 	int gid;
 	String missionName;
 	String missionInfo;
-	/*
-	 * int gid = 2;
-   String missionName = "돈 아껴서 부자되자!";
-   String missionInfo = "매일 매일 사용한 돈 인증";*/
+	
    Calendar missionStart = Calendar.getInstance();
    Calendar missionEnd = Calendar.getInstance();
    String startYear;
@@ -66,34 +62,34 @@ public class DetailMyGroup extends JFrame {
    String endYear;
    String endMonth;
    String endDay;
+   Calendar today = Calendar.getInstance();
    
    
-   public int calculateDayCount() {
-      missionStart.set(Calendar.HOUR_OF_DAY, 0);
-       missionStart.set(Calendar.MINUTE, 0);
-       missionStart.set(Calendar.SECOND, 0);
-       missionStart.set(Calendar.MILLISECOND, 0);
+   //생성자 안에서 초기화하기
+   MakeProgressData proData;
+   public Vector<Vector<Integer>> progresses;
+   
+   
+   public int calculateDayCount(Calendar start, Calendar end) {
+       start.set(Calendar.HOUR_OF_DAY, 0);
+       start.set(Calendar.MINUTE, 0);
+       start.set(Calendar.SECOND, 0);
+       start.set(Calendar.MILLISECOND, 0);
 
-       missionEnd.set(Calendar.HOUR_OF_DAY, 0);
-       missionEnd.set(Calendar.MINUTE, 0);
-       missionEnd.set(Calendar.SECOND, 0);
-       missionEnd.set(Calendar.MILLISECOND, 0);
+       end.set(Calendar.HOUR_OF_DAY, 0);
+       end.set(Calendar.MINUTE, 0);
+       end.set(Calendar.SECOND, 0);
+       end.set(Calendar.MILLISECOND, 0);
 
-       long diffInMillis = missionEnd.getTimeInMillis() - missionStart.getTimeInMillis();
+       long diffInMillis = end.getTimeInMillis() - start.getTimeInMillis();
        long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
        return ((int) diffInDays)+1;
    }
    int dayCount;
-   
-   // 먼저 detailmygroup정보에서 userID들을 가져와서 각각의 유저의 진행도와 사진과 이름을 가져오기 
-   // int[] groupUserID = {};
+   int todayCount;
 
-   int [][] detailProgress = {{2,2,1,1,0,0,0,0},
-         {1,2,1,0,0,0,0,0},
-         {1,1,1,1,0,0,0,0},
-         {2,2,2,0,0,0,0,0},
-         {2,2,2,1,0,0,0,0}};
-   int []missionProgRage = {0,0,0,0,0};
+   int[][] detailProgress;
+   int []missionProgRage;
 
    MakeUserData userData;
    HashMap nicknames;
@@ -452,7 +448,7 @@ public class DetailMyGroup extends JFrame {
     	  a++;
     	  }
     	  catch(Exception e) {
-    		  e.printStackTrace();
+    		  //e.printStackTrace();
     		  System.out.println("index error");
     		  }
       }
@@ -477,21 +473,7 @@ public class DetailMyGroup extends JFrame {
       chatUid = chatData.uid;
       chatMessage = chatData.message;
       chatIsPic = chatData.isPic;
-      chatids = chatData.chatids;
-      
-      
-      for (int i=0;i<detailProgress.length;i++) {
-         int count =0;
-         for (int j =0;j<detailProgress[0].length;j++) {
-            if(detailProgress[i][j]==1) count++;
-         //System.out.println(count);
-         }
-         missionProgRage[i] = (int)(count*100/detailProgress[0].length);
-      }
-      
-      
-      showProgressRate();
-      
+      chatids = chatData.chatids;     
 
       //임시날짜
       startYear = groupData.getStartDateYear();
@@ -501,10 +483,10 @@ public class DetailMyGroup extends JFrame {
       endMonth = groupData.getEndDateMonth();
       endDay = groupData.getEndDateDay();
       int sYear = Integer.parseInt(startYear);
-      int sMonth = Integer.parseInt(startMonth);
+      int sMonth = Integer.parseInt(startMonth)-1;
       int sDay = Integer.parseInt(startDay);
       int eYear = Integer.parseInt(endYear);
-      int eMonth = Integer.parseInt(endMonth);
+      int eMonth = Integer.parseInt(endMonth)-1;
       int eDay = Integer.parseInt(endDay);
       
       missionStart.set(Calendar.YEAR, sYear);
@@ -514,8 +496,46 @@ public class DetailMyGroup extends JFrame {
       missionEnd.set(Calendar.MONTH, eMonth);
       missionEnd.set(Calendar.DAY_OF_MONTH, eDay);
       
-      //dayCount만들기
-      dayCount = calculateDayCount();
+      dayCount = calculateDayCount(missionStart, missionEnd);
+      todayCount = calculateDayCount(missionStart, today);
+      
+      proData = new MakeProgressData(this, missionStart);
+      progresses = proData.authDateData; 
+      
+      int usernumber = uids.size();
+      detailProgress = new int[usernumber][dayCount];
+      missionProgRage = new int[usernumber];
+      for(int j=0;j<usernumber;j++) {	
+    	  for (int i=0;i<todayCount-1;i++) {
+    		  detailProgress[j][i]=2;
+    		  }
+    	  }
+      
+      for (int i=0;i<detailProgress.length;i++) {
+         int count =0;
+         for (int j =0;j<detailProgress[0].length;j++) {
+            if(detailProgress[i][j]==1) count++;
+         }
+         missionProgRage[i] = (int)(count*100/detailProgress[0].length);
+      }
+      
+      
+      for (int i=0;i<progresses.size();i++) {
+    	  Vector<Integer> tempVector = progresses.get(i);
+    	  int uid = tempVector.get(0);
+    	  int uidIdx=5; //
+    	  for (int j=0;j<uids.size();j++) {
+    		  if(uids.get(j)==uid) {uidIdx=j;}
+    	  }
+    	  if(uidIdx==5) {}
+    	  else {
+    		  int authIdx = tempVector.get(1);
+    		  detailProgress[uidIdx][authIdx] = 1;
+		  }
+    	   }
+      
+      
+      showProgressRate();
       
       //배너
       detailMyGroupP.setLayout(null);
@@ -566,10 +586,8 @@ public class DetailMyGroup extends JFrame {
       
       
       authMission.addActionListener(event -> {
-         missionPic();
-       
-      });
-      
+         missionPic();      
+      });     
       chatting();
    }
    
