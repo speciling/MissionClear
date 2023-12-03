@@ -60,9 +60,9 @@ public class MyGroupList {
         myGroup.setBounds(0, 0, 950, 850);
         myGroup.setLayout(null);
 
-        JLabel groupList = new JLabel("내그룹목록");
+        JLabel groupList = new JLabel("내 그룹 목록");
         groupList.setFont(new Font("나눔고딕", Font.BOLD, 32));
-        groupList.setBounds(13, 22, 156, 35);
+        groupList.setBounds(13, 22, 180, 35);
         myGroup.add(groupList);
 
         JPanel groupListPanel = new JPanel();

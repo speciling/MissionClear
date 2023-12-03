@@ -82,7 +82,7 @@ public class GroupDetailPopup {
 	    category.setForeground(new Color(56, 183, 255));
 	    category.setHorizontalAlignment(JLabel.CENTER);
 	    category.setFont(new Font("나눔고딕", Font.PLAIN, 17));
-	    category.setBounds(19, 180, 81, 35);
+	    category.setBounds(19, 180, 85, 35);
 	    Color customColor = new Color(56, 183, 255);
 	    category.setBorder(new RoundedBorder(10, customColor));
 	    groupDetailPopupPanel.add(category);
