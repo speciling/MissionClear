@@ -11,7 +11,6 @@ import client.db.ClientDBManager;
 public class MakeUserData {
 	public HashMap<Integer,String> nicknames = new HashMap<Integer,String>(){{}};
 	public HashMap<Integer,String> pfps = new HashMap<Integer,String>(){{}};
-	//int gid=2;
 	public List<Integer> uids = new Vector<Integer>();
 	
 	public MakeUserData(){}

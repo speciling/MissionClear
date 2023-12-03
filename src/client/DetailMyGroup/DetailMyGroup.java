@@ -95,16 +95,16 @@ public class DetailMyGroup extends JFrame {
          {2,2,2,1,0,0,0,0}};
    int []missionProgRage = {0,0,0,0,0};
 
-   MakeUserData userData = new MakeUserData(gid);
-   HashMap nicknames = userData.nicknames;
-   HashMap pfps = userData.pfps;
-   List<Integer> uids = userData.uids;
+   MakeUserData userData;
+   HashMap nicknames;
+   HashMap pfps;
+   List<Integer> uids;
    
-   MakeChatData chatData = new MakeChatData(gid);
-   HashMap chatUid = chatData.uid;
-   HashMap chatMessage = chatData.message;
-   HashMap chatIsPic = chatData.isPic;
-   List<Integer> chatids = chatData.chatids;
+   MakeChatData chatData;
+   HashMap chatUid;
+   HashMap chatMessage;
+   HashMap chatIsPic;
+   List<Integer> chatids;
    
    // 세부 미션 수행도 만들기
    //int[username.length][dayCount] detailProgress = {};
@@ -460,14 +460,24 @@ public class DetailMyGroup extends JFrame {
    }
    
    public DetailMyGroup(Group g, boolean vis) {
-	groupData = g;
-	gid = groupData.getGid();
-	String missionName = groupData.getTitle();
-	String missionInfo = groupData.getMission();
+	  groupData = g;
+	  gid = groupData.getGid();
+	  String missionName = groupData.getTitle();
+	  String missionInfo = groupData.getMission();
       detailMyGroupP = new JPanel();
       detailMyGroupP.setBounds(0, 0, 943, 850);
       detailMyGroupP.setLayout(null);
-      // TODO Auto-generated method stub
+
+      userData = new MakeUserData(gid);
+      nicknames = userData.nicknames;
+      pfps = userData.pfps;
+      uids = userData.uids;
+      
+      chatData = new MakeChatData(gid);
+      chatUid = chatData.uid;
+      chatMessage = chatData.message;
+      chatIsPic = chatData.isPic;
+      chatids = chatData.chatids;
       
       
       for (int i=0;i<detailProgress.length;i++) {
@@ -596,9 +606,5 @@ public class DetailMyGroup extends JFrame {
        ClientSocket.send(r); 
        
    }
-   
-   public static void main(String [] args) {
-       MainPage a = new MainPage(true);
-	   }
    
 }
