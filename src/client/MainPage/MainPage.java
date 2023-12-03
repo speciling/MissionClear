@@ -25,6 +25,7 @@ public class MainPage extends JFrame {
    public int uid;
    public String userPic = "./resource/MainPage/defaultPic.png";
    public Container main;
+   public static MainPage instance;
 
 /**
  * DB에서 userName과 userPic 같은 유저의 정보를 가져오는 함수이다. 
@@ -53,6 +54,7 @@ public class MainPage extends JFrame {
    }
    
    public MainPage(boolean vis) {
+	  instance = this;
       initializeMainPage();
    }
    public void initializeMainPage() {
