@@ -8,12 +8,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import client.MainPage.MainPage;
+
 import java.awt.Font;
 import javax.swing.JButton;
 
 public class AddMyGroup {
 
 	protected RoundedPanel addGroupPanel;
+	private MainPage mainPage;
 	private Group group;
 	/**
 	 * Launch the application.
@@ -31,6 +34,10 @@ public class AddMyGroup {
 		this.group = group;
 		initialize();
 	}
+	
+	public void setMainPage(MainPage mainPage) {
+        this.mainPage = mainPage;
+    }
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -72,11 +79,15 @@ public class AddMyGroup {
 	    category.setBorder(new RoundedBorder(10, customColor));
 	    addGroupPanel.add(category);
 	    
-		JButton detailEnterButton = new JButton("");
-		detailEnterButton.setBounds(0, 0, 890, 189);
-		detailEnterButton.setContentAreaFilled(false);
-		detailEnterButton.setBorderPainted(false);
-		addGroupPanel.add(detailEnterButton);
+	    JButton detailEnterButton = new JButton("");
+        detailEnterButton.setBounds(0, 0, 890, 189);
+        detailEnterButton.setContentAreaFilled(false);
+        detailEnterButton.setBorderPainted(false);
+        detailEnterButton.addActionListener(e -> {
+            if (MainPage.instance != null) {
+                MainPage.instance.changeDetailPan(); // 정적 변수를 통해 MainPage의 메서드 호출
+            }
+        });
 		addGroupPanel.add(detailEnterButton);
 		
 	}
