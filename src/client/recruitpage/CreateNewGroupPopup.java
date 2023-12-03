@@ -399,11 +399,18 @@ public class CreateNewGroupPopup {
             int monthValue = Integer.parseInt(month);
             int dayValue = Integer.parseInt(day);
 
-            if (yearValue < Calendar.getInstance().get(Calendar.YEAR)) {
-                return false; // 년도가 현재년도보다 작은 경우 유효하지 않음
+            month = String.format("%02d", monthValue);
+            day = String.format("%02d", dayValue);
+            
+            Calendar currentDate = Calendar.getInstance();
+            Calendar inputDate = Calendar.getInstance();
+            inputDate.set(yearValue, monthValue - 1, dayValue);
+            
+            if (inputDate.before(currentDate)) {
+                return false; // 입력된 날짜가 현재 날짜보다 이전인 경우
             }
 
-            if (monthValue < 1 || monthValue > 12 || monthValue < Calendar.getInstance().get(Calendar.MONTH)) {
+            if (monthValue < 1 || monthValue > 12) {
                 return false; // 월이 1~12 범위를 벗어난 경우 유효하지 않음
             }
 
@@ -422,11 +429,18 @@ public class CreateNewGroupPopup {
             int monthValue = Integer.parseInt(month);
             int dayValue = Integer.parseInt(day);
 
-            if ( yearValue < Calendar.getInstance().get(Calendar.YEAR)) {
-                return false; // 년도가 현재년도보다 작은 경우 유효하지 않음
+            month = String.format("%02d", monthValue);
+            day = String.format("%02d", dayValue);
+            
+            Calendar currentDate = Calendar.getInstance();
+            Calendar inputDate = Calendar.getInstance();
+            inputDate.set(yearValue, monthValue - 1, dayValue);
+            
+            if (inputDate.before(currentDate)) {
+                return false; // 입력된 날짜가 현재 날짜보다 이전인 경우
             }
 
-            if (monthValue < 1 || monthValue > 12 || monthValue < Calendar.getInstance().get(Calendar.MONTH)) {
+            if (monthValue < 1 || monthValue > 12) {
                 return false; // 월이 1~12 범위를 벗어난 경우 유효하지 않음
             }
 

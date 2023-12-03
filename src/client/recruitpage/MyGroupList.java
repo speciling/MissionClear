@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI; 
 
 /**
@@ -84,6 +85,8 @@ public class MyGroupList {
         JScrollPane scrollPane = new JScrollPane(groupListPanel);
         scrollPane.setBounds(10, 70, 930, 760);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBorder(new MatteBorder(1, 1, 1, 1, new Color(246, 246, 246)));
+
         myGroup.add(scrollPane);
         
         JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
