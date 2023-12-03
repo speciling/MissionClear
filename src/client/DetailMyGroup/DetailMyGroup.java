@@ -25,6 +25,7 @@ import org.json.simple.JSONObject;
 
 import client.MainPage.MainPage;
 import client.net.ClientSocket;
+import client.recruitpage.Group;
 import server.service.Request;
 import server.service.RequestType;
 
@@ -47,12 +48,26 @@ class RoundedPanel2 extends JPanel {
 }
 
 public class DetailMyGroup extends JFrame {
+	String authPicPath;
+	
+	Group groupData = new Group();
+	int gid = groupData.getGid();
+	String missionName = groupData.getTitle();
+	String missionInfo = groupData.getMission();
+	/*
+	 * int gid = 2;
    String missionName = "돈 아껴서 부자되자!";
-   String missionInfo = "매일 매일 사용한 돈 인증";
-   String authPicPath;
-
+   String missionInfo = "매일 매일 사용한 돈 인증";*/
    Calendar missionStart = Calendar.getInstance();
    Calendar missionEnd = Calendar.getInstance();
+   String startYear = groupData.getStartDateYear();
+   String startMonth = groupData.getStartDateMonth();
+   String startDay = groupData.getStartDateDay();
+   String endYear = groupData.getEndDateYear();
+   String endMonth = groupData.getEndDateMonth();
+   String endDay = groupData.getEndDateDay();
+   
+   
    public int calculateDayCount() {
       missionStart.set(Calendar.HOUR_OF_DAY, 0);
        missionStart.set(Calendar.MINUTE, 0);
@@ -79,8 +94,7 @@ public class DetailMyGroup extends JFrame {
          {2,2,2,0,0,0,0,0},
          {2,2,2,1,0,0,0,0}};
    int []missionProgRage = {0,0,0,0,0};
-   
-   int gid = 2;
+
    MakeUserData userData = new MakeUserData(gid);
    HashMap nicknames = userData.nicknames;
    HashMap pfps = userData.pfps;
@@ -265,7 +279,7 @@ public class DetailMyGroup extends JFrame {
 	   {
 		   JLabel chattingL = new JLabel(userNicknameChat+"님이 오늘의 미션을 인증하였습니다.");
 		   chattingL.setBounds(90,21,x-100,60);
-		   chattingL.setFont(new Font("나눔고딕",Font.BOLD, 15));
+		   chattingL.setFont(new Font("나눔고딕",Font.BOLD, 14));
 		   chatBox.add(chattingL);
 		   if (x==900)//큰 사이즈일 때
 		   {
@@ -298,8 +312,9 @@ public class DetailMyGroup extends JFrame {
       
       showMore.addActionListener(event -> {
          JFrame showMoreF = new JFrame();
+         showMoreF.getContentPane().setBackground(Color.white);
          showMoreF.setVisible(true);
-         showMoreF.setSize(900,800);
+         showMoreF.setSize(900,700);
          showMoreF.setLocation(200, 100);
          
          
@@ -307,7 +322,7 @@ public class DetailMyGroup extends JFrame {
       // 메세지를 보내는 부분
          RoundedPanel2 sendMessage = new RoundedPanel2(15);
          sendMessage.setLayout(null);
-         sendMessage.setBounds(20,700,840,50); //
+         sendMessage.setBounds(20,600,840,50); //
          sendMessage.setForeground(new Color(239,239,239));
          showMoreF.add(sendMessage);
          
@@ -315,13 +330,13 @@ public class DetailMyGroup extends JFrame {
          JButton sendButton900 = new JButton(sendIcon);
          
          sendMessage.add(sendButton900);
-         sendButton900.setBounds(815,8,33,33); //
+         sendButton900.setBounds(800,8,33,33); //
          sendButton900.setContentAreaFilled(false);
          sendButton900.setBorderPainted(false);
          JTextField inputText = new JTextField(){
               @Override
               public void setBorder(Border border) {}};
-         inputText.setBounds(10,0,360,50);
+         inputText.setBounds(10,0,780,50);
          inputText.setFont(new Font("나눔고딕",Font.PLAIN, 15));
          inputText.setOpaque(false);
          sendMessage.add(inputText);
@@ -350,9 +365,13 @@ public class DetailMyGroup extends JFrame {
         	 chatMoreBox.add(chatBox(900,num,cid), BorderLayout.CENTER);
         	 num++;
          }
-         chatMoreBox.setPreferredSize(new Dimension(900,95*num+305*picnum));
+         chatMoreBox.setPreferredSize(new Dimension(900,95*num+305*picnum+400)); //패딩추가
          JScrollPane p = new JScrollPane(chatMoreBox,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
          p.setViewportView(chatMoreBox);
+         p.setBounds(0,0,900,580);
+         
+         
+         
          showMoreF.add(p, BorderLayout.CENTER);
          JScrollBar verticalBar = p.getVerticalScrollBar();
          verticalBar.setPreferredSize(new Dimension(15, 0)); // 스크롤바의 너비 설정
@@ -461,12 +480,19 @@ public class DetailMyGroup extends JFrame {
       
 
       //임시날짜
-      missionStart.set(Calendar.YEAR, 2023);
-      missionStart.set(Calendar.MONTH, Calendar.NOVEMBER);
-      missionStart.set(Calendar.DAY_OF_MONTH, 12);
-      missionEnd.set(Calendar.YEAR, 2023);
-      missionEnd.set(Calendar.MONTH, Calendar.NOVEMBER);
-      missionEnd.set(Calendar.DAY_OF_MONTH, 19);
+      int sYear = Integer.parseInt(startYear);
+      int sMonth = Integer.parseInt(startMonth);
+      int sDay = Integer.parseInt(startDay);
+      int eYear = Integer.parseInt(endYear);
+      int eMonth = Integer.parseInt(endMonth);
+      int eDay = Integer.parseInt(endDay);
+      
+      missionStart.set(Calendar.YEAR, sYear);
+      missionStart.set(Calendar.MONTH, sMonth);
+      missionStart.set(Calendar.DAY_OF_MONTH, sDay);
+      missionEnd.set(Calendar.YEAR, eYear);
+      missionEnd.set(Calendar.MONTH, eMonth);
+      missionEnd.set(Calendar.DAY_OF_MONTH, eDay);
       
       //dayCount만들기
       dayCount = calculateDayCount();

@@ -243,22 +243,22 @@ public class MainPage extends JFrame {
       }
       
       else if (panelName.equals("mygroup")) {
-    	  
+    	  /*
     	  MyGroupList r = new MyGroupList(true);
           JPanel p = r.get();
           p = makePan(p);
           refreshPan();
           globPan.add(p);
           globPan.repaint();
-          globPan.revalidate();
+          globPan.revalidate();*/
           
-         /* DetailMyGroup dg = new DetailMyGroup(true);
+       DetailMyGroup dg = new DetailMyGroup(true);
        JPanel p = dg.get();
        p = makePan(p);
        refreshPan();
        globPan.add(p);
        globPan.repaint();
-       globPan.revalidate();*/
+       globPan.revalidate();
        
       }
    
