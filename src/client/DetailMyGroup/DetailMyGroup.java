@@ -554,8 +554,7 @@ public class DetailMyGroup extends JFrame {
        
        JSONObject j = new JSONObject();
        String filePath = selectedFile.getAbsolutePath();
-       j.put("filePath", filePath);  // j.put("FilePath", message);
-       j.put("isPic",1);
+       j.put("filePath", filePath); 
        j.put("gid",gid);
        Request r = new Request(RequestType.CERTIFYMISSION,j);
        ClientSocket.send(r); 
