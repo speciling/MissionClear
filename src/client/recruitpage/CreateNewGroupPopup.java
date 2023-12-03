@@ -136,6 +136,10 @@ public class CreateNewGroupPopup {
     	recruitmentCapacity.setRenderer(new CustomComboBoxRenderer());
     	recruitmentCapacity.setUI(new BasicComboBoxUI() {
     	    @Override
+    	    public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+    	        g.setColor(Color.WHITE); // 원하는 배경색으로 변경
+    	        g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    	    }
     	    protected JButton createArrowButton() {
     	        JButton arrowButton = new JButton("▼");
     	        arrowButton.setBackground(new Color(56, 183, 255)); 
@@ -161,9 +165,12 @@ public class CreateNewGroupPopup {
 
     	category.setBorder(new RoundedBorder(new Color(56, 183, 255), 2, 10));
     	category.setRenderer(new CustomComboBoxRenderer());
-
     	category.setUI(new BasicComboBoxUI() {
     	    @Override
+    	    public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+    	        g.setColor(Color.WHITE); // 원하는 배경색으로 변경
+    	        g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    	    }
     	    protected JButton createArrowButton() {
     	        JButton arrowButton = new JButton("▼");
     	        arrowButton.setBackground(new Color(56, 183, 255)); 

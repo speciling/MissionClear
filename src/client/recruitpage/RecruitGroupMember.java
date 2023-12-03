@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
 import javax.swing.ImageIcon;
@@ -213,13 +214,17 @@ public class RecruitGroupMember{
         comboBox.setBounds(180, 82, 121, 35);
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
         comboBox.setFont(new Font("나눔고딕", Font.PLAIN, 15));
-        comboBox.setBackground(Color.WHITE);
+        comboBox.setBackground(new Color(246, 246, 246));
         comboBox.setForeground(new Color(56, 183, 255));
 
         comboBox.setBorder(new RoundedBorder(new Color(56, 183, 255), 2, 10));
         comboBox.setRenderer(new CustomComboBoxRenderer());
         comboBox.setUI(new BasicComboBoxUI() {
     	    @Override
+    	    public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+    	        g.setColor(Color.WHITE); // 원하는 배경색으로 변경
+    	        g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    	    }
     	    protected JButton createArrowButton() {
     	        JButton arrowButton = new JButton("▼");
     	        arrowButton.setBackground(new Color(56, 183, 255)); 
