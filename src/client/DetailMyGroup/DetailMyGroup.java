@@ -437,22 +437,49 @@ public class DetailMyGroup extends JFrame {
           Request r = new Request(RequestType.CHAT,j);
           ClientSocket.send(r);    
          });
-         
-      
-      int a=0;
-      for(int k=2;k>=0;k--)
-      {
-    	  try {
-    	  int cid = chatids.get(k);
-    	  chatPart.add(chatBox(415,a,cid));
-    	  a++;
+      Thread chatThread = new Thread(()->{
+    	  while (true) {
+
+              JPanel chatPartPart = new JPanel();
+              chatPartPart.setBackground(Color.white);
+              chatPartPart.setLayout(null);
+              chatPartPart.setBounds(0,0,415,285);
+              
+              
+              int a=0;
+              for(int k=2;k>=0;k--)
+              {
+            	  try {
+            	  int cid = chatids.get(k);
+            	  chatPartPart.add(chatBox(415,a,cid));
+            	  a++;
+            	  }
+            	  catch(Exception e) {
+            		  //e.printStackTrace();
+            		  System.out.println("index error");
+            		  }
+              }
+              
+              chatPart.add(chatPartPart);
+              chatPart.repaint();
+              chatPart.revalidate();
+              
+              try {
+            	  Thread.sleep(100);
+              } catch (Exception e) {
+            	  e.printStackTrace();
+              }
+
+              chatData = new MakeChatData(gid);
+              chatUid = chatData.uid;
+              chatMessage = chatData.message;
+              chatIsPic = chatData.isPic;
+              chatids = chatData.chatids;
+              
+              chatPart.remove(chatPartPart);
     	  }
-    	  catch(Exception e) {
-    		  //e.printStackTrace();
-    		  System.out.println("index error");
-    		  }
-      }
-      
+      }); 
+      chatThread.start();
    }
    
    public DetailMyGroup(Group g, boolean vis) {
@@ -588,6 +615,8 @@ public class DetailMyGroup extends JFrame {
       authMission.addActionListener(event -> {
          missionPic();      
       });     
+
+      
       chatting();
    }
    
