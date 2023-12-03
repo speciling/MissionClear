@@ -1,31 +1,18 @@
 package client.recruitpage;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
-import java.util.Calendar;
+import java.awt.geom.Path2D;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JSpinner;
-import javax.swing.JList;
-import javax.swing.JComboBox;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.Border;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+
+import java.util.*;
+
 
 
 // 모서리가 둥근 JPanel을 생성하는 클래스
@@ -35,6 +22,7 @@ import javax.swing.ImageIcon;
  */
 public class CreateNewGroupPopup {
 	private RecruitGroupMember recruitGroupMember; // RecruitGroupMember 참조 추가
+	Font nanumGothicFont = new Font("나눔고딕", Font.PLAIN, 14); // 폰트 크기는 필요에 따라 조정
 
     // 생성자 수정
 	/**
@@ -103,8 +91,8 @@ public class CreateNewGroupPopup {
     	title.setBackground(new Color(237, 237, 237));
     	title.setBounds(56, 129, 580, 45);
     	title.setBorder(null);
+    	title.setFont(nanumGothicFont);
     	createPopup.add(title);
-    	title.setColumns(10);
     	
     	JLabel missionDescription = new JLabel("미션 설명");
     	missionDescription.setFont(new Font("나눔고딕", Font.PLAIN, 19));
@@ -116,6 +104,7 @@ public class CreateNewGroupPopup {
     	description.setBackground(new Color(237, 237, 237));
     	description.setBounds(56, 214, 580, 45);
     	description.setBorder(null);
+    	description.setFont(nanumGothicFont);
     	createPopup.add(description);
     	
     	mission = new JTextField();
@@ -123,6 +112,7 @@ public class CreateNewGroupPopup {
     	mission.setBackground(new Color(237, 237, 237));
     	mission.setBounds(56, 296, 580, 45);
     	mission.setBorder(null);
+    	mission.setFont(nanumGothicFont);
     	createPopup.add(mission);
     	
     	JLabel missionContents = new JLabel("활동 내용");
@@ -138,6 +128,23 @@ public class CreateNewGroupPopup {
     	JComboBox recruitmentCapacity = new JComboBox();
     	recruitmentCapacity.setModel(new DefaultComboBoxModel(new String[] {"인원 선택", "1", "2", "3", "4", "5"}));
     	recruitmentCapacity.setBounds(56, 384, 160, 39);
+    	recruitmentCapacity.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+    	recruitmentCapacity.setBackground(Color.WHITE);
+    	recruitmentCapacity.setForeground(new Color(56, 183, 255));
+
+    	recruitmentCapacity.setBorder(new RoundedBorder(new Color(56, 183, 255), 2, 10));
+    	recruitmentCapacity.setRenderer(new CustomComboBoxRenderer());
+    	recruitmentCapacity.setUI(new BasicComboBoxUI() {
+    	    @Override
+    	    protected JButton createArrowButton() {
+    	        JButton arrowButton = new JButton("▼");
+    	        arrowButton.setBackground(new Color(56, 183, 255)); 
+    	        arrowButton.setForeground(Color.WHITE);
+    	        arrowButton.setBorder(BorderFactory.createEmptyBorder());
+    	        arrowButton.setOpaque(true);
+    	        return arrowButton;
+    	    }
+    	});
     	createPopup.add(recruitmentCapacity);
     	
     	JLabel missionCategory = new JLabel("카테고리");
@@ -145,9 +152,28 @@ public class CreateNewGroupPopup {
     	missionCategory.setBounds(361, 346, 77, 35);
     	createPopup.add(missionCategory);
     	
-    	JComboBox category = new JComboBox();
-    	category.setModel(new DefaultComboBoxModel(new String[] {"카테고리 선택", "챌린지", "스터디", "다이어트", "기타"}));
+    	JComboBox<String> category = new JComboBox<>();
+    	category.setModel(new DefaultComboBoxModel<>(new String[]{"카테고리 선택", "챌린지", "스터디", "다이어트", "기타"}));
     	category.setBounds(361, 384, 160, 39);
+    	category.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+    	category.setBackground(Color.WHITE);
+    	category.setForeground(new Color(56, 183, 255));
+
+    	category.setBorder(new RoundedBorder(new Color(56, 183, 255), 2, 10));
+    	category.setRenderer(new CustomComboBoxRenderer());
+
+    	category.setUI(new BasicComboBoxUI() {
+    	    @Override
+    	    protected JButton createArrowButton() {
+    	        JButton arrowButton = new JButton("▼");
+    	        arrowButton.setBackground(new Color(56, 183, 255)); 
+    	        arrowButton.setForeground(Color.WHITE);
+    	        arrowButton.setBorder(BorderFactory.createEmptyBorder());
+    	        arrowButton.setOpaque(true);
+    	        return arrowButton;
+    	    }
+    	});
+    	
     	createPopup.add(category);
     	
     	JLabel recruitmentDeadline = new JLabel("모집 기한");
@@ -160,6 +186,7 @@ public class CreateNewGroupPopup {
     	recruitmentDeadlineYear.setBorder(null);
     	recruitmentDeadlineYear.setBackground(new Color(237, 237, 237));
     	recruitmentDeadlineYear.setBounds(56, 467, 62, 32);
+    	recruitmentDeadlineYear.setFont(nanumGothicFont);
     	createPopup.add(recruitmentDeadlineYear);
     	
     	recruitmentDeadlineMonth = new JTextField();
@@ -167,6 +194,7 @@ public class CreateNewGroupPopup {
     	recruitmentDeadlineMonth.setBorder(null);
     	recruitmentDeadlineMonth.setBackground(new Color(237, 237, 237));
     	recruitmentDeadlineMonth.setBounds(128, 467, 62, 32);
+    	recruitmentDeadlineMonth.setFont(nanumGothicFont);
     	createPopup.add(recruitmentDeadlineMonth);
     	
     	recruitmentDeadlineDay = new JTextField();
@@ -174,6 +202,7 @@ public class CreateNewGroupPopup {
     	recruitmentDeadlineDay.setBorder(null);
     	recruitmentDeadlineDay.setBackground(new Color(237, 237, 237));
     	recruitmentDeadlineDay.setBounds(200, 467, 62, 32);
+    	recruitmentDeadlineDay.setFont(nanumGothicFont);
     	createPopup.add(recruitmentDeadlineDay);
     	
     	JLabel recruitmentDeadline_1 = new JLabel("까지");
@@ -191,6 +220,7 @@ public class CreateNewGroupPopup {
     	recruitmentStartDateYear.setBorder(null);
     	recruitmentStartDateYear.setBackground(new Color(237, 237, 237));
     	recruitmentStartDateYear.setBounds(56, 541, 62, 32);
+    	recruitmentStartDateYear.setFont(nanumGothicFont);
     	createPopup.add(recruitmentStartDateYear);
     	
     	recruitmentStartDateMonth = new JTextField();
@@ -198,6 +228,7 @@ public class CreateNewGroupPopup {
     	recruitmentStartDateMonth.setBorder(null);
     	recruitmentStartDateMonth.setBackground(new Color(237, 237, 237));
     	recruitmentStartDateMonth.setBounds(128, 541, 62, 32);
+    	recruitmentStartDateMonth.setFont(nanumGothicFont);
     	createPopup.add(recruitmentStartDateMonth);
     	
     	recruitmentStartDateDay = new JTextField();
@@ -205,6 +236,7 @@ public class CreateNewGroupPopup {
     	recruitmentStartDateDay.setBorder(null);
     	recruitmentStartDateDay.setBackground(new Color(237, 237, 237));
     	recruitmentStartDateDay.setBounds(200, 541, 62, 32);
+    	recruitmentStartDateDay.setFont(nanumGothicFont);
     	createPopup.add(recruitmentStartDateDay);
     	
     	JLabel activityPeriod_1 = new JLabel("~");
@@ -217,6 +249,7 @@ public class CreateNewGroupPopup {
     	recruitmentEndDateYear.setBorder(null);
     	recruitmentEndDateYear.setBackground(new Color(237, 237, 237));
     	recruitmentEndDateYear.setBounds(300, 541, 62, 32);
+    	recruitmentEndDateYear.setFont(nanumGothicFont);
     	createPopup.add(recruitmentEndDateYear);
     	
     	recruitmentEndDateMonth = new JTextField();
@@ -224,6 +257,7 @@ public class CreateNewGroupPopup {
     	recruitmentEndDateMonth.setBorder(null);
     	recruitmentEndDateMonth.setBackground(new Color(237, 237, 237));
     	recruitmentEndDateMonth.setBounds(371, 541, 62, 32);
+    	recruitmentEndDateMonth.setFont(nanumGothicFont);
     	createPopup.add(recruitmentEndDateMonth);
     	
     	recruitmentEndDateDay = new JTextField();
@@ -231,6 +265,7 @@ public class CreateNewGroupPopup {
     	recruitmentEndDateDay.setBorder(null);
     	recruitmentEndDateDay.setBackground(new Color(237, 237, 237));
     	recruitmentEndDateDay.setBounds(442, 541, 62, 32);
+    	recruitmentEndDateDay.setFont(nanumGothicFont);
     	createPopup.add(recruitmentEndDateDay);
     	
     	JLabel setPasswordLabel = new JLabel("비밀방 설정(비밀번호 4자리 입력)");
@@ -460,7 +495,78 @@ public class CreateNewGroupPopup {
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
-   
+    class RoundedBorder extends AbstractBorder {
+        private final Color color;
+        private final int thickness;
+        private final int radius;
+        private final Insets insets;
+        private final BasicStroke stroke;
+
+        public RoundedBorder(Color color, int thickness, int radius) {
+            this.color = color;
+            this.thickness = thickness;
+            this.radius = radius;
+            this.insets = new Insets(thickness, thickness, thickness, thickness + thickness / 2); // Adjust for arrow button width
+            this.stroke = new BasicStroke(thickness);
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setColor(color);
+            g2d.setStroke(stroke);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Draw the rounded border
+            int r = radius;
+            int w = width - thickness;
+            int h = height - thickness;
+            Path2D.Float path = new Path2D.Float();
+            path.moveTo(x + r, y);
+            path.lineTo(x + w - r, y);
+            path.quadTo(x + w, y, x + w, y + r);
+            path.lineTo(x + w, y + h - r);
+            path.quadTo(x + w, y + h, x + w - r, y + h);
+            path.lineTo(x + r, y + h);
+            path.quadTo(x, y + h, x, y + h - r);
+            path.lineTo(x, y + r);
+            path.quadTo(x, y, x + r, y);
+            path.closePath();
+            g2d.draw(path);
+            g2d.dispose();
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return insets;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c, Insets insets) {
+            return getBorderInsets(c);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return false;
+        }
+    }
+    
+ 
+    class CustomComboBoxRenderer extends DefaultListCellRenderer {
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            setHorizontalAlignment(SwingConstants.CENTER); // 텍스트를 가운데로 정렬합니다.
+            setOpaque(true); // 배경색이 보이도록 opaque 값을 true로 설정합니다.
+            if (!isSelected) {
+                setBackground(Color.WHITE); // 선택되지 않았을 때 배경색을 흰색으로 설정합니다.
+                setForeground(Color.BLACK); // 선택되지 않았을 때 글자색을 검은색으로 설정합니다.
+            }
+            return this;
+        }
+    }
+
     /**
      * Gets the frame of the popup window.
      * @return The JFrame object of this popup.

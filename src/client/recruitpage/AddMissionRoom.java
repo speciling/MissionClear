@@ -127,7 +127,7 @@ public class AddMissionRoom {
 	    category.setForeground(new Color(56, 183, 255));
 	    category.setHorizontalAlignment(JLabel.CENTER);
 	    category.setFont(new Font("나눔고딕", Font.PLAIN, 17));
-	    category.setBounds(300, 225, 75, 30);
+	    category.setBounds(310, 225, 85, 30);
 	    Color customColor = new Color(56, 183, 255);
 	    category.setBorder(new RoundedBorder(10, customColor));
 	    addMissionRoomPanel.add(category);

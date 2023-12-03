@@ -5,14 +5,19 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.awt.Color;
 import java.awt.Component;
 
@@ -25,19 +30,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-import client.recruitpage.Group;
+import javax.swing.DefaultListCellRenderer;
 
+import client.recruitpage.Group;
+import client.recruitpage.CreateNewGroupPopup.CustomComboBoxRenderer;
+import client.recruitpage.CreateNewGroupPopup.RoundedBorder;
 import client.MainPage.MainPage;
 /**
  * A custom JPanel with rounded corners.
@@ -200,6 +212,23 @@ public class RecruitGroupMember{
         comboBox = new JComboBox<>();
         comboBox.setBounds(180, 82, 121, 35);
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
+        comboBox.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+        comboBox.setBackground(Color.WHITE);
+        comboBox.setForeground(new Color(56, 183, 255));
+
+        comboBox.setBorder(new RoundedBorder(new Color(56, 183, 255), 2, 10));
+        comboBox.setRenderer(new CustomComboBoxRenderer());
+        comboBox.setUI(new BasicComboBoxUI() {
+    	    @Override
+    	    protected JButton createArrowButton() {
+    	        JButton arrowButton = new JButton("▼");
+    	        arrowButton.setBackground(new Color(56, 183, 255)); 
+    	        arrowButton.setForeground(Color.WHITE);
+    	        arrowButton.setBorder(BorderFactory.createEmptyBorder());
+    	        arrowButton.setOpaque(true);
+    	        return arrowButton;
+    	    }
+    	});
         groupRecruitment.add(comboBox);
         comboBox.addActionListener(new ActionListener() {
             @Override
@@ -345,6 +374,74 @@ public class RecruitGroupMember{
 	    panel.setBounds(left, top, panel.getWidth(), panel.getHeight());
 	    dynamicPanel.add(panel);
 	}
+	 class RoundedBorder extends AbstractBorder {
+	        private final Color color;
+	        private final int thickness;
+	        private final int radius;
+	        private final Insets insets;
+	        private final BasicStroke stroke;
 
+	        public RoundedBorder(Color color, int thickness, int radius) {
+	            this.color = color;
+	            this.thickness = thickness;
+	            this.radius = radius;
+	            this.insets = new Insets(thickness, thickness, thickness, thickness + thickness / 2); // Adjust for arrow button width
+	            this.stroke = new BasicStroke(thickness);
+	        }
+
+	        @Override
+	        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+	            Graphics2D g2d = (Graphics2D) g.create();
+	            g2d.setColor(color);
+	            g2d.setStroke(stroke);
+	            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+	            // Draw the rounded border
+	            int r = radius;
+	            int w = width - thickness;
+	            int h = height - thickness;
+	            Path2D.Float path = new Path2D.Float();
+	            path.moveTo(x + r, y);
+	            path.lineTo(x + w - r, y);
+	            path.quadTo(x + w, y, x + w, y + r);
+	            path.lineTo(x + w, y + h - r);
+	            path.quadTo(x + w, y + h, x + w - r, y + h);
+	            path.lineTo(x + r, y + h);
+	            path.quadTo(x, y + h, x, y + h - r);
+	            path.lineTo(x, y + r);
+	            path.quadTo(x, y, x + r, y);
+	            path.closePath();
+	            g2d.draw(path);
+	            g2d.dispose();
+	        }
+
+	        @Override
+	        public Insets getBorderInsets(Component c) {
+	            return insets;
+	        }
+
+	        @Override
+	        public Insets getBorderInsets(Component c, Insets insets) {
+	            return getBorderInsets(c);
+	        }
+
+	        @Override
+	        public boolean isBorderOpaque() {
+	            return false;
+	        }
+	    }
+	 class CustomComboBoxRenderer extends DefaultListCellRenderer {
+	        @Override
+	        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	            setHorizontalAlignment(SwingConstants.CENTER); // 텍스트를 가운데로 정렬합니다.
+	            setOpaque(true); // 배경색이 보이도록 opaque 값을 true로 설정합니다.
+	            if (!isSelected) {
+	                setBackground(Color.WHITE); // 선택되지 않았을 때 배경색을 흰색으로 설정합니다.
+	                setForeground(Color.BLACK); // 선택되지 않았을 때 글자색을 검은색으로 설정합니다.
+	            }
+	            return this;
+	        }
+	    }
 	
 }
