@@ -36,10 +36,11 @@ public class InputPasswordPopup {
 
     private void initialize() {
         frame = new JFrame();
-        frame.setSize(355, 240);
+        frame.setSize(339, 199);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
+		frame.setUndecorated(true);
 		
         inputPasswordPanel = new RoundedPanel(20);
         inputPasswordPanel.setBounds(0, 0, 339, 199);

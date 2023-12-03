@@ -65,10 +65,11 @@ public class CreateNewGroupPopup {
     
     public void initialize() {
     	setFrame(new JFrame());
-    	getFrame().setSize(691, 760);
+    	getFrame().setSize(675, 721);
     	getFrame().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	getFrame().getContentPane().setLayout(null);
     	getFrame().setLocationRelativeTo(null);
+    	getFrame().setUndecorated(true);
     	
     	RoundedPanel createPopup = new RoundedPanel(30); // 모서리 반경을 20으로 설정
     	createPopup.setBounds(0, 0, 675, 721);
@@ -414,14 +415,14 @@ public class CreateNewGroupPopup {
                 	    Integer.parseInt(recruitmentCapacity.getSelectedItem().toString()), // recruitmentCapacity는 int 타입
                 	    selectedCategory, 
                 	    recruitmentDeadlineYear.getText(), 
-                	    recruitmentDeadlineMonth.getText(), 
-                	    recruitmentDeadlineDay.getText(), 
+                	    String.format("%02d", deadlineMonth),  	    
+                	    String.format("%02d", deadlineDay),
                 	    recruitmentStartDateYear.getText(), 
-                	    recruitmentStartDateMonth.getText(), 
-                	    recruitmentStartDateDay.getText(), 
+                	    String.format("%02d", startDateMonth),  	    
+                	    String.format("%02d", startDateDay),           	    
                 	    recruitmentEndDateYear.getText(), 
-                	    recruitmentEndDateMonth.getText(), 
-                	    recruitmentEndDateDay.getText(),
+                	    String.format("%02d", endDateMonth),  	    
+                	    String.format("%02d",endDateDay),
                 	    roomPassword.getText(), // roomPassword 필드 추가
                 	    isSecretRoom 
                 	);                // RecruitGroupMember의 frame에 패널 추가
@@ -441,9 +442,6 @@ public class CreateNewGroupPopup {
             int monthValue = Integer.parseInt(month);
             int dayValue = Integer.parseInt(day);
 
-            month = String.format("%02d", monthValue);
-            day = String.format("%02d", dayValue);
-            
             Calendar currentDate = Calendar.getInstance();
             Calendar inputDate = Calendar.getInstance();
             inputDate.set(yearValue, monthValue - 1, dayValue);
@@ -470,9 +468,6 @@ public class CreateNewGroupPopup {
             int yearValue = Integer.parseInt(year);
             int monthValue = Integer.parseInt(month);
             int dayValue = Integer.parseInt(day);
-
-            month = String.format("%02d", monthValue);
-            day = String.format("%02d", dayValue);
             
             Calendar currentDate = Calendar.getInstance();
             Calendar inputDate = Calendar.getInstance();

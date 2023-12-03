@@ -118,7 +118,7 @@ public class AddMissionRoom {
 	    separator.setBounds(17, 162, 374, 1); // 위치와 크기 설정
 	    addMissionRoomPanel.add(separator);
 	    
-	    JLabel recruitDeadline = new JLabel("<html><b>모집기한:</b> " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + "까지<br></html>");
+	    JLabel recruitDeadline = new JLabel("<html><b>모집기한:</b> " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + " 까지<br></html>");
 	    recruitDeadline.setFont(new Font("나눔고딕", Font.PLAIN, 15));
 	    recruitDeadline.setBounds(23, 180, 357, 21);
 	    addMissionRoomPanel.add(recruitDeadline);

@@ -50,10 +50,11 @@ public class GroupDetailPopup {
      */ 
 	void initialize() {
 		frame = new JFrame();
-		frame.setSize(422, 425);
+		frame.setSize(406, 387);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
+		frame.setUndecorated(true);
 		
 		groupDetailPopupPanel = new RoundedPanel(20); 
 		groupDetailPopupPanel.setBounds(0, 0, 406, 387);
