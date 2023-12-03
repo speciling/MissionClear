@@ -1,12 +1,8 @@
 package server.db;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import server.group.Group;
 import server.service.Request;
-import server.user.User;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,13 +10,25 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * `DBManager` 클래스는 데이터베이스 작업을 처리하며 SQL 쿼리 실행, 테이블 생성 및 관리, 채팅 메시지 및 인증 사진 저장과 관련된 메서드를 제공합니다.
+ *
+ * @see ServerDBManager
+ * @see client.db.ClientDBManager
+ * @author 지연우
+ */
 public class DBManager {
     protected static Connection conn = null;
     protected static Path path = null;
 
+    /**
+     * 결과 집합을 반환하지 않는 SQL 쿼리를 실행합니다.
+     *
+     * @param sql 실행할 SQL 쿼리
+     * @return 성공, 경고 또는 실패를 나타내는 결과 유형
+     */
     protected static ResultType executeSQL(String sql) {
         try (Statement statement = conn.createStatement();) {
             statement.execute(sql);
@@ -35,6 +43,12 @@ public class DBManager {
         }
     }
 
+    /**
+     * 결과 집합을 나타내는 JSON 객체를 반환하는 SQL 쿼리를 실행합니다.
+     *
+     * @param sql 실행할 SQL 쿼리
+     * @return 쿼리 결과와 결과 유형을 포함하는 JSON 객체
+     */
     protected static JSONObject executeQuery(String sql) {
         JSONObject result = new JSONObject();
         try (Statement statement = conn.createStatement();) {
@@ -75,6 +89,9 @@ public class DBManager {
         }
     }
 
+    /**
+     * 테이블이 존재하는지 확인하는 메서드.
+     */
     private static boolean checkTable(String tableName) throws SQLException {
         DatabaseMetaData metaData = conn.getMetaData();
         try (ResultSet tables = metaData.getTables(null, null, tableName, null);) {
@@ -82,7 +99,13 @@ public class DBManager {
         }
     }
 
-    // 성공시 SUCCESS, 해당 이름의 테이블이 존재하면 WARNING, 실패시 FAILURE 반환
+    /**
+     * 지정된 이름과 SQL 정의로 데이터베이스에 테이블을 생성합니다.
+     *
+     * @param tableName 테이블을 생성할 이름
+     * @param SQL       테이블의 SQL 정의
+     * @return 성공, 경고 또는 실패를 나타내는 결과 유형
+     */
     protected static ResultType createTable(String tableName, String SQL) {
         try {
             if (checkTable(tableName))
@@ -95,20 +118,12 @@ public class DBManager {
         }
     }
 
-    protected static ResultType dropTable(String tableName) {
-        try {
-            if( !checkTable(tableName) ) {
-                return ResultType.WARNING;
-            }
-
-            return executeSQL("DROP TABLE IF EXISTS "+tableName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return ResultType.FAILURE;
-        }
-    }
-
-    // 저장 성공시 채팅 번호 반환, 실패시 -1 반환
+    /**
+     * 데이터베이스에 채팅 메시지를 저장합니다.
+     *
+     * @param data 채팅 메시지 세부 정보를 포함하는 JSON 객체
+     * @return 성공한 경우 채팅 ID, 실패한 경우 -1
+     */
     public static int saveChatMessage(JSONObject data){
         Integer uid = Integer.parseInt(data.get("uid").toString());
         Integer gid = Integer.parseInt(data.get("gid").toString());
@@ -132,7 +147,12 @@ public class DBManager {
         return chatId;
     }
 
-    // 저장 성공시 채팅 번호 반환, 실패시 -1 반환
+    /**
+     * 데이터베이스에 인증 사진 관련 정보를 저장합니다.
+     *
+     * @param request 인증 사진 세부 정보를 포함하는 요청 객체
+     * @return 성공한 경우 채팅 ID, 실패한 경우 -1
+     */
     public static int saveCertifyPicture(Request request){
         int uid = Integer.parseInt(request.getData().get("uid").toString());
         int gid = Integer.parseInt(request.getData().get("gid").toString());
@@ -157,12 +177,26 @@ public class DBManager {
         return saveChatMessage(request.getData());
     }
 
+    /**
+     * 데이터베이스에서 사용자의 닉네임을 변경합니다.
+     *
+     * @param uid      닉네임을 변경할 사용자 ID
+     * @param nickname 새로운 닉네임
+     * @return 성공여부를 나타내는 결과 유형
+     */
     public static ResultType changeNickname(int uid, String nickname){
         String sql = String.format("UPDATE USER SET nickname='%s' WHERE uid=%d", nickname, uid);
         ResultType resultType = executeSQL(sql);
         return resultType;
     }
 
+    /**
+     * 데이터베이스에서 사용자의 프로필 사진(PFP)을 변경합니다.
+     *
+     * @param data     사용자 및 파일 세부 정보를 포함하는 JSON 객체
+     * @param fileData PFP 이미지를 나타내는 바이트 배열
+     * @return 성공여부를 나타내는 결과 유형
+     */
     public static ResultType changePFP(JSONObject data, byte[] fileData){
         int uid = Integer.parseInt(data.get("uid").toString());
 
@@ -183,28 +217,4 @@ public class DBManager {
 
         return executeSQL(sql);
     }
-
-    public static ResultType createGroupDataTables(int gid) {
-
-        // 그룹 채팅 테이블과 그룹 진행도 테이블 생성
-        String tableName = "G"+gid+"Chat";
-        String sql = String.format("""
-                    CREATE TABLE IF NOT EXISTS %s 
-                    (chatId integer primary key, uid integer not null, text string not null)""", tableName);
-        createTable(tableName, sql);
-
-        tableName = "G"+gid+"Progress";
-        String[] users = ((String) executeQuery("SELECT users FROM GROUPS WHERE gid="+gid).get("users")).split(",");
-        StringBuilder colums = new StringBuilder();
-        for (String uid : users){
-            colums.append(", ").append(uid).append(" integer default 0");
-        }
-        sql = String.format("""
-                    CREATE TABLE IF NOT EXISTS %s 
-                    (date string not null%s)""", tableName, colums.toString());
-        createTable(tableName, sql);
-
-        return ResultType.SUCCESS;
-    }
-
 }

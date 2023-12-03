@@ -1,6 +1,5 @@
 package client.db;
 
-import client.Client;
 import client.net.ClientSocket;
 import client.recruitpage.Group;
 import org.json.simple.JSONArray;
@@ -14,12 +13,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+/**
+ * {@code ClientDBManager} 클래스는 클라이언트 측 데이터베이스 관련 작업을 처리합니다.
+ *
+ * @author 지연우
+ */
 public class ClientDBManager extends DBManager {
+    /** 현재 사용자의 UID */
     public static int myUid;
 
+    /**
+     * 클라이언트 데이터베이스를 초기화하고 사용자 및 그룹 테이블을 생성합니다.
+     */
     public static void init() {
         try {
             path = Path.of("./missioncleardata/client/client.db");
@@ -53,10 +60,11 @@ public class ClientDBManager extends DBManager {
         }
     }
 
-    public static JSONObject getLastData() {
-        return null;
-    }
-
+    /**
+     * 데이터베이스에 로그인한 사용자 본인의 정보를 저장합니다.
+     *
+     * @param data 로그인한 사용자 본인 정보를 포함하는 JSON 객체
+     */
     public static void login(JSONObject data) {
         Integer uid = Integer.parseInt(data.get("uid").toString());
         String nickname = data.get("nickname").toString();
@@ -80,6 +88,11 @@ public class ClientDBManager extends DBManager {
 
     }
 
+    /**
+     * 초기 데이터를 저장합니다.
+     *
+     * @param data 초기 데이터를 포함하는 JSON 객체
+     */
     public static void saveInitData(JSONObject data) {
         JSONArray userData = (JSONArray) data.get("userData");
         for (int i = 0; i < userData.size(); i++) {
@@ -155,6 +168,11 @@ public class ClientDBManager extends DBManager {
         }
     }
 
+    /**
+     * 새로 생성된 그룹의 정보를 그룹 테이블에 저장하고, 채팅 테이블과 진행도 테이블을 생성합니다.
+     *
+     * @param group 생성할 그룹 정보를 포함하는 JSON 객체
+     */
     public static void createNewGroup(JSONObject group) {
         String title = (String) group.get("title");
         String description = (String) group.get("description");
@@ -191,6 +209,12 @@ public class ClientDBManager extends DBManager {
         createTable("G"+gid+"PROGRESS", sql);
     }
 
+    /**
+     * 입장한 그룹의 정보를 그룹 테이블에 저장하고, 채팅 테이블과 진행도 테이블을 생성합니다.
+     * 또한 유저의 소속 그룹 정보를 수정합니다.
+     *
+     * @param data 입장한 그룹 정보를 포함하는 JSON 객체
+     */
     public static void enterGroup(JSONObject data) {
         int uid = Integer.parseInt(data.get("uid").toString());
         int gid = Integer.parseInt(data.get("gid").toString());
@@ -224,17 +248,34 @@ public class ClientDBManager extends DBManager {
         createTable("G"+gid+"PROGRESS", sql);
     }
 
+    /**
+     * 특정 사용자의 정보를 조회합니다.
+     *
+     * @param uid 조회할 사용자의 UID
+     * @return 사용자 정보를 포함하는 JSON 객체
+     */
     public static JSONObject getUserInfo(int uid) {
         String sql = String.format("""
                 SELECT * FROM USER WHERE uid=%d""", uid);
         return executeQuery(sql);
     }
 
+    /**
+     * 현재 로그인한 사용자의 정보를 조회합니다.
+     *
+     * @return 현재 사용자 정보를 포함하는 JSON 객체
+     */
     public static JSONObject getMyInfo() {
         String sql = String.format("SELECT * FROM USER WHERE uid=%d", myUid);
         return executeQuery(sql);
     }
 
+    /**
+     * 특정 그룹의 사용자 목록을 조회합니다.
+     *
+     * @param gid 조회할 그룹의 GID
+     * @return 사용자 정보를 포함하는 JSON 객체의 배열
+     */
     public static JSONArray getGroupUsers(int gid) {
         JSONArray result = new JSONArray();
         String sql = String.format("SELECT users FROM GROUPS WHERE gid=%d", gid);
@@ -261,6 +302,11 @@ public class ClientDBManager extends DBManager {
         return result;
     }
 
+    /**
+     * 현재 로그인한 사용자의 그룹중 활동 기간이 끝나지 않은 그룹의 목록을 조회합니다.
+     *
+     * @return 활동 기간이 끝나지 않은 그룹 정보를 포함하는 Group 객체의 리스트
+     */
     public static List<Group> getMyGroupList() {
         List<Group> groupList = new ArrayList<>();
         String sql = "SELECT * FROM GROUPS WHERE (endDate >= date('now', 'localtime'))";
@@ -287,6 +333,11 @@ public class ClientDBManager extends DBManager {
         return groupList;
     }
 
+    /**
+     * 종료된 그룹 목록을 조회합니다.
+     *
+     * @return 종료된 그룹 목록을 포함하는 Group 객체의 리스트
+     */
     public static List<Group> getMyEndedGroupList() {
         List<Group> groupList = new ArrayList<>();
         String sql = "SELECT * FROM GROUPS WHERE (endDate < date('now', 'localtime'))";
@@ -313,6 +364,12 @@ public class ClientDBManager extends DBManager {
         return groupList;
     }
 
+    /**
+     * 특정 그룹의 진행도 정보를 조회합니다.
+     *
+     * @param gid 조회할 그룹의 GID
+     * @return 진행도 정보를 포함하는 JSON 배열
+     */
     public static JSONArray getGroupProgress(int gid) {
         JSONArray result = new JSONArray();
         String sql = String.format("SELECT * FROM G%dPROGRESS", gid);
@@ -331,6 +388,12 @@ public class ClientDBManager extends DBManager {
         return result;
     }
 
+    /**
+     * 특정 그룹의 채팅 데이터를 조회합니다.
+     *
+     * @param gid 조회할 그룹의 GID
+     * @return 채팅 데이터를 포함하는 JSON 배열
+     */
     public static JSONArray getChatData(int gid) {
         JSONArray result = new JSONArray();
         String sql = String.format("SELECT * FROM G%dCHAT ORDER BY chatId DESC LIMIT 50", gid);
@@ -351,6 +414,11 @@ public class ClientDBManager extends DBManager {
         return result;
     }
 
+    /**
+     * 서버로부터 전송된 파일을 저장합니다.
+     *
+     * @param request 파일 저장 요청 정보를 포함하는 Request 객체
+     */
     public static void saveFile(Request request) {
         String fileName = request.getData().get("fileName").toString();
         fileName = path.toString() + "\\" + fileName;

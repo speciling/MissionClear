@@ -13,9 +13,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.*;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * {@code RequestHandler}는 {@code Handler} 인터페이스를 구현하는 클래스로, 클라이언트의 요청을 처리합니다.
@@ -41,7 +39,6 @@ public class RequestHandler implements Handler{
      * @param socketChannel  클라이언트와의 통신을 담당하는 {@code SocketChannel}
      * @throws IOException   입출력 예외가 발생할 경우 던지집니다.
      *
-     * @author 지연우
      */
     RequestHandler(Selector selector, SocketChannel socketChannel) throws IOException {
         this.socketChannel = socketChannel;
@@ -55,7 +52,6 @@ public class RequestHandler implements Handler{
     /**
      * RequsetHandler 객체의 상태에 따라 요청을 읽어오고, 필요한 함수를 호출하거나, 요청을 보내는 메소드
      *
-     * @author 지연우
      */
     @Override
     public void handle() {
@@ -142,6 +138,9 @@ public class RequestHandler implements Handler{
         }
     }
 
+    /**
+     * 소켓을 닫고 유저의 연결을 종료하는 메소드
+     */
     private void closeSocket() {
         if (user != null){
             this.user.disconnect();
@@ -154,6 +153,13 @@ public class RequestHandler implements Handler{
         }
     }
 
+    /**
+     * 클라이언트로부터 요청을 읽어옵니다.
+     * 기본적으로 헤더(타입+길이) 5바이트를 읽고 정해진 길이만큼의 요청 정보를 읽어옵니다.
+     * 사진 파일이 첨부된 요청의 경우 요청 정보 이후에 4바이트의 사진 파일 크기를 읽고 사진 파일 정보를 읽어옵니다.
+     *
+     * @return 읽어온 요청을 나타내는 {@code Request} 객체입니다.
+     */
     private Request getRequest() {
         ByteBuffer headerBuffer = ByteBuffer.allocate(5);
 
@@ -200,6 +206,13 @@ public class RequestHandler implements Handler{
         return null;
     }
 
+    /**
+     * 로그인 요청을 처리하는 메서드입니다.
+     * 로그인 후 로그인 성공여부와 로그인에 성공했을 경우 유저 데이터를 클라이언트에 전송합니다.
+     * 로그인에 성공했을 경우 자동으로 초기 데이터를 클라이언트에 전송하고, 초기 데이터 전송 완료 후 user객체를 생성합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void login(Request request) {
         JSONObject requestData = request.getData();
         String id = (String)requestData.get("id");
@@ -235,6 +248,12 @@ public class RequestHandler implements Handler{
 
     }
 
+    /**
+     * 회원가입 요청을 처리하는 메서드입니다.
+     * 회원가입 시도 후 성공여부를 다시 클라이언트에 전송합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void signUp(Request request) {
         JSONObject requestData = request.getData();
         String id = (String)requestData.get("id");
@@ -245,21 +264,44 @@ public class RequestHandler implements Handler{
         addTask(Request.toByteBuffer(RequestType.SIGNUP, result));
     }
 
+    /**
+     * 초기 데이터 전송 요청을 처리하는 메서드입니다.
+     * 초기 데이터 전송은 로그인 함수에서 처리하고, 여기서는 유저를 소속 그룹 객체에 등록하는 역할만을 합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void sendData(Request request) {
         this.user.connect();
     }
 
+    /**
+     * 모집 중인 그룹 데이터 요청을 처리하는 메서드입니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void getRecruitingGroupData(Request request) {
         JSONObject result = ServerDBManager.getRecruitingGroupData();
         addTask(Request.toByteBuffer(RequestType.GETRECRUITINGGROUPDATA, result));
     }
 
+    /**
+     * 새로운 그룹 생성 요청을 처리하는 메서드입니다.
+     * 그룹 생성을 시도하고, 생성 성공여부등의 데이터를 클라이언트에 전송합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void  createNewGroup(Request request) {
         request.getData().put("users", user.userID);
         JSONObject result = ServerDBManager.createGroup((JSONObject) request.getData());
         addTask(Request.toByteBuffer(RequestType.CREATENEWGROUP, result));
     }
 
+    /**
+     * 그룹 입장 요청을 처리하는 메서드입니다.
+     * 그룹 입장을 시도하고, 그룹 입장 성공여부등의 데이터를 클라이언트에 전송합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void enterGroup(Request request) {
         int uid = user.userID, gid = Integer.parseInt(request.getData().get("gid").toString());
         String pw = request.getData().get("password").toString();
@@ -270,6 +312,12 @@ public class RequestHandler implements Handler{
         addTask(Request.toByteBuffer(RequestType.ENTERGROUP, result));
     }
 
+    /**
+     * 채팅 요청을 처리하는 메서드입니다.
+     * db에 채팅 데이터를 저장하고, 채팅이 보내진 그룹 소속 유저중 현재 접속중인 모든 유저에게 채팅 데이터를 전송합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void chat(Request request) {
         int chatId = DBManager.saveChatMessage(request.getData());
         int gid = Integer.parseInt(request.getData().get("gid").toString());
@@ -278,6 +326,12 @@ public class RequestHandler implements Handler{
             user.send(Request.toByteBuffer(request));
     }
 
+    /**
+     * 미션 인증 요청을 처리하는 메서드입니다.
+     * db에 미션 인증 데이터를 저장하고, 채팅이 보내진 그룹 소속 유저중 현재 접속중인 모든 유저에게 미션 인증 데이터를 전송합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void certifyMission(Request request) {
         int chatId = DBManager.saveCertifyPicture(request);
         int gid = Integer.parseInt(request.getData().get("gid").toString());
@@ -288,6 +342,12 @@ public class RequestHandler implements Handler{
         }
     }
 
+    /**
+     * 프로필 사진 변경 요청을 처리하는 메서드입니다.
+     * 프로필 사진 변경 시도 후, 변경 성공 여부등의 데이터를 클라이언트에 다시 전송합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void changePFP(Request request) {
         ResultType resultType = DBManager.changePFP(request.getData(), request.file);
         JSONObject result = request.getData();
@@ -295,6 +355,12 @@ public class RequestHandler implements Handler{
         addTask(Request.toByteBuffer(request));
     }
 
+    /**
+     * 닉네임 변경 요청을 처리하는 메서드입니다.
+     * 닉네임 변경 시도 후, 변경 성공 여부등의 데이터를 클라이언트에 다시 전송합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void  changeNickname(Request request) {
         int uid = user.userID;
         String nickname = request.getData().get("nickname").toString();
@@ -305,6 +371,12 @@ public class RequestHandler implements Handler{
         addTask(Request.toByteBuffer(RequestType.CHANGENICKNAME, result));
     }
 
+    /**
+     * 파일 전송 요청을 처리하는 메서드입니다.
+     * 요청받은 파일을 서버 db에서 찾아서 클라이언트에 전송합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     private void getFile(Request request) {
         ServerDBManager.getFile(request);
 
