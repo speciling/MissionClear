@@ -219,7 +219,16 @@ public class MainPage extends JFrame {
    
    
    
-
+   public void changeDetailPan() {
+       DetailMyGroup dg = new DetailMyGroup(true);
+       JPanel p = dg.get();
+       p = makePan(p);
+       refreshPan();
+       globPan.add(p);
+       globPan.repaint();
+       globPan.revalidate();
+       
+   }
    public void changePanel(String panelName) {
 	   
       if (panelName.equals("group")) {
@@ -234,20 +243,21 @@ public class MainPage extends JFrame {
       }
       
       else if (panelName.equals("mygroup")) {
-    	  /*MyGroupList r = new MyGroupList(true);
+    	  MyGroupList r = new MyGroupList(true);
           JPanel p = r.get();
           p = makePan(p);
-          globPan.add(p);*/
-         //changePan();//panel 초기화
+          globPan.add(p);
+          globPan.repaint();
+          globPan.revalidate();
+          
+          /*DetailMyGroup dg = new DetailMyGroup(true);
+       JPanel p = dg.get();
+       p = makePan(p);
+       refreshPan();
+       globPan.add(p);
+       globPan.repaint();
+       globPan.revalidate();*/
        
-         DetailMyGroup dg = new DetailMyGroup(true);
-         JPanel p = dg.get();
-         p = makePan(p);
-         refreshPan();
-         globPan.add(p);
-         globPan.repaint();
-         globPan.revalidate();
-         
       }
    
       else if (panelName.equals("mypage")) {
