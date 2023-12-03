@@ -14,6 +14,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -26,7 +27,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class RequestHandler implements Handler{
     private static final int READING = 0, SENDING = 1;
 
-    private final BlockingQueue<ByteBuffer> writeQueue = new LinkedBlockingQueue<>();
+    private final Deque<ByteBuffer> writeQueue = new LinkedBlockingDeque<>();
     private final SocketChannel socketChannel;
     private final SelectionKey selectionKey;
     private int state = READING;
@@ -133,6 +134,8 @@ public class RequestHandler implements Handler{
             ByteBuffer data = writeQueue.poll();
             try{
                 socketChannel.write(data);
+                if(data.remaining() > 0)
+                    writeQueue.addFirst(data);
             } catch (IOException e) {
                 closeSocket();
             }
