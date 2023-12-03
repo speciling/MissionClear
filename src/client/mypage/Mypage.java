@@ -3,30 +3,26 @@ package client.mypage;
 import java.awt.*;
 
 import client.db.ClientDBManager;
-import client.login.RoundCornerTextField;
 import client.net.ClientSocket;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 
 import javax.swing.*;
-
-import client.MainPage.MainPage;
 import client.recruitpage.Group;
+import org.json.simple.JSONArray;
 import server.service.Request;
 import server.service.RequestType;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import org.json.simple.JSONObject;
-
-import static client.db.ClientDBManager.getMyGroupList;
 
 /**
  * @author 최지원
@@ -81,11 +77,13 @@ public class Mypage {
 
 	public JPanel box;
 	public CustomPanel missionProgressPanel;
-	private JLabel ongoingGroupName;
-	public RoundedPanel2 missionInProgress;
+    public CustomPanel missionEndProgressPanel;
+    public RoundedPanel2 missionInProgress;
+    public RoundedPanel2 endMissionInProgress;
 	private JTextField nicknameField;
-	private String newnickname;
+	private String newNickname;
     private String filePath;
+    int uid;
 
     public JPanel get() {
     	return box;
@@ -96,6 +94,7 @@ public class Mypage {
      *
      */
     public Mypage(int uid, String nickname, String picPath) {
+        this.uid=uid;
     	box = new JPanel();    	
         box.setBackground(new Color(246, 246, 246));
         box.setBounds(0,0,943,781);
@@ -115,19 +114,19 @@ public class Mypage {
 	    
 	    showOngoingMission();
 
-       
-        RoundedPanel2 missionended = new RoundedPanel2(32);
-        missionended.setBounds(476, 249, 420, 462);
-        missionended.setForeground(new Color(255, 255, 255));
-        missionended.setBackground(new Color(255, 255, 255));
-        box.add(missionended);
-        missionended.setLayout(null);
+        endMissionInProgress = new RoundedPanel2(32);
+        endMissionInProgress.setBounds(476, 249, 420, 462);
+        endMissionInProgress.setForeground(new Color(255, 255, 255));
+        endMissionInProgress.setBackground(new Color(255, 255, 255));
+        box.add(endMissionInProgress);
+        endMissionInProgress.setLayout(null);
         
         JLabel lblNewLabel_2 = new JLabel("종료된 미션");
         lblNewLabel_2.setFont(new Font("나눔고딕", Font.BOLD, 20));
         lblNewLabel_2.setBounds(158, 10, 102, 35);
-        missionended.add(lblNewLabel_2);
+        endMissionInProgress.add(lblNewLabel_2);
 
+        showFinishedMission();
 
         JButton PFPButton = new JButton();
         PFPButton.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
@@ -210,10 +209,10 @@ public class Mypage {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     enterButton.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                            newnickname = nicknameField.getText();
+                            newNickname = nicknameField.getText();
                             JSONObject a = new JSONObject();
-                            a.put("nickname", newnickname);
-                            System.out.println(newnickname);
+                            a.put("nickname", newNickname);
+                            System.out.println(newNickname);
                             Request request = new Request(RequestType.CHANGENICKNAME,a);
                             ClientSocket.send(request);
                             changeNickNamePopUp.dispose();
@@ -273,24 +272,33 @@ public class Mypage {
             missionInProgress.add(missionProgressPanel);
             missionProgressPanel.setLayout(null);
 
-            ongoingGroupName = new JLabel();
+            JLabel ongoingGroupName = new JLabel();
             ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
             ongoingGroupName.setText(group.getTitle());
             ongoingGroupName.setBounds(12, 10, 265, 35);
             missionProgressPanel.add(ongoingGroupName);
 
-            int progressValue = 50;
+
+            int cnt=0;
+            JSONArray a = ClientDBManager.getGroupProgress(group.getGid());
+            for(int i=0;i<a.size();i++){
+                JSONObject o = (JSONObject) a.get(i);
+                int uid= Integer.parseInt(o.get("uid").toString());
+
+                if(uid==this.uid){
+                    cnt++;
+                }
+            }
+            String startDate = group.getStartDateYear()+"-"+group.getStartDateMonth()+"-"+group.getStartDateDay();
+            String endDate = group.getEndDateYear()+"-"+group.getEndDateMonth()+"-"+group.getEndDateDay();
+            int gid=group.getGid();
+            float period=(float)ChronoUnit.DAYS.between(LocalDate.parse(startDate),LocalDate.parse(endDate))+1;
+            int progressValue = (int)(cnt/period*100);
+
 
             JProgressBar progressBar = new JProgressBar();
             progressBar.setStringPainted(true);
             progressBar.setValue(progressValue);
-
-            JPanel up = new JPanel();
-            up.setLayout(new BorderLayout());
-            missionProgressPanel.add(up);
-            JLabel userRage = new JLabel(progressValue+"%");
-            userRage.setFont(new Font("나눔고딕",Font.PLAIN, 15));
-            up.add(userRage, BorderLayout.EAST);
 
             progressBar.setBounds(12, 55, 300, 30);
 
@@ -309,25 +317,40 @@ public class Mypage {
     /** 완료된 미션을 보여주는 함수*/
     public void showFinishedMission() {
         //완료된 미션을 보여주는 함수
-        int x=506, y=56;
+        int x=470, y=56;
         List<Group> groupList = ClientDBManager.getMyEndedGroupList();
         for(Group group: groupList){
-            missionProgressPanel = new CustomPanel();
-            missionProgressPanel.setBackground(new Color(255, 255, 255));
+            missionEndProgressPanel = new CustomPanel();
+            missionEndProgressPanel.setBackground(new Color(255, 255, 255));
 
 
-            missionProgressPanel.setBounds(x, y, 374, 107);
-            missionInProgress.add(missionProgressPanel);
-            missionProgressPanel.setLayout(null);
+            missionEndProgressPanel.setBounds(x, y, 374, 107);
+            endMissionInProgress.add(missionEndProgressPanel);
+            missionEndProgressPanel.setLayout(null);
 
-            ongoingGroupName = new JLabel();
-            ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
-            ongoingGroupName.setText(group.getTitle());
+            JLabel endedGroupName = new JLabel();
+            endedGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
+            endedGroupName.setText(group.getTitle());
 
-            ongoingGroupName.setBounds(12, 10, 265, 35);
-            missionProgressPanel.add(ongoingGroupName);
+            endedGroupName.setBounds(12, 10, 265, 35);
+            missionEndProgressPanel.add(endedGroupName);
 
-            int progressValue = 50;
+            int cnt=0;
+            JSONArray a = ClientDBManager.getGroupProgress(group.getGid());
+            for(int i=0;i<a.size();i++){
+                JSONObject o = (JSONObject) a.get(i);
+                int uid= Integer.parseInt(o.get("uid").toString());
+
+                if(uid==this.uid){
+                    cnt++;
+                }
+            }
+            String startDate = group.getStartDateYear()+"-"+group.getStartDateMonth()+"-"+group.getStartDateDay();
+            String endDate = group.getEndDateYear()+"-"+group.getEndDateMonth()+"-"+group.getEndDateDay();
+            int gid=group.getGid();
+            float period=(float)ChronoUnit.DAYS.between(LocalDate.parse(startDate),LocalDate.parse(endDate))+1;
+            int progressValue = (int)(cnt/period*100);
+            System.out.println(gid+":"+progressValue+","+period+","+cnt);
 
 
             JProgressBar progressBar = new JProgressBar();
@@ -335,13 +358,13 @@ public class Mypage {
             progressBar.setValue(progressValue);
             progressBar.setBounds(12, 55, 304, 30);
 
-            missionProgressPanel.add(progressBar);
+            missionEndProgressPanel.add(progressBar);
 
             y+=110;
         }
-        if(missionProgressPanel!=null){
-            missionProgressPanel.revalidate();
-            missionProgressPanel.repaint();
+        if(missionEndProgressPanel!=null){
+            missionEndProgressPanel.revalidate();
+            missionEndProgressPanel.repaint();
         }
     }
 }
