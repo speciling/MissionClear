@@ -190,7 +190,7 @@ public class ServerDBManager extends DBManager{
         JSONObject result = new JSONObject();
         JSONArray recruitingGroups = new JSONArray();
         try (Statement statement = conn.createStatement()){
-            String sql = "SELECT * FROM GROUPS WHERE (deadline > date('now', 'localtime') AND usercnt < capacity)";
+            String sql = "SELECT * FROM GROUPS WHERE (deadline >= date('now', 'localtime') AND usercnt < capacity)";
             try (ResultSet resultSet = statement.executeQuery(sql)) {
                 // 열 제목 리스트 생성
                 ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
