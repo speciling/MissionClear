@@ -4,7 +4,6 @@ import client.db.ClientDBManager;
 import client.recruitpage.Group;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import server.db.DBManager;
 import server.db.ResultType;
 import server.service.Request;
@@ -21,25 +20,49 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * {@code ClientSocket} 클래스는 클라이언트가 서버와 통신하는 소켓 관련 동작을 처리하는 클래스입니다.
+ *
+ * @author 지연우
+ */
 public class ClientSocket extends Thread{
+    /** 서버의 IP 주소 */
     private final String IP;
+    /** 서버의 포트 번호 */
     private final int PORT;
+    /** SocketChannel 객체 */
     private SocketChannel socket;
+    /** 서버로 전송할 데이터를 저장하는 큐 */
     private static final BlockingQueue<ByteBuffer> writeQueue = new LinkedBlockingQueue<>();
+    /** 서버로부터 수신한 요청을 저장하는 큐 */
     private static final BlockingQueue<Request> readQueue = new LinkedBlockingQueue<>();
 
 
-
+    /**
+     * 서버의 IP를 따로 입력하지 않을 경우 {@code ClientSocket} 클래스의 생성자입니다.
+     * IP를 localhost로 설정합니다.
+     *
+     * @param PORT 서버의 포트 번호
+     */
     public ClientSocket(int PORT) {
         this.IP = "localhost";
         this.PORT = PORT;
     }
 
+    /**
+     * {@code ClientSocket} 클래스의 생성자입니다.
+     *
+     * @param IP   서버의 IP 주소
+     * @param PORT 서버의 포트 번호
+     */
     public ClientSocket(String IP, int PORT) {
         this.IP = IP;
         this.PORT = PORT;
     }
 
+    /**
+     * 클라이언트 소켓을 생성하고 쓰기 및 읽기 스레드를 시작합니다.
+     */
     @Override
     public void run() {
         try {
@@ -78,8 +101,13 @@ public class ClientSocket extends Thread{
 
     }
 
+    /**
+     * 서버에서 수신된 응답을 파싱하여 {@code Request} 객체로 반환합니다.
+     *
+     * @return 서버 응답에 해당하는 {@code Request} 객체
+     * @throws IOException 입출력 예외가 발생한 경우
+     */
     private Request getResponse() throws IOException{
-        JSONObject response;
         ByteBuffer headerBuffer = ByteBuffer.allocate(5);
 
         int readCount = socket.read(headerBuffer);
@@ -116,6 +144,11 @@ public class ClientSocket extends Thread{
         return null;
     }
 
+    /**
+     * 서버에서 수신된 응답을 처리합니다.
+     *
+     * @throws IOException 입출력 예외가 발생한 경우
+     */
     private void recieve() throws IOException{
         Request response = getResponse();
         if (response != null) {
@@ -160,6 +193,11 @@ public class ClientSocket extends Thread{
         }
     }
 
+    /**
+     * 서버로 전송할 요청을 큐에 추가합니다.
+     *
+     * @param request 전송할 요청 객체
+     */
     public static void send(Request request) {
         if (request.type == RequestType.CERTIFYMISSION || request.type == RequestType.CHANGEPFP) {
             String filePath = request.getData().get("filePath").toString();
@@ -175,6 +213,11 @@ public class ClientSocket extends Thread{
         writeQueue.add(Request.toByteBuffer(request));
     }
 
+    /**
+     * 서버로부터 수신한 결과를 반환합니다.
+     *
+     * @return 수신한 결과가 성공인 경우 true, 그렇지 않은 경우 false
+     */
     public static boolean getResult() {
         while (true) {
             if (!readQueue.isEmpty()) {
@@ -185,37 +228,11 @@ public class ClientSocket extends Thread{
         }
     }
 
-    public static boolean login(String id, String pw) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", id);
-        jsonObject.put("password", pw);
-
-        send(new Request((byte)RequestType.LOGIN.getCode(), jsonObject.toJSONString()));
-        while (true) {
-            if (!readQueue.isEmpty()) {
-                JSONObject data = readQueue.poll().getData();
-
-                return Integer.parseInt(data.get("resultType").toString()) == ResultType.SUCCESS.getCode();
-            }
-        }
-    }
-
-    public static boolean signUp(String id, String pw, String nickname) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", id);
-        jsonObject.put("password", pw);
-        jsonObject.put("nickname", nickname);
-
-        send(new Request((byte) RequestType.LOGIN.getCode(), jsonObject.toJSONString()));
-
-        while (true) {
-            if (!readQueue.isEmpty()) {
-                Integer result = Integer.parseInt(readQueue.poll().getData().get("resultType").toString());
-                return result == ResultType.SUCCESS.getCode();
-            }
-        }
-    }
-
+    /**
+     * 서버에서 모집 중인 그룹 데이터를 가져옵니다.
+     *
+     * @return 서버에서 가져온 모집 중인 그룹의 리스트
+     */
     public static List<Group> getRecruitingGroupData() {
         send(new Request(RequestType.GETRECRUITINGGROUPDATA, new JSONObject()));
         Request result = null;

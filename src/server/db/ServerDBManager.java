@@ -4,7 +4,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import server.service.Request;
 import server.service.RequestType;
-import server.user.User;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -14,8 +13,17 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.IntStream;
 
+/**
+ * {@code ServerDBManager} 클래스는 서버의 데이터베이스 관리를 담당하는 클래스입니다.
+ *
+ * @see DBManager
+ * @author 지연우
+ */
 public class ServerDBManager extends DBManager{
 
+    /**
+     * 데이터베이스 연결 등 초기화를 수행합니다.
+     */
     public static void init() {
         try {
             path = Path.of("./missioncleardata/server/pictures");
@@ -43,8 +51,14 @@ public class ServerDBManager extends DBManager{
         }
     }
 
-    // 성공시 SUCCESS, 이미 존재하는 아이디면 WARNING, 에러 발생시 FAILURE
-    // return: {"resultType": ResultType.getCode(), "uid": uid (유저 생성 성공시) }
+    /**
+     * 사용자를 추가합니다.
+     *
+     * @param id       사용자 아이디
+     * @param pw       사용자 비밀번호
+     * @param nickname 사용자 닉네임
+     * @return 결과를 담은 JSON 객체
+     */
     public static JSONObject addUser(String id, String pw, String nickname) {
         JSONObject result = new JSONObject();
         String sql = String.format("""
@@ -59,7 +73,12 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
-    // 성공시 SUCCESS, 아이디나 비밀번호가 잘못됐으면 WARNING, 에러 발생시 FAILURE
+    /**
+     * 사용자 정보를 조회합니다.
+     *
+     * @param uid 사용자 식별자
+     * @return 사용자 정보를 담은 JSON 객체
+     */
     public static JSONObject getUser(int uid) {
         String sql = String.format("""
                 SELECT uid, groups, nickname, pfp FROM USER WHERE uid=%s""", uid);
@@ -72,6 +91,13 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
+    /**
+     * 아이디와 비밀번호가 일치히나느 사용자 정보가 있는지 조회합니다.
+     *
+     * @param id 사용자 아이디
+     * @param pw 사용자 비밀번호
+     * @return 사용자 정보 존재 여부 및 해당 사용자 정보를 담은 JSON 객체
+     */
     public static JSONObject getUser(String id, String pw) {
         String sql = String.format("""
                 SELECT uid, groups, nickname, pfp FROM USER WHERE id='%s' AND password='%s'""", id, pw);
@@ -84,6 +110,12 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
+    /**
+     * 그룹 정보를 조회합니다.
+     *
+     * @param gid 그룹 식별자
+     * @return 그룹 정보를 담은 JSON 객체
+     */
     public static JSONObject getGroup(int gid) {
         String sql = String.format("""
                 SELECT gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users FROM GROUPS WHERE gid=%s""", gid);
@@ -96,6 +128,15 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
+    /**
+     * 초기 데이터를 조회합니다.
+     * 초기 데이터는 해당 유저가 속한 그룹, 그 그룹들에 속한 유저의 정보, 채팅정보, 미션인증 정보를 의미합니다.
+     * 사용자들의 프로필 사진 전송 요청 또한 이 함수에서 수행합니다.
+     *
+     * @param groups     사용자가 속한 그룹 리스트
+     * @param writeQueue 데이터를 쓰기 위한 큐
+     * @return 초기 데이터를 담은 JSON 객체
+     */
     public static JSONObject getInitData(List<Integer> groups, Queue<ByteBuffer> writeQueue) {
         JSONObject result = new JSONObject();
         JSONArray myGroups = new JSONArray();
@@ -186,6 +227,11 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
+    /**
+     * 모집 중인 그룹 데이터를 조회합니다.
+     *
+     * @return 모집 중인 그룹 데이터를 담은 JSON 객체
+     */
     public static JSONObject getRecruitingGroupData() {
         JSONObject result = new JSONObject();
         JSONArray recruitingGroups = new JSONArray();
@@ -228,47 +274,12 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
-    public static JSONObject getGroupsData(){
-        return null;
-    }
-
-    public static JSONObject getChatData(JSONObject lastChatId){
-        return null;
-    }
-
-    public static JSONObject getProfileData(JSONObject profiles){
-        return null;
-    }
-
-    public static void main(String[] args) {
-        ServerDBManager.init();
-        JSONObject groupInfo = new JSONObject();
-        addUser("t5", "tt", "");
-        addUser("t4", "tt", "");
-        groupInfo.put("title", "t1");
-        groupInfo.put("description", "t1");
-        groupInfo.put("mission", "t1");
-        groupInfo.put("capacity", 3);
-        groupInfo.put("category", 3);
-        groupInfo.put("deadline", "2023-11-15");
-        groupInfo.put("startDate", "");
-        groupInfo.put("endDate", "");
-        groupInfo.put("password", "");
-        groupInfo.put("uid", 1);
-        System.out.println(createGroup(groupInfo));
-//        System.out.println(enterGroup(2, 1, ""));
-
-        JSONObject chatData = new JSONObject();
-        chatData.put("uid", 1);
-        chatData.put("gid", 1);
-        chatData.put("message", "hi");
-        chatData.put("time", "2023-11-18");
-        System.out.println(saveChatMessage(chatData));
-
-//        System.out.println(executeQuery("SELECT * FROM USER WHERE uid=2"));
-//        System.out.println(executeQuery("SELECT * FROM GROUPS WHERE gid=1"));
-    }
-
+    /**
+     * 새 그룹 정보를 그룹 테이블에 저장하고, 그룹 채팅 테이블과 그룹 진행도 테이블을 생성합니다.
+     *
+     * @param groupInfo 그룹 정보를 담은 JSON 객체
+     * @return 생성된 그룹 정보를 담은 JSON 객체
+     */
     public static JSONObject createGroup(JSONObject groupInfo){
         // GROUPS 테이블에 그룹 row 추가
         String title = (String) groupInfo.get("title");
@@ -314,6 +325,14 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
+    /**
+     * 그룹에 입장이 가능한지 조회하고, 가능하다면 그룹의 소속유저 정보, 유저수 정보, 유저의 소속그룹 정보를 수정합니다,.
+     *
+     * @param uid 사용자 식별자
+     * @param gid 그룹 식별자
+     * @param pw  그룹 비밀번호
+     * @return 결과를 담은 JSON 객체
+     */
     public static JSONObject enterGroup(int uid, int gid, String pw){
         String sql = String.format("""
                 SELECT * FROM GROUPS WHERE (gid=%d AND password='%s' AND usercnt<capacity)""", gid, pw);
@@ -347,6 +366,11 @@ public class ServerDBManager extends DBManager{
         return result;
     }
 
+    /**
+     * 클라이언트가 요청한 파일을 읽어 {@code Request} 객체에 첨부합니다.
+     *
+     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
+     */
     public static void getFile(Request request) {
         String fileName = request.getData().get("fileName").toString();
         fileName = path.toString() + "\\" + fileName;
