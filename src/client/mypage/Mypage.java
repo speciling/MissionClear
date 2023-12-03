@@ -265,10 +265,9 @@ public class Mypage {
 
         int x=23, y=56;
         List<Group> groupList = ClientDBManager.getMyGroupList();
-        for(int i=0;i<groupList.size();i++){
+        for(Group group: groupList){
             missionProgressPanel = new CustomPanel();
             missionProgressPanel.setBackground(new Color(255, 255, 255));
-
 
             missionProgressPanel.setBounds(x, y, 374, 107);
             missionInProgress.add(missionProgressPanel);
@@ -276,25 +275,33 @@ public class Mypage {
 
             ongoingGroupName = new JLabel();
             ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
-            ongoingGroupName.setText("돈 아껴서 부자되자");
+            ongoingGroupName.setText(group.getTitle());
             ongoingGroupName.setBounds(12, 10, 265, 35);
             missionProgressPanel.add(ongoingGroupName);
 
             int progressValue = 50;
 
-
             JProgressBar progressBar = new JProgressBar();
             progressBar.setStringPainted(true);
             progressBar.setValue(progressValue);
-            progressBar.setBounds(12, 55, 304, 30);
+
+            JPanel up = new JPanel();
+            up.setLayout(new BorderLayout());
+            missionProgressPanel.add(up);
+            JLabel userRage = new JLabel(progressValue+"%");
+            userRage.setFont(new Font("나눔고딕",Font.PLAIN, 15));
+            up.add(userRage, BorderLayout.EAST);
+
+            progressBar.setBounds(12, 55, 300, 30);
 
             missionProgressPanel.add(progressBar);
 
             y+=110;
         }
-
-        missionProgressPanel.revalidate();
-        missionProgressPanel.repaint();
+        if(missionProgressPanel!=null){
+            missionProgressPanel.revalidate();
+            missionProgressPanel.repaint();
+        }
     }
 
 
@@ -304,7 +311,7 @@ public class Mypage {
         //완료된 미션을 보여주는 함수
         int x=506, y=56;
         List<Group> groupList = ClientDBManager.getMyEndedGroupList();
-        for(int i=0 ; i<groupList.size() ; i++){
+        for(Group group: groupList){
             missionProgressPanel = new CustomPanel();
             missionProgressPanel.setBackground(new Color(255, 255, 255));
 
@@ -315,7 +322,8 @@ public class Mypage {
 
             ongoingGroupName = new JLabel();
             ongoingGroupName.setFont(new Font("나눔고딕", Font.PLAIN, 25));
-            ongoingGroupName.setText("돈 아껴서 부자되자");
+            ongoingGroupName.setText(group.getTitle());
+
             ongoingGroupName.setBounds(12, 10, 265, 35);
             missionProgressPanel.add(ongoingGroupName);
 
@@ -331,9 +339,10 @@ public class Mypage {
 
             y+=110;
         }
-
-        missionProgressPanel.revalidate();
-        missionProgressPanel.repaint();
+        if(missionProgressPanel!=null){
+            missionProgressPanel.revalidate();
+            missionProgressPanel.repaint();
+        }
     }
 }
 
