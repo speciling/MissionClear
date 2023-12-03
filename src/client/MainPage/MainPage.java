@@ -7,6 +7,7 @@ import client.db.ClientDBManager;
 import client.detailMyGroup.DetailMyGroup;
 import client.login.Login;
 import client.mypage.Mypage;
+import client.recruitpage.Group;
 import client.recruitpage.MyGroupList;
 import client.recruitpage.RecruitGroupMember;
 import org.json.simple.JSONObject;
@@ -219,11 +220,12 @@ public class MainPage extends JFrame {
    
    
    
-   public void changeDetailPan() {
-       DetailMyGroup dg = new DetailMyGroup(true);
+   public void changeDetailPan(Group a) {
+       DetailMyGroup dg = new DetailMyGroup(a,true);
        JPanel p = dg.get();
        p = makePan(p);
        refreshPan();
+       
        globPan.add(p);
        globPan.repaint();
        globPan.revalidate();
@@ -243,22 +245,22 @@ public class MainPage extends JFrame {
       }
       
       else if (panelName.equals("mygroup")) {
-    	  /*
+    	  
     	  MyGroupList r = new MyGroupList(true);
           JPanel p = r.get();
           p = makePan(p);
           refreshPan();
           globPan.add(p);
           globPan.repaint();
-          globPan.revalidate();*/
-          
+          globPan.revalidate();
+       /*   
        DetailMyGroup dg = new DetailMyGroup(true);
        JPanel p = dg.get();
        p = makePan(p);
        refreshPan();
        globPan.add(p);
        globPan.repaint();
-       globPan.revalidate();
+       globPan.revalidate();*/
        
       }
    

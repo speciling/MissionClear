@@ -50,10 +50,10 @@ class RoundedPanel2 extends JPanel {
 public class DetailMyGroup extends JFrame {
 	String authPicPath;
 	
-	Group groupData = new Group();
-	int gid = groupData.getGid();
-	String missionName = groupData.getTitle();
-	String missionInfo = groupData.getMission();
+	Group groupData;
+	int gid;
+	String missionName;
+	String missionInfo;
 	/*
 	 * int gid = 2;
    String missionName = "돈 아껴서 부자되자!";
@@ -459,7 +459,11 @@ public class DetailMyGroup extends JFrame {
       
    }
    
-   public DetailMyGroup(boolean vis) {
+   public DetailMyGroup(Group g, boolean vis) {
+	groupData = g;
+	gid = groupData.getGid();
+	String missionName = groupData.getTitle();
+	String missionInfo = groupData.getMission();
       detailMyGroupP = new JPanel();
       detailMyGroupP.setBounds(0, 0, 943, 850);
       detailMyGroupP.setLayout(null);
