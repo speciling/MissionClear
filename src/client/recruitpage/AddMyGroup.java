@@ -85,7 +85,7 @@ public class AddMyGroup {
         detailEnterButton.setBorderPainted(false);
         detailEnterButton.addActionListener(e -> {
             if (MainPage.instance != null) {
-                MainPage.instance.changeDetailPan(); // 정적 변수를 통해 MainPage의 메서드 호출
+                MainPage.instance.changeDetailPan(group); // 정적 변수를 통해 MainPage의 메서드 호출
             }
         });
 		addGroupPanel.add(detailEnterButton);

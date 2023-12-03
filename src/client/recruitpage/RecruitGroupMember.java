@@ -99,7 +99,7 @@ public class RecruitGroupMember{
             addToGroupRecruitment(missionRoomPanel.getPanel()); // 패널을 UI에 추가
         }
         // 필요한 경우 UI 업데이트 메소드 호출
-    }
+    }	
 	/**
      * Initializes and sets up the group recruitment interface.
      */

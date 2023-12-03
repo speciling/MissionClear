@@ -9,6 +9,8 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Calendar;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -134,7 +136,7 @@ public class CreateNewGroupPopup {
     	createPopup.add(missionRecruitmentCapacity);
     	
     	JComboBox recruitmentCapacity = new JComboBox();
-    	recruitmentCapacity.setModel(new DefaultComboBoxModel(new String[] {"인원 선택", "1", "2", "3", "4", "5", "6"}));
+    	recruitmentCapacity.setModel(new DefaultComboBoxModel(new String[] {"인원 선택", "1", "2", "3", "4", "5"}));
     	recruitmentCapacity.setBounds(56, 384, 160, 39);
     	createPopup.add(recruitmentCapacity);
     	
@@ -397,11 +399,21 @@ public class CreateNewGroupPopup {
             int monthValue = Integer.parseInt(month);
             int dayValue = Integer.parseInt(day);
 
-            // 필요한 경우 추가적인 유효성 검사 수행
+            if (yearValue < Calendar.getInstance().get(Calendar.YEAR)) {
+                return false; // 년도가 현재년도보다 작은 경우 유효하지 않음
+            }
 
-            return true; // 예외가 발생하지 않고 입력이 유효한 경우
+            if (monthValue < 1 || monthValue > 12 || monthValue < Calendar.getInstance().get(Calendar.MONTH)) {
+                return false; // 월이 1~12 범위를 벗어난 경우 유효하지 않음
+            }
+
+            if (dayValue < 1 || dayValue > getDaysInMonth(yearValue, monthValue)) {
+                return false; // 일이 해당 월의 유효한 일 수를 벗어난 경우 유효하지 않음
+            }
+
+            return true; // 날짜가 유효한 경우
         } catch (NumberFormatException e) {
-            return false; // 파싱이 실패하면 입력이 유효하지 않음
+            return false; // 파싱 실패
         }
     }
     private boolean isValidActivityPeriod(String year, String month, String day) {
@@ -410,13 +422,31 @@ public class CreateNewGroupPopup {
             int monthValue = Integer.parseInt(month);
             int dayValue = Integer.parseInt(day);
 
-            // 필요한 경우 추가적인 유효성 검사 수행
+            if ( yearValue < Calendar.getInstance().get(Calendar.YEAR)) {
+                return false; // 년도가 현재년도보다 작은 경우 유효하지 않음
+            }
 
-            return true; // 예외가 발생하지 않고 입력이 유효한 경우
+            if (monthValue < 1 || monthValue > 12 || monthValue < Calendar.getInstance().get(Calendar.MONTH)) {
+                return false; // 월이 1~12 범위를 벗어난 경우 유효하지 않음
+            }
+
+            if (dayValue < 1 || dayValue > getDaysInMonth(yearValue, monthValue)) {
+                return false; // 일이 해당 월의 유효한 일 수를 벗어난 경우 유효하지 않음
+            }
+
+            return true; // 날짜가 유효한 경우
         } catch (NumberFormatException e) {
-            return false; // 파싱이 실패하면 입력이 유효하지 않음
+            return false; // 파싱 실패
         }
     }
+
+    private int getDaysInMonth(int year, int month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, 1);
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
+   
     /**
      * Gets the frame of the popup window.
      * @return The JFrame object of this popup.
