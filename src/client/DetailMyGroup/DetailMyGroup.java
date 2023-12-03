@@ -60,12 +60,12 @@ public class DetailMyGroup extends JFrame {
    String missionInfo = "매일 매일 사용한 돈 인증";*/
    Calendar missionStart = Calendar.getInstance();
    Calendar missionEnd = Calendar.getInstance();
-   String startYear = groupData.getStartDateYear();
-   String startMonth = groupData.getStartDateMonth();
-   String startDay = groupData.getStartDateDay();
-   String endYear = groupData.getEndDateYear();
-   String endMonth = groupData.getEndDateMonth();
-   String endDay = groupData.getEndDateDay();
+   String startYear;
+   String startMonth;
+   String startDay;
+   String endYear;
+   String endMonth;
+   String endDay;
    
    
    public int calculateDayCount() {
@@ -484,6 +484,12 @@ public class DetailMyGroup extends JFrame {
       
 
       //임시날짜
+      startYear = groupData.getStartDateYear();
+      startMonth = groupData.getStartDateMonth();
+      startDay = groupData.getStartDateDay();
+      endYear = groupData.getEndDateYear();
+      endMonth = groupData.getEndDateMonth();
+      endDay = groupData.getEndDateDay();
       int sYear = Integer.parseInt(startYear);
       int sMonth = Integer.parseInt(startMonth);
       int sDay = Integer.parseInt(startDay);
