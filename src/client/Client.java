@@ -9,7 +9,7 @@ public class Client extends Thread{
     int PORT = 8080;
 
     public static void main(String [] args) {
-          ClientSocket socket = new ClientSocket(8080);
+          ClientSocket socket = new ClientSocket("172.31.99.182",8080);
           socket.start();
           ClientDBManager.init();
           Login login = new Login();

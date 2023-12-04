@@ -75,8 +75,6 @@ public class Mypage {
 
     CustomFont customFont = new CustomFont();
     public JPanel box;
-    public CustomPanel missionProgressPanel;
-    public CustomPanel missionEndProgressPanel;
     public RoundedPanel2 missionInProgress;
     public RoundedPanel2 endMissionInProgress;
     private JTextField nicknameField;
@@ -122,7 +120,7 @@ public class Mypage {
         JLabel lblNewLabel_2_1 = new JLabel("진행중인 미션");
         box.add(lblNewLabel_2_1);
         lblNewLabel_2_1.setFont(customFont.deriveFont(Font.BOLD, 20));
-        lblNewLabel_2_1.setBounds(166, 249, 121, 24);
+        lblNewLabel_2_1.setBounds(166, 249, 130, 24);
         
         showOngoingMission();
 
@@ -330,12 +328,6 @@ public class Mypage {
             y += panelHeight + verticalGap;
         }
 
-        if(missionProgressPanel!=null){
-           missionInProgress.setPreferredSize(new Dimension(374, y));
-            missionProgressPanel.revalidate();
-            missionProgressPanel.repaint();
-        }
-    
 
     }
 
@@ -351,7 +343,7 @@ public class Mypage {
 
         List<Group> groupList = ClientDBManager.getMyEndedGroupList();
         for(Group group: groupList){
-            missionEndProgressPanel = new CustomPanel();
+            CustomPanel missionEndProgressPanel = new CustomPanel();
             missionEndProgressPanel.setBackground(new Color(255, 255, 255));
 
             missionEndProgressPanel.setPreferredSize(new Dimension(374, 107));
@@ -359,7 +351,7 @@ public class Mypage {
             missionEndProgressPanel.setMaximumSize(new Dimension(374, 107));
 
             JLabel endedGroupName = new JLabel();
-            endedGroupName.setFont(customFont.deriveFont( Font.PLAIN, 25));
+            endedGroupName.setFont(customFont.deriveFont( Font.BOLD, 20));
             endedGroupName.setText(group.getTitle());
 
             endedGroupName.setBounds(12, 10, 265, 35);
@@ -392,12 +384,6 @@ public class Mypage {
 
             y += panelHeight + verticalGap;
         }
-        /*
-        if(missionEndProgressPanel!=null){
-            endMissionInProgress.setPreferredSize(new Dimension(374, y));
-            missionEndProgressPanel.revalidate();
-            missionEndProgressPanel.repaint();
-        }
-        */
+
     }
 }

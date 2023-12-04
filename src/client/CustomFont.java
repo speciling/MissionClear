@@ -13,7 +13,7 @@ public class CustomFont {
     private Font font;
 
     public CustomFont() {
-        try (InputStream fontStream = Files.newInputStream(Path.of("./resource/NanumGothic.ttf"))) {
+        try (InputStream fontStream = getClass().getClassLoader().getResourceAsStream("NanumGothic.ttf")) {
             // InputStream으로부터 Font 객체 생성
             font = Font.createFont(Font.TRUETYPE_FONT, fontStream);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
