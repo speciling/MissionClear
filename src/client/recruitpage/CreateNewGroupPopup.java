@@ -11,6 +11,8 @@ import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
+import client.CustomFont;
+
 import java.util.*;
 
 
@@ -22,7 +24,6 @@ import java.util.*;
  */
 public class CreateNewGroupPopup {
 	private RecruitGroupMember recruitGroupMember; // RecruitGroupMember 참조 추가
-	Font nanumGothicFont = new Font("나눔고딕", Font.PLAIN, 14); // 폰트 크기는 필요에 따라 조정
 
     // 생성자
 	/**
@@ -46,10 +47,10 @@ public class CreateNewGroupPopup {
     private JTextField recruitmentEndDateYear;
     private JTextField recruitmentEndDateMonth;
     private JTextField recruitmentEndDateDay;
-    private JTextField roomPassword;
+    private JPasswordField roomPassword;
     private JRadioButton secretRoom;
     private JRadioButton openRoom;
-
+    CustomFont customFont = new CustomFont();
 
     /**
      * 기본 생성자. 팝업 창의 기본 설정을 초기화한다.
@@ -85,12 +86,12 @@ public class CreateNewGroupPopup {
     	createPopup.setLayout(null);
     	
     	JLabel createMissionRoomLabel = new JLabel("미션방 생성하기");
-    	createMissionRoomLabel.setFont(new Font("\uB098\uB214\uACE0\uB515", createMissionRoomLabel.getFont().getStyle() | Font.BOLD, 27));
+    	createMissionRoomLabel.setFont(customFont.deriveFont(Font.BOLD,27));
     	createMissionRoomLabel.setBounds(251, 39, 190, 35);
     	createPopup.add(createMissionRoomLabel);
     	
     	JLabel mssionRoomTitle = new JLabel("미션방 제목");
-    	mssionRoomTitle.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	mssionRoomTitle.setFont(customFont.deriveFont(Font.PLAIN,19));
     	mssionRoomTitle.setBounds(56, 94, 101, 35);
     	createPopup.add(mssionRoomTitle);
     	
@@ -98,11 +99,11 @@ public class CreateNewGroupPopup {
     	title.setBackground(new Color(237, 237, 237));
     	title.setBounds(56, 129, 580, 45);
     	title.setBorder(null);
-    	title.setFont(nanumGothicFont);
+    	title.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(title);
     	
     	JLabel missionDescription = new JLabel("미션 설명");
-    	missionDescription.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	missionDescription.setFont(customFont.deriveFont(Font.PLAIN,19));
     	missionDescription.setBounds(56, 179, 80, 35);
     	createPopup.add(missionDescription);
     	
@@ -111,7 +112,7 @@ public class CreateNewGroupPopup {
     	description.setBackground(new Color(237, 237, 237));
     	description.setBounds(56, 214, 580, 45);
     	description.setBorder(null);
-    	description.setFont(nanumGothicFont);
+    	description.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(description);
     	
     	mission = new JTextField();
@@ -119,23 +120,23 @@ public class CreateNewGroupPopup {
     	mission.setBackground(new Color(237, 237, 237));
     	mission.setBounds(56, 296, 580, 45);
     	mission.setBorder(null);
-    	mission.setFont(nanumGothicFont);
+    	mission.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(mission);
     	
     	JLabel missionContents = new JLabel("활동 내용");
-    	missionContents.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	missionContents.setFont(customFont.deriveFont(Font.PLAIN,19));
     	missionContents.setBounds(56, 261, 80, 35);
     	createPopup.add(missionContents);
     	
     	JLabel missionRecruitmentCapacity = new JLabel("모집 인원");
-    	missionRecruitmentCapacity.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	missionRecruitmentCapacity.setFont(customFont.deriveFont(Font.PLAIN,19));
     	missionRecruitmentCapacity.setBounds(56, 346, 80, 35);
     	createPopup.add(missionRecruitmentCapacity);
     	
     	JComboBox recruitmentCapacity = new JComboBox();
     	recruitmentCapacity.setModel(new DefaultComboBoxModel(new String[] {"인원 선택", "1", "2", "3", "4", "5"}));
     	recruitmentCapacity.setBounds(56, 384, 160, 39);
-    	recruitmentCapacity.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+    	recruitmentCapacity.setFont(customFont.deriveFont(Font.PLAIN,15));
     	recruitmentCapacity.setBackground(Color.WHITE);
     	recruitmentCapacity.setForeground(new Color(56, 183, 255));
 
@@ -159,14 +160,14 @@ public class CreateNewGroupPopup {
     	createPopup.add(recruitmentCapacity);
     	
     	JLabel missionCategory = new JLabel("카테고리");
-    	missionCategory.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	missionCategory.setFont(customFont.deriveFont(Font.PLAIN,19));
     	missionCategory.setBounds(361, 346, 77, 35);
     	createPopup.add(missionCategory);
     	
     	JComboBox<String> category = new JComboBox<>();
     	category.setModel(new DefaultComboBoxModel<>(new String[]{"카테고리 선택", "챌린지", "스터디", "다이어트", "기타"}));
     	category.setBounds(361, 384, 160, 39);
-    	category.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+    	category.setFont(customFont.deriveFont(Font.PLAIN,15));
     	category.setBackground(Color.WHITE);
     	category.setForeground(new Color(56, 183, 255));
 
@@ -191,7 +192,7 @@ public class CreateNewGroupPopup {
     	createPopup.add(category);
     	
     	JLabel recruitmentDeadline = new JLabel("모집 기한");
-    	recruitmentDeadline.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	recruitmentDeadline.setFont(customFont.deriveFont(Font.PLAIN,19));
     	recruitmentDeadline.setBounds(56, 429, 80, 35);
     	createPopup.add(recruitmentDeadline);
     	
@@ -200,7 +201,7 @@ public class CreateNewGroupPopup {
     	recruitmentDeadlineYear.setBorder(null);
     	recruitmentDeadlineYear.setBackground(new Color(237, 237, 237));
     	recruitmentDeadlineYear.setBounds(56, 467, 62, 32);
-    	recruitmentDeadlineYear.setFont(nanumGothicFont);
+    	recruitmentDeadlineYear.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentDeadlineYear);
     	
     	recruitmentDeadlineMonth = new JTextField();
@@ -208,7 +209,7 @@ public class CreateNewGroupPopup {
     	recruitmentDeadlineMonth.setBorder(null);
     	recruitmentDeadlineMonth.setBackground(new Color(237, 237, 237));
     	recruitmentDeadlineMonth.setBounds(128, 467, 62, 32);
-    	recruitmentDeadlineMonth.setFont(nanumGothicFont);
+    	recruitmentDeadlineMonth.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentDeadlineMonth);
     	
     	recruitmentDeadlineDay = new JTextField();
@@ -216,16 +217,16 @@ public class CreateNewGroupPopup {
     	recruitmentDeadlineDay.setBorder(null);
     	recruitmentDeadlineDay.setBackground(new Color(237, 237, 237));
     	recruitmentDeadlineDay.setBounds(200, 467, 62, 32);
-    	recruitmentDeadlineDay.setFont(nanumGothicFont);
+    	recruitmentDeadlineDay.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentDeadlineDay);
     	
     	JLabel recruitmentDeadline_1 = new JLabel("까지");
-    	recruitmentDeadline_1.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	recruitmentDeadline_1.setFont(customFont.deriveFont(Font.PLAIN,19));
     	recruitmentDeadline_1.setBounds(271, 465, 39, 35);
     	createPopup.add(recruitmentDeadline_1);
     	
     	JLabel activityPeriod = new JLabel("활동 기간");
-    	activityPeriod.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	activityPeriod.setFont(customFont.deriveFont(Font.PLAIN,19));
     	activityPeriod.setBounds(56, 503, 80, 35);
     	createPopup.add(activityPeriod);
     	
@@ -234,7 +235,7 @@ public class CreateNewGroupPopup {
     	recruitmentStartDateYear.setBorder(null);
     	recruitmentStartDateYear.setBackground(new Color(237, 237, 237));
     	recruitmentStartDateYear.setBounds(56, 541, 62, 32);
-    	recruitmentStartDateYear.setFont(nanumGothicFont);
+    	recruitmentStartDateYear.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentStartDateYear);
     	
     	recruitmentStartDateMonth = new JTextField();
@@ -242,7 +243,7 @@ public class CreateNewGroupPopup {
     	recruitmentStartDateMonth.setBorder(null);
     	recruitmentStartDateMonth.setBackground(new Color(237, 237, 237));
     	recruitmentStartDateMonth.setBounds(128, 541, 62, 32);
-    	recruitmentStartDateMonth.setFont(nanumGothicFont);
+    	recruitmentStartDateMonth.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentStartDateMonth);
     	
     	recruitmentStartDateDay = new JTextField();
@@ -250,11 +251,11 @@ public class CreateNewGroupPopup {
     	recruitmentStartDateDay.setBorder(null);
     	recruitmentStartDateDay.setBackground(new Color(237, 237, 237));
     	recruitmentStartDateDay.setBounds(200, 541, 62, 32);
-    	recruitmentStartDateDay.setFont(nanumGothicFont);
+    	recruitmentStartDateDay.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentStartDateDay);
     	
     	JLabel activityPeriod_1 = new JLabel("~");
-    	activityPeriod_1.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	activityPeriod_1.setFont(customFont.deriveFont(Font.PLAIN,19));
     	activityPeriod_1.setBounds(274, 539, 20, 35);
     	createPopup.add(activityPeriod_1);
     	
@@ -263,7 +264,7 @@ public class CreateNewGroupPopup {
     	recruitmentEndDateYear.setBorder(null);
     	recruitmentEndDateYear.setBackground(new Color(237, 237, 237));
     	recruitmentEndDateYear.setBounds(300, 541, 62, 32);
-    	recruitmentEndDateYear.setFont(nanumGothicFont);
+    	recruitmentEndDateYear.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentEndDateYear);
     	
     	recruitmentEndDateMonth = new JTextField();
@@ -271,7 +272,7 @@ public class CreateNewGroupPopup {
     	recruitmentEndDateMonth.setBorder(null);
     	recruitmentEndDateMonth.setBackground(new Color(237, 237, 237));
     	recruitmentEndDateMonth.setBounds(371, 541, 62, 32);
-    	recruitmentEndDateMonth.setFont(nanumGothicFont);
+    	recruitmentEndDateMonth.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentEndDateMonth);
     	
     	recruitmentEndDateDay = new JTextField();
@@ -279,11 +280,11 @@ public class CreateNewGroupPopup {
     	recruitmentEndDateDay.setBorder(null);
     	recruitmentEndDateDay.setBackground(new Color(237, 237, 237));
     	recruitmentEndDateDay.setBounds(442, 541, 62, 32);
-    	recruitmentEndDateDay.setFont(nanumGothicFont);
+    	recruitmentEndDateDay.setFont(customFont.deriveFont(Font.PLAIN,14));
     	createPopup.add(recruitmentEndDateDay);
     	
     	JLabel setPasswordLabel = new JLabel("비밀방 설정(비밀번호 4자리 입력)");
-    	setPasswordLabel.setFont(new Font("나눔고딕", Font.PLAIN, 19));
+    	setPasswordLabel.setFont(customFont.deriveFont(Font.PLAIN,19));
     	setPasswordLabel.setBounds(56, 580, 280, 35);
     	createPopup.add(setPasswordLabel);
     	
@@ -302,12 +303,12 @@ public class CreateNewGroupPopup {
         roomTypeGroup.add(secretRoom);
         roomTypeGroup.add(openRoom);
         
-        secretRoom.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+        secretRoom.setFont(customFont.deriveFont(Font.PLAIN,15));
     	secretRoom.setBackground(new Color(255, 255, 255));
     	secretRoom.setBounds(56, 621, 50, 23);
     	createPopup.add(secretRoom);
     	
-    	openRoom.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+    	openRoom.setFont(customFont.deriveFont(Font.PLAIN,15));
     	openRoom.setBackground(Color.WHITE);
     	openRoom.setBounds(113, 621, 70, 23);
     	createPopup.add(openRoom);
@@ -332,27 +333,27 @@ public class CreateNewGroupPopup {
     	
     	JLabel warningLabel_1 = new JLabel("* 날짜정보를 다시 입력해주세요.");
     	warningLabel_1.setForeground(Color.RED);
-    	warningLabel_1.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+    	warningLabel_1.setFont(customFont.deriveFont(Font.PLAIN,13));
     	warningLabel_1.setBounds(145, 435, 200, 20);
     	warningLabel_1.setVisible(false);
     	createPopup.add(warningLabel_1);
     	
     	JLabel warningLabel_2 = new JLabel("* 날짜정보를 다시 입력해주세요.");
     	warningLabel_2.setForeground(Color.RED);
-    	warningLabel_2.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+    	warningLabel_2.setFont(customFont.deriveFont(Font.PLAIN,13));
     	warningLabel_2.setBounds(145, 511, 200, 20);
     	warningLabel_2.setVisible(false);
     	createPopup.add(warningLabel_2);
     	
     	JLabel warningLabel_3 = new JLabel("*비밀방 여부를 선택해주세요.");
     	warningLabel_3.setForeground(Color.RED);
-    	warningLabel_3.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+    	warningLabel_3.setFont(customFont.deriveFont(Font.PLAIN,13));
     	warningLabel_3.setBounds(347, 588, 200, 20);
     	warningLabel_3.setVisible(false);
     	createPopup.add(warningLabel_3);
     	
     	JLabel warningLabel_4 = new JLabel("*비밀번호를 다시 입력해주세요.");
-    	warningLabel_4.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+    	warningLabel_4.setFont(customFont.deriveFont(Font.PLAIN,13));
     	warningLabel_4.setForeground(Color.RED);
     	warningLabel_4.setBounds(347, 588, 200, 20);
     	warningLabel_4.setVisible(false);

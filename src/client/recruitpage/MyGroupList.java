@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 
+import client.CustomFont;
 import client.MainPage.MainPage;
 import client.db.ClientDBManager;
 
@@ -30,7 +31,8 @@ public class MyGroupList {
     public List<JPanel> addedPanels = new ArrayList<>(); // 동적으로 추가된 그룹 패널 목록
     public int nextPanelY = 93; // 다음 패널이 배치될 Y 좌표
     public final int PANEL_HEIGHT = 189; // 각 패널의 높이
-
+    CustomFont customFont = new CustomFont();
+    
     /**
      * MyGroupList 인터페이스의 메인 패널을 반환한다.
      * @return 그룹 목록 인터페이스의 메인 JPanel 컴포넌트
@@ -62,7 +64,7 @@ public class MyGroupList {
         myGroup.setLayout(null);
 
         JLabel groupList = new JLabel("내 그룹 목록");
-        groupList.setFont(new Font("나눔고딕", Font.BOLD, 32));
+        groupList.setFont(customFont.deriveFont(Font.BOLD,32));
         groupList.setBounds(13, 22, 180, 35);
         myGroup.add(groupList);
 

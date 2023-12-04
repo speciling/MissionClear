@@ -166,7 +166,7 @@ public class Group {
      * 미션 방 비밀번호를 반환한다.
      * @return 미션 방 비밀번호
      */
-    public String getRoomPassword() {
+    private String getRoomPassword() {
         return roomPassword;
     }
     

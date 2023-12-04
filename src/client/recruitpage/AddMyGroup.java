@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import client.CustomFont;
 import client.MainPage.MainPage;
 
 import java.awt.Font;
@@ -18,6 +19,7 @@ public class AddMyGroup {
 	protected RoundedPanel addGroupPanel;
 	private MainPage mainPage;
 	private Group group;
+	CustomFont customFont = new CustomFont();
 	
 	/**
      * 기본 생성자. UI 초기화를 담당한다.
@@ -58,29 +60,29 @@ public class AddMyGroup {
 		addGroupPanel.setBorder(new LineBorder(new Color(200, 200, 200), 1, true));
 
 		JLabel missionTitleLabel = new JLabel(group.getTitle());
-		missionTitleLabel.setFont(new Font("나눔고딕", Font.BOLD, 25));
+		missionTitleLabel.setFont(customFont.deriveFont(Font.BOLD,25));
 		missionTitleLabel.setBounds(26, 12, 232, 35);
 		addGroupPanel.add(missionTitleLabel);
 		
 		JLabel activityPeriodLabel = new JLabel("<html><b>활동기간</b>: " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + " ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "</html>");
-		activityPeriodLabel.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		activityPeriodLabel.setFont(customFont.deriveFont(Font.PLAIN,15));
 		activityPeriodLabel.setBounds(26, 53, 352, 25);
 		addGroupPanel.add(activityPeriodLabel);
 		
 		JLabel missionLabel = new JLabel("<html><b>활동내용</b>: " + group.getMission() + "</html>");
-		missionLabel.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		missionLabel.setFont(customFont.deriveFont(Font.PLAIN,15));
 		missionLabel.setBounds(26, 83, 352, 25);
 		addGroupPanel.add(missionLabel);
 		
 		JLabel personnelPanel = new JLabel("<html><b>참여인원</b>: " + group.getUserCount() + "명");
-		personnelPanel.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		personnelPanel.setFont(customFont.deriveFont(Font.PLAIN,15));
 		personnelPanel.setBounds(26, 113, 352, 25);
 		addGroupPanel.add(personnelPanel);
 		
 		JLabel category = new JLabel(group.getCategory());
 	    category.setForeground(new Color(56, 183, 255));
 	    category.setHorizontalAlignment(JLabel.CENTER);
-	    category.setFont(new Font("나눔고딕", Font.PLAIN, 17));
+	    category.setFont(customFont.deriveFont(Font.PLAIN,17));
 	    category.setBounds(780, 144, 90, 35);
 	    Color customColor = new Color(56, 183, 255);
 	    category.setBorder(new RoundedBorder(10, customColor));

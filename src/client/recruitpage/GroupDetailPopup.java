@@ -16,6 +16,7 @@ import javax.swing.JSeparator;
 
 import org.json.simple.JSONObject;
 
+import client.CustomFont;
 import client.net.ClientSocket;
 import server.service.Request;
 import server.service.RequestType;
@@ -36,7 +37,8 @@ public class GroupDetailPopup {
 	private JFrame frame;
 	protected RoundedPanel groupDetailPopupPanel;
 	private Group group;
-
+	CustomFont customFont = new CustomFont();
+	
 	/**
      * GroupDetailPopup의 생성자.
      * @param group 상세 정보를 표시할 그룹 객체
@@ -68,13 +70,13 @@ public class GroupDetailPopup {
 	    
 	    // 그룹 제목 레이블 설정
 	    JLabel title = new JLabel(group.getTitle());
-	    title.setFont(new Font("나눔고딕", Font.BOLD, 20));
+	    title.setFont(customFont.deriveFont(Font.BOLD,20));
 	    title.setBounds(19, 53, 357, 35);
 	    groupDetailPopupPanel.add(title);
 	    
 	    // 미션 설명 레이블 설정
 	    JLabel description = new JLabel(group.getDescription());
-	    description.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+	    description.setFont(customFont.deriveFont(Font.PLAIN,18));
 	    description.setBounds(19, 100, 369, 42);
 	    groupDetailPopupPanel.add(description);
 	    
@@ -88,7 +90,7 @@ public class GroupDetailPopup {
 	    JLabel category = new JLabel(group.getCategory());
 	    category.setForeground(new Color(56, 183, 255));
 	    category.setHorizontalAlignment(JLabel.CENTER);
-	    category.setFont(new Font("나눔고딕", Font.PLAIN, 17));
+	    category.setFont(customFont.deriveFont(Font.PLAIN,17));
 	    category.setBounds(19, 180, 85, 35);
 	    Color customColor = new Color(56, 183, 255);
 	    category.setBorder(new RoundedBorder(10, customColor));
@@ -116,7 +118,7 @@ public class GroupDetailPopup {
 	    
 	    // 그룹 상세 정보 레이블 설정
 	    JLabel missionInfo = new JLabel("<html><b>모집기한</b>: " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + "까지<br>\r\n<b>모집인원</b>: " + group.getCapacity() + "명<br>\r\n<b>활동기간</b>: " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + " ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "<br>\r\n<b>활동내용</b>: " + group.getMission() + "</html>");
-	    missionInfo.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+	    missionInfo.setFont(customFont.deriveFont(Font.PLAIN,18));
 	    missionInfo.setBounds(19, 220, 357, 113);
 	    groupDetailPopupPanel.add(missionInfo);
 	    

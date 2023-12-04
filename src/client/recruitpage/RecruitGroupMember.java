@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
+import client.CustomFont;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +59,7 @@ public class RecruitGroupMember{
 	private List<Group> searchList = new ArrayList<>();
 	private JTextField searchTitle;
 	public JPanel groupRecruitment;
+	CustomFont customFont = new CustomFont();
 	
 	/**
      * 그룹 모집 패널을 반환.
@@ -172,7 +175,7 @@ public class RecruitGroupMember{
         
         searchTitle.setOpaque(false); // 배경을 투명하게 설정
         searchTitle.setForeground(SystemColor.controlShadow);
-        searchTitle.setFont(new Font("나눔고딕", Font.BOLD, 18));
+        searchTitle.setFont(customFont.deriveFont(Font.BOLD,18));
         searchTitle.setBorder(null);
         searchTitle.setColumns(10);
         groupRecruitment.add(missionRoomCreate);
@@ -186,13 +189,13 @@ public class RecruitGroupMember{
         
         JLabel searchCategory = new JLabel("카테고리 선택");
         searchCategory.setBounds(50, 81, 110, 35);
-        searchCategory.setFont(new Font("\uB098\uB214\uACE0\uB515", searchCategory.getFont().getStyle() | Font.BOLD, searchCategory.getFont().getSize() + 6));
+        searchCategory.setFont(customFont.deriveFont(Font.BOLD,18));
         groupRecruitment.add(searchCategory);
         
         comboBox = new JComboBox<>();
         comboBox.setBounds(180, 82, 121, 35);
         comboBox.setModel(new DefaultComboBoxModel(new String[] {"선택하기", "다이어트", "챌린지", "스터디", "기타"}));
-        comboBox.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+        comboBox.setFont(customFont.deriveFont(Font.PLAIN,15));
         comboBox.setBackground(new Color(246, 246, 246));
         comboBox.setForeground(new Color(56, 183, 255));
 

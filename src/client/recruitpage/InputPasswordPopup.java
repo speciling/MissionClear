@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import org.json.simple.JSONObject;
 
+import client.CustomFont;
 import client.net.ClientSocket;
 import server.service.Request;
 import server.service.RequestType;
@@ -34,7 +35,7 @@ public class InputPasswordPopup {
     private Group group; // Group 객체 참조
     private JPasswordField passwordField; // 비밀번호 필드
     private JLabel warningLabel; // 경고 메시지 레이블
-
+    CustomFont customFont = new CustomFont();
     /**
      * 그룹 참여를 위한 비밀번호 입력 팝업의 생성자.
      * @param group 참여하려는 그룹 객체
@@ -68,7 +69,7 @@ public class InputPasswordPopup {
 
         // 비밀번호 레이블 설정
         JLabel passwordLabel = new JLabel("비밀번호 입력");
-        passwordLabel.setFont(new Font("나눔고딕", Font.BOLD, 18));
+        passwordLabel.setFont(customFont.deriveFont(Font.BOLD,18));
         passwordLabel.setBounds(115, 31, 110, 35);
         inputPasswordPanel.add(passwordLabel);
 
@@ -81,7 +82,7 @@ public class InputPasswordPopup {
 
         // 경고 레이블 설정
         warningLabel = new JLabel("*비밀번호가 일치하지 않습니다.");
-        warningLabel.setFont(new Font("나눔고딕", Font.PLAIN, 16));
+        warningLabel.setFont(customFont.deriveFont(Font.PLAIN,16));
         warningLabel.setForeground(Color.RED);
         warningLabel.setBounds(60, 113, 219, 24);
         warningLabel.setVisible(false); // 기본적으로 보이지 않도록 설정

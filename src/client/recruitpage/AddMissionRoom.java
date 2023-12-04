@@ -21,6 +21,9 @@ import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+
+import client.CustomFont;
+
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
@@ -82,7 +85,8 @@ public class AddMissionRoom {
 	private JLabel title;
 	private JLabel description;
 	protected RoundedPanel addMissionRoomPanel;
-	 
+	CustomFont customFont = new CustomFont();
+	
 	 /**
      * 그룹 객체를 매개변수로 받는 생성자.
      * 제공된 그룹 정보를 사용하여 UI를 초기화한다.
@@ -109,12 +113,12 @@ public class AddMissionRoom {
 	    
 	    title = new JLabel(group.getTitle());
 	    title.setBounds(22, 21, 357, 35);
-	    title.setFont(new Font("나눔고딕", Font.BOLD, 20));
+	    title.setFont(customFont.deriveFont(Font.BOLD,20));
 	    addMissionRoomPanel.add(title);
 	    
 	    this.description = new JLabel("<html>" + group.getDescription() + "</html>");
 	    this.description.setBounds(22, 73, 357, 42);
-	    this.description.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+	    this.description.setFont(customFont.deriveFont(Font.PLAIN,18));
 	    addMissionRoomPanel.add(this.description);
 	    
 	    JSeparator separator = new JSeparator();
@@ -123,14 +127,14 @@ public class AddMissionRoom {
 	    addMissionRoomPanel.add(separator);
 	    
 	    JLabel recruitDeadline = new JLabel("<html><b>모집기한:</b> " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + " 까지<br></html>");
-	    recruitDeadline.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+	    recruitDeadline.setFont(customFont.deriveFont(Font.PLAIN,15));
 	    recruitDeadline.setBounds(23, 180, 357, 21);
 	    addMissionRoomPanel.add(recruitDeadline);
 	    
 	    JLabel category = new JLabel(group.getCategory());
 	    category.setForeground(new Color(56, 183, 255));
 	    category.setHorizontalAlignment(JLabel.CENTER);
-	    category.setFont(new Font("나눔고딕", Font.PLAIN, 17));
+	    category.setFont(customFont.deriveFont(Font.PLAIN,17));
 	    category.setBounds(310, 225, 85, 30);
 	    Color customColor = new Color(56, 183, 255);
 	    category.setBorder(new RoundedBorder(10, customColor));
@@ -154,12 +158,12 @@ public class AddMissionRoom {
 	    addMissionRoomPanel.add(detailPopup);
 	    
 	    JLabel recruitmentCapacity = new JLabel("<html><b>모집인원:</b> " + group.getCapacity() + "명<br></html>");
-	    recruitmentCapacity.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+	    recruitmentCapacity.setFont(customFont.deriveFont(Font.PLAIN,15));
 	    recruitmentCapacity.setBounds(23, 201, 357, 21);
 	    addMissionRoomPanel.add(recruitmentCapacity);
 
 	    JLabel activityPeriod = new JLabel("<html><b>활동기간:</b> " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + ". ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "</html>");
-	    activityPeriod.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+	    activityPeriod.setFont(customFont.deriveFont(Font.PLAIN,15));
 	    activityPeriod.setBounds(23, 222, 357, 21);
 	    addMissionRoomPanel.add(activityPeriod);
 	    
