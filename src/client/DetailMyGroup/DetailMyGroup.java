@@ -130,7 +130,7 @@ public class DetailMyGroup extends JFrame {
       popup.setLayout(null);
       JLabel title = new JLabel("진행상황");
       title.setHorizontalAlignment(JLabel.CENTER);
-       title.setVerticalAlignment(JLabel.CENTER);
+      title.setVerticalAlignment(JLabel.CENTER);
       title.setFont(new Font("나눔고딕",Font.BOLD, 30));
       title.setBounds(0,0,434,70);
       popup.add(title);
@@ -538,14 +538,6 @@ public class DetailMyGroup extends JFrame {
     		  }
     	  }
       
-      for (int i=0;i<detailProgress.length;i++) {
-         int count =0;
-         for (int j =0;j<detailProgress[0].length;j++) {
-            if(detailProgress[i][j]==1) count++;
-         }
-         missionProgRage[i] = (int)(count*100/detailProgress[0].length);
-      }
-      
       
       for (int i=0;i<progresses.size();i++) {
     	  Vector<Integer> tempVector = progresses.get(i);
@@ -560,7 +552,14 @@ public class DetailMyGroup extends JFrame {
     		  detailProgress[uidIdx][authIdx] = 1;
 		  }
     	   }
-      
+      //위치바꿈
+      for (int i=0;i<detailProgress.length;i++) {
+          int count =0;
+          for (int j =0;j<detailProgress[0].length;j++) {
+             if(detailProgress[i][j]==1) count++;
+          }
+          missionProgRage[i] = (int)(count*100/detailProgress[0].length);
+       }
       
       showProgressRate();
       
