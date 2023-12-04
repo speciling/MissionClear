@@ -278,6 +278,7 @@ public class MainPage extends JFrame {
       else if(panelName.equals("login")) {
     	  Login l = new Login();
     	  l.loginpage();
+          ClientDBManager.init();
     	  this.dispose();
       }
    }

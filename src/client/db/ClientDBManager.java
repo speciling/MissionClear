@@ -29,6 +29,8 @@ public class ClientDBManager extends DBManager {
      */
     public static void init() {
         try {
+            if (conn != null)
+                conn.close();
             path = Path.of("./missioncleardata/client/client.db");
             try{
                 Files.deleteIfExists(path);
