@@ -145,11 +145,13 @@ public class ClientDBManager extends DBManager {
                 Integer uid = Integer.parseInt(chatting.get("uid").toString());
                 String message = chatting.get("message").toString();
                 Integer isPic = Integer.parseInt(chatting.get("isPic").toString());
-                if (isPic == 1) {
-                    JSONObject object = new JSONObject();
-                    object.put("fileName", message);
-                    message = path.toString() + "\\" + message;
-                    ClientSocket.send(new Request(RequestType.GETFILE, object));
+                if (isPic == 1){
+                    Path filePath = Path.of(path.toString()  + "\\" + Path.of(message).getFileName());
+                    if (!Files.exists(filePath)){
+                        JSONObject object = new JSONObject();
+                        object.put("fileName", message);
+                        ClientSocket.send(new Request(RequestType.GETFILE, object));
+                    }
                 }
                 sql = String.format("""
                         INSERT INTO G%dCHAT (chatId, uid, message, isPic) VALUES (%d, %d, '%s', %d)""", gid, chatId, uid, message, isPic);
@@ -244,7 +246,7 @@ public class ClientDBManager extends DBManager {
                 pfp = path.toString() + "\\" + fileName;
                 if (!Files.exists(Path.of(pfp))){
                     JSONObject object = new JSONObject();
-                    object.put("fileName", Path.of(pfp).getFileName());
+                    object.put("fileName", Path.of(pfp).getFileName().toString());
                     ClientSocket.send(new Request(RequestType.GETFILE, object));
                 }
             }
@@ -255,7 +257,7 @@ public class ClientDBManager extends DBManager {
         }
 
         String sql = String.format("""
-                    INSERT OR REPLCAE INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
+                    INSERT OR REPLACE INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
 
         executeSQL(sql);
 
