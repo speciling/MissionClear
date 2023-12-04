@@ -21,26 +21,27 @@ import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicScrollBarUI; 
 
 /**
- * Class representing the list of groups a user is part of.
- * This class extends MainPage and provides a user interface for displaying a list of groups the user is in.
+ * 사용자가 속한 그룹 목록을 표시하는 클래스.
+ * 이 클래스는 사용자 인터페이스를 통해 사용자가 참여하고 있는 그룹의 목록을 제공한다.
+ * 사용자는 이 목록을 통해 소속된 그룹의 정보를 확인하고 관리할 수 있다.
  */
 public class MyGroupList {
-    private JPanel myGroup;
-    public List<JPanel> addedPanels = new ArrayList<>();
-    public int nextPanelY = 93; // 첫 패널의 Y 위치
+    private JPanel myGroup; // 사용자의 그룹 목록을 표시하는 메인 패널
+    public List<JPanel> addedPanels = new ArrayList<>(); // 동적으로 추가된 그룹 패널 목록
+    public int nextPanelY = 93; // 다음 패널이 배치될 Y 좌표
     public final int PANEL_HEIGHT = 189; // 각 패널의 높이
 
     /**
-     * Retrieves the main panel of the group list interface.
-     * @return the main JPanel component of the group list interface.
+     * MyGroupList 인터페이스의 메인 패널을 반환한다.
+     * @return 그룹 목록 인터페이스의 메인 JPanel 컴포넌트
      */
     public JPanel get() {
         return myGroup;
     }
 
     /**
-     * Constructor to initialize the MyGroupList interface.
-     * @param vis Boolean value to set the visibility of the main page.
+     * MyGroupList 인터페이스를 초기화하는 생성자.
+     * @param vis 메인 페이지의 가시성을 설정하는 불리언 값. 메인 페이지의 가시성을 제어한다.
      */
     public MyGroupList(boolean vis) {
         super();
@@ -48,11 +49,11 @@ public class MyGroupList {
         
     }
 
-   
-
     /**
-     * Initializes and sets up the My Group List interface.
-     * This method sets up the layout and components for displaying the list of groups the user is part of.
+     * '내 그룹 목록' 인터페이스를 초기화하고 설정하는 메소드.
+     * 이 메소드는 사용자의 그룹 목록을 표시하기 위한 레이아웃과 컴포넌트를 설정한다.
+     * 그룹 목록은 스크롤 가능한 패널에 동적으로 추가되며, 각 그룹에 대한 정보를 표시한다.
+     * 이 메소드는 그룹 목록 레이블, 스크롤 패널, 각 그룹의 패널을 초기화하고 설정한다.
      */
     private void initializeMyGroupList() {
         myGroup = new JPanel();
@@ -78,7 +79,7 @@ public class MyGroupList {
             addGroupPanel.setBounds(13, panelY, addGroupPanel.getWidth(), addGroupPanel.getHeight());
             groupListPanel.add(addGroupPanel);
 
-            panelY += PANEL_HEIGHT + 5; // 10은 패널 간의 간격
+            panelY += PANEL_HEIGHT + 5; // 5는 패널 간의 간격
         }
         groupListPanel.setPreferredSize(new Dimension(930, panelY));
 
@@ -122,6 +123,12 @@ public class MyGroupList {
 
     }
 
+    /**
+     * 그룹 목록을 새로고침하는 메소드.
+     * 이 메소드는 데이터베이스에서 최신 그룹 목록을 가져와서 인터페이스에 표시한다.
+     * 그룹 목록은 동적으로 업데이트되며, UI는 해당 변경사항을 반영하여 갱신된다.
+     * 새로고침 기능은 사용자가 그룹 정보를 최신 상태로 유지하고 싶을 때 유용하다.
+     */
     public void refreshGroupList() {
         List<Group> groups = ClientDBManager.getMyGroupList();
         for (Group group : groups) {

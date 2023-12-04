@@ -2,6 +2,10 @@ package client.recruitpage;
 
 import org.json.simple.JSONObject;
 
+/**
+ * 그룹 정보를 관리하는 클래스.
+ * 그룹의 상세 정보 및 설정을 관리하며, JSON 객체로 변환하는 기능을 제공한다.
+ */
 public class Group {
     private int gid;
     private String title;
@@ -22,71 +26,175 @@ public class Group {
     private String roomPassword;
     private boolean isSecretRoom;
 
-    
+    /**
+     * 그룹의 고유 식별자(GID)를 반환한다.
+     * @return 그룹의 고유 식별자
+     */
     public int getGid() {
     	return gid;
     }
+    
+    /**
+     * 그룹의 제목을 반환한다.
+     * @return 그룹 제목
+     */
     public String getTitle() {
         return title;
     }
+    
+    /**
+     * 미션 내용 반환한다.
+     * @return 미션 내용
+     */
     public String getDescription() {
     	return description;
     }
+    
+    /**
+     * 미션 방 활동내용을 반환한다.
+     * @return 미션 방 활동내용
+     */
     public String getMission() {
     	return mission;
     }
+    
+    /**
+     * 미션 방 모집기한(년도)을 반환한다.
+     * @return 미션 방 모집기한(년도)
+     */
     public String getDeadlineYear() {
     	return recruitmentDeadlineYear;
     }
+    
+    /**
+     * 미션 방 모집기한(달)을 반환한다.
+     * @return 미션 방 모집기한(달)
+     */
     public String getDeadlineMonth() {
     	return recruitmentDeadlineMonth;
     }
+    
+    /**
+     * 미션 방 모집기한(일)을 반환한다.
+     * @return 미션 방 모집기한(일)
+     */
     public String getDeadlineDay() {
     	return recruitmentDeadlineDay;
     }
+    
+    /**
+     * 그룹의 모집인원을 반환한다.
+     * @return 그룹 모집인원
+     */
     public int getCapacity() {
         return recruitmentCapacity;
     }
+    
+    /**
+     * 그룹의 현재인원을 반환한다.
+     * @return 그룹 현재인원
+     */
     public int getUserCount() {
         return usercount;
     }
+    
+    /**
+     * 미션 방 카테고리를 반환한다.
+     * @return 미션 방 카테고리
+     */
     public String getCategory() {
     	return category;
     }
+    
+    /**
+     * 미션 방 활동 기간 시작날짜(년도)를 반환한다.
+     * @return 미션 방 활동 기간 시작날짜(년도)
+     */
     public String getStartDateYear() {
         return recruitmentStartDateYear;
     }
 
+    /**
+     * 미션 방 활동 기간 시작날짜(달)를 반환한다.
+     * @return 미션 방 활동 기간 시작날짜(달)
+     */
     public String getStartDateMonth() {
         return recruitmentStartDateMonth;
     }
 
+    /**
+     *  미션 방 활동 기간 시작날짜(일)를 반환한다.
+     * @return 미션 방 활동 기간 시작날짜(일)
+     */
     public String getStartDateDay() {
         return recruitmentStartDateDay;
     }
 
+    /**
+     * 미션 방 활동 기간 종료날짜(년도)를 반환한다.
+     * @return 미션 방 활동 기간 종료날짜(년도)
+     */
     public String getEndDateYear() {
         return recruitmentEndDateYear;
     }
 
+    /**
+     * 미션 방 활동 기간 종료날짜(달)를 반환한다.
+     * @return 미션 방 활동 기간 종료날짜(달)
+     */
     public String getEndDateMonth() {
         return recruitmentEndDateMonth;
     }
 
+    /**
+     * 미션 방 활동 기간 종료날짜(일)를 반환한다.
+     * @return 미션 방 활동 기간 종료날짜(일)
+     */
     public String getEndDateDay() {
         return recruitmentEndDateDay;
     }
+    
+    /**
+     * 미션 방 비밀번호 설정 여부를 반환한다.
+     * @return 미션 방 비밀번호 설정 여부
+     */
     public boolean isSecretRoom() {
         return isSecretRoom;
     }
+    
+    /**
+     * 미션 방 비밀번호를 반환한다.
+     * @return 미션 방 비밀번호
+     */
     public String getRoomPassword() {
         return roomPassword;
     }
-    // 기본 생성자
+    
+    /**
+     * 기본 생성자. Group 객체를 초기화한다.
+     */
     public Group() {
     }
 
-    // 모든 필드를 포함한 생성자
+    /**
+     * 모든 필드를 포함한 생성자. Group 객체를 초기화한다.
+     * @param title 그룹 제목
+     * @param description 그룹 설명
+     * @param mission 그룹 미션
+     * @param recruitmentCapacity 모집 인원
+     * @param category 그룹 카테고리
+     * @param recruitmentDeadlineYear 모집 마감 년도
+     * @param recruitmentDeadlineMonth 모집 마감 월
+     * @param recruitmentDeadlineDay 모집 마감 일
+     * @param recruitmentStartDateYear 모집 시작 년도
+     * @param recruitmentStartDateMonth 모집 시작 월
+     * @param recruitmentStartDateDay 모집 시작 일
+     * @param recruitmentEndDateYear 모집 종료 년도
+     * @param recruitmentEndDateMonth 모집 종료 월
+     * @param recruitmentEndDateDay 모집 종료 일
+     * @param roomPassword 방 비밀번호
+     * @param isSecretRoom 비밀방 여부
+     */
     public Group(String title, String description, String mission, int recruitmentCapacity,String category, String recruitmentDeadlineYear, String recruitmentDeadlineMonth, String recruitmentDeadlineDay, String recruitmentStartDateYear, String recruitmentStartDateMonth, String recruitmentStartDateDay, String recruitmentEndDateYear, String recruitmentEndDateMonth, String recruitmentEndDateDay, String roomPassword, boolean isSecretRoom ) {
         this.title = title;
         this.description = description;
@@ -106,6 +214,10 @@ public class Group {
         this.isSecretRoom = isSecretRoom;
     }
 
+    /**
+     * JSONObject로부터 Group 객체를 생성하는 생성자.
+     * @param data JSONObject 형태의 그룹 데이터
+     */
     public Group(JSONObject data) {
         this.gid = Integer.parseInt(data.get("gid").toString());
         this.title = data.get("title").toString();
@@ -133,6 +245,10 @@ public class Group {
             this.isSecretRoom = Boolean.parseBoolean(isSecret.toString());
     }
 
+    /**
+     * Group 객체를 JSONObject로 변환한다.
+     * @return 그룹 정보가 담긴 JSONObject
+     */
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         json.put("title", this.title);
@@ -153,11 +269,4 @@ public class Group {
         return json;
     }
 
-    // 게터와 세터 메서드들
-    // ... (모든 필드에 대한 게터와 세터 메서드들)
-
-    // main 메서드는 필요에 따라 사용
-    public static void main(String[] args) {
-        // 테스트 코드나 메인 애플리케이션 코드
-    }
 }

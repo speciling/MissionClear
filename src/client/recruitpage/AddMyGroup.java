@@ -18,29 +18,36 @@ public class AddMyGroup {
 	protected RoundedPanel addGroupPanel;
 	private MainPage mainPage;
 	private Group group;
-	/**
-	 * Launch the application.
-	 */
 	
-
 	/**
-	 * @wbp.parser.constructor
-	 */
-	public AddMyGroup() {
+     * 기본 생성자. UI 초기화를 담당한다.
+     */ 
+	AddMyGroup() {
 		initialize();
 	}
 
+	/**
+     * 그룹 정보를 받아서 UI를 초기화하는 생성자.
+     * @param group UI에 표시될 그룹 정보를 담고 있는 Group 객체.
+     */
 	public AddMyGroup(Group group) {
 		this.group = group;
 		initialize();
 	}
 	
+	 /**
+     * MainPage 인스턴스를 설정한다.
+     * @param mainPage 이 클래스와 연동될 MainPage 인스턴스.
+     */
 	public void setMainPage(MainPage mainPage) {
         this.mainPage = mainPage;
     }
+
 	/**
-	 * Initialize the contents of the frame.
-	 */
+     * 패널의 내용을 초기화한다. 여기에 UI 구성 요소들을 배치하고 설정한다.
+     * RoundedPanel, JLabel, JButton 등을 사용하여 사용자 인터페이스를 구성한다.
+     * 각 UI 요소는 그룹의 정보를 표시하고, 사용자가 상세 정보를 볼 수 있도록 한다.
+     */
 	private void initialize() {
 		addGroupPanel =  new RoundedPanel(0); 
 		addGroupPanel.setBounds(0, 0, 890, 189);
@@ -91,9 +98,10 @@ public class AddMyGroup {
 		addGroupPanel.add(detailEnterButton);
 		
 	}
-	/**
-     * Gets the panel of this class.
-     * @return The JPanel object of this class.
+
+	 /**
+     * 이 클래스의 JPanel 객체를 반환한다.
+     * @return 이 클래스의 JPanel 객체.
      */
     public JPanel getPanel() {
         return addGroupPanel;

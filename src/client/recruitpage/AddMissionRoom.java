@@ -24,19 +24,18 @@ import javax.swing.border.Border;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
-
 /**
- * A custom border with rounded corners.
- * This class implements a border with specified radius and color.
+ * 둥근 모서리를 가진 사용자 지정 테두리를 구현하는 클래스.
+ * 지정된 반경과 색상을 가진 테두리를 생성한다.
  */
 class RoundedBorder implements Border {
     private int radius;
     private Color color;
 
     /**
-     * Constructor to create a rounded border with specified radius and color.
-     * @param radius the radius of the rounded corners.
-     * @param color the color of the border.
+     * 둥근 테두리를 생성하는 생성자.
+     * @param radius 둥근 모서리의 반경.
+     * @param color 테두리의 색상.
      */
     RoundedBorder(int radius, Color color) {
         this.radius = radius;
@@ -44,30 +43,30 @@ class RoundedBorder implements Border {
     }
 
     /**
-     * Gets the border insets for a given component.
-     * @param c the component for which this border insets value is to be computed.
-     * @return the insets of the border.
+     * 주어진 컴포넌트에 대한 테두리 여백을 가져온다.
+     * @param c 테두리 여백이 계산될 컴포넌트.
+     * @return 테두리의 여백.
      */
     public Insets getBorderInsets(Component c) {
         return new Insets(this.radius+1, this.radius+1, this.radius+2, this.radius);
     }
 
     /**
-     * Checks if the border is opaque.
-     * @return false as this custom border is not opaque.
+     * 테두리가 불투명한지 여부를 확인한다.
+     * @return 이 사용자 정의 테두리는 불투명하지 않으므로 false를 반환한다.
      */
     public boolean isBorderOpaque() {
         return false;
     }
 
     /**
-     * Paints the border for the specified component with the specified position and size.
-     * @param c the component for which this border is being painted.
-     * @param g the paint graphics.
-     * @param x the x position of the border.
-     * @param y the y position of the border.
-     * @param width the width of the border.
-     * @param height the height of the border.
+     * 지정된 위치와 크기에 대해 특정 컴포넌트의 테두리를 그린다.
+     * @param c 테두리가 그려질 컴포넌트.
+     * @param g 그리기 그래픽.
+     * @param x 테두리의 x 위치.
+     * @param y 테두리의 y 위치.
+     * @param width 테두리의 너비.
+     * @param height 테두리의 높이.
      */
     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
         g.setColor(color);
@@ -76,16 +75,19 @@ class RoundedBorder implements Border {
 }
 
 /**
- * This class represents the UI for adding a new mission room.
- * It initializes and displays the UI components for creating a mission room.
+ * 새 미션 방을 추가하는 UI를 구현하는 클래스.
  */
-
 public class AddMissionRoom {
 	
 	private JLabel title;
 	private JLabel description;
 	protected RoundedPanel addMissionRoomPanel;
 	 
+	 /**
+     * 그룹 객체를 매개변수로 받는 생성자.
+     * 제공된 그룹 정보를 사용하여 UI를 초기화한다.
+     * @param group UI에 표시될 그룹 정보를 담고 있는 Group 객체.
+     */
 	public AddMissionRoom(Group group) {
         if (group != null) {
             this.initialize(group);
@@ -93,7 +95,9 @@ public class AddMissionRoom {
     }
 
 	 /**
-     * @wbp.parser.entryPoint
+     * UI 컴포넌트를 초기화하는 메소드.
+     * 라벨, 분리선, 버튼 등을 사용하여 사용자 인터페이스를 구성한다.
+     * @param group 이 UI에 표시될 그룹 정보.
      */
 	void initialize(Group group) {
 		
@@ -169,9 +173,11 @@ public class AddMissionRoom {
 	}
 	
 	
-	
+	/**
+     * 이 클래스의 JPanel 객체를 반환하는 메소드.
+     * @return 이 클래스의 JPanel 객체.
+     */
 	public JPanel getPanel() {
-		// TODO Auto-generated method stub
 		return addMissionRoomPanel;
 	}
 

@@ -27,27 +27,29 @@ import javax.swing.ImageIcon;
 
 
 /**
- * Class representing the detail popup for a group.
- * This class is responsible for displaying the detailed information of a group in a popup window.
+ * 그룹 상세 정보를 표시하는 팝업 창을 관리하는 클래스.
+ * 이 클래스는 특정 그룹의 상세 정보를 사용자에게 보여주는 데 사용된다.
+ * 사용자는 이 팝업을 통해 그룹의 제목, 설명, 카테고리, 모집 기한, 활동 기간 등의 정보를 확인할 수 있다.
  */
 public class GroupDetailPopup {
 	private MyGroupList myGroupList;
 	private JFrame frame;
 	protected RoundedPanel groupDetailPopupPanel;
 	private Group group;
-    /**
-     * Constructor for GroupDetailPopup.
-     * Initializes the UI components of the popup.
+
+	/**
+     * GroupDetailPopup의 생성자.
+     * @param group 상세 정보를 표시할 그룹 객체
      */
 	public GroupDetailPopup(Group group) {
         this.group = group;
         initialize();
     }
 
-    /**
-     * Initializes the contents of the popup window.
-     * Sets up the frame and layout of the popup, including labels, buttons, and other UI elements.
-     */ 
+	/**
+     * 팝업 창의 내용을 초기화하는 메서드.
+     * 프레임과 레이아웃을 설정하고, 레이블, 버튼 및 기타 UI 요소를 구성한다.
+     */
 	void initialize() {
 		frame = new JFrame();
 		frame.setSize(406, 387);
@@ -56,6 +58,7 @@ public class GroupDetailPopup {
 		frame.setLocationRelativeTo(null);
 		frame.setUndecorated(true);
 		
+		// 패널 설정
 		groupDetailPopupPanel = new RoundedPanel(20); 
 		groupDetailPopupPanel.setBounds(0, 0, 406, 387);
 		groupDetailPopupPanel.setForeground(new Color(255, 255, 255));
@@ -63,21 +66,25 @@ public class GroupDetailPopup {
 	    frame.getContentPane().add(groupDetailPopupPanel);
 	    groupDetailPopupPanel.setLayout(null);
 	    
+	    // 그룹 제목 레이블 설정
 	    JLabel title = new JLabel(group.getTitle());
 	    title.setFont(new Font("나눔고딕", Font.BOLD, 20));
 	    title.setBounds(19, 53, 357, 35);
 	    groupDetailPopupPanel.add(title);
 	    
+	    // 미션 설명 레이블 설정
 	    JLabel description = new JLabel(group.getDescription());
 	    description.setFont(new Font("나눔고딕", Font.PLAIN, 18));
 	    description.setBounds(19, 100, 369, 42);
 	    groupDetailPopupPanel.add(description);
 	    
+	    // 구분선 설정
 	    JSeparator separator = new JSeparator();
 	    separator.setForeground(new Color(128, 128, 128));
 	    separator.setBounds(19, 168, 374, 1); // 위치와 크기 설정
 	    groupDetailPopupPanel.add(separator);
 	    
+	    // 그룹 카테고리 레이블 설정
 	    JLabel category = new JLabel(group.getCategory());
 	    category.setForeground(new Color(56, 183, 255));
 	    category.setHorizontalAlignment(JLabel.CENTER);
@@ -87,6 +94,7 @@ public class GroupDetailPopup {
 	    category.setBorder(new RoundedBorder(10, customColor));
 	    groupDetailPopupPanel.add(category);
 	    
+	    // 팝업 종료 버튼 설정
 	    JButton exitButton = new JButton("");
 	    exitButton.addActionListener(new ActionListener() {
 	        @Override
@@ -98,7 +106,7 @@ public class GroupDetailPopup {
 	    exitButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/exit.png"));
 	    exitButton.setBounds(351, 3, 50, 50);
 	    
-	 // 버튼 배경 투명 설정
+	    // 버튼 배경 투명 설정
 	    exitButton.setOpaque(false);
 	    exitButton.setContentAreaFilled(false);
 	    exitButton.setBorderPainted(false);
@@ -106,11 +114,13 @@ public class GroupDetailPopup {
 	    
 	    groupDetailPopupPanel.add(exitButton);
 	    
+	    // 그룹 상세 정보 레이블 설정
 	    JLabel missionInfo = new JLabel("<html><b>모집기한</b>: " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + "까지<br>\r\n<b>모집인원</b>: " + group.getCapacity() + "명<br>\r\n<b>활동기간</b>: " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + " ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "<br>\r\n<b>활동내용</b>: " + group.getMission() + "</html>");
 	    missionInfo.setFont(new Font("나눔고딕", Font.PLAIN, 18));
 	    missionInfo.setBounds(19, 220, 357, 113);
 	    groupDetailPopupPanel.add(missionInfo);
 	    
+	    // 그룹 참여 버튼 설정
 	    JButton enterButton = new JButton("");
 	    enterButton.setBackground(new Color(255, 255, 255));
 	    enterButton.addActionListener(new ActionListener() {
@@ -154,8 +164,8 @@ public class GroupDetailPopup {
 	}
 
 	 /**
-     * Gets the frame of the popup window.
-     * @return The JFrame object of this popup.
+     * 팝업 창의 JFrame 객체를 반환하는 메서드.
+     * @return 이 팝업의 JFrame 객체
      */
 	public JFrame getFrame() {
         return frame;

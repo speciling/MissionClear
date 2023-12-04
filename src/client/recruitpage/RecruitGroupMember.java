@@ -1,67 +1,31 @@
 package client.recruitpage;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JList;
-
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.BorderFactory;
-import javax.swing.DropMode;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.SystemColor;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.Border;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.JButton;
-import javax.swing.JTextPane;
-import javax.swing.JTextArea;
-import javax.swing.JToggleButton;
-import javax.swing.SwingConstants;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-
-import client.recruitpage.Group;
-import client.recruitpage.CreateNewGroupPopup.CustomComboBoxRenderer;
-import client.recruitpage.CreateNewGroupPopup.RoundedBorder;
-import client.MainPage.MainPage;
 /**
- * A custom JPanel with rounded corners.
- * This class extends JPanel to create a panel with rounded corners.
+ * 둥근 모서리를 가진 사용자 정의 JPanel.
+ * 이 클래스는 JPanel을 확장하여 둥근 모서리를 가진 시각적으로 패널을 생성
+ * 사용자 인터페이스의 미학을 향상시킴
  */
 class RoundedPanel extends JPanel {
     private int radius;
 
     /**
-     * Constructor to create a rounded panel with a specified radius.
-     * @param radius the radius of the corners in the panel.
+     * 지정된 모서리 반경을 가진 둥근 패널을 생성하는 생성자.
+     * @param radius 패널의 모서리 반경.
      */
     public RoundedPanel(int radius) {
         this.radius = radius;
@@ -69,8 +33,8 @@ class RoundedPanel extends JPanel {
     }
 
     /**
-     * Paints the rounded corners on the panel.
-     * @param g the Graphics object to protect.
+     * 패널에 둥근 모서리를 그림.
+     * @param g 그리기 작업에 사용되는 Graphics 객체.
      */
     @Override
     protected void paintComponent(Graphics g) {
@@ -83,8 +47,8 @@ class RoundedPanel extends JPanel {
 }
 
 /**
- * Class representing the recruitment group member interface.
- * This class extends MainPage and provides a user interface for recruitment functionalities.
+ * 모집 그룹 멤버 인터페이스를 나타내는 클래스.
+ * 이 클래스는 모집 기능을 위한 사용자 인터페이스 요소를 관리하며, MainPage의 기능을 확장.
  */
 public class RecruitGroupMember{
 	private int currentPage = 0;
@@ -94,15 +58,28 @@ public class RecruitGroupMember{
 	private JTextField searchTitle;
 	public JPanel groupRecruitment;
 	
+	/**
+     * 그룹 모집 패널을 반환.
+     * @return 현재의 그룹 모집 JPanel.
+     */
 	public JPanel get() {
 	      return groupRecruitment;
 	}
 	
+	/**
+     * 생성자. 그룹 모집 인터페이스를 초기화하고 서버에서 그룹 데이터를 로드.
+     * @param vis 인터페이스의 가시성을 설정하는 불리언 값.
+     */
 	public RecruitGroupMember(boolean vis) {
 		super();
 		initializeGroupRecruitment();
 		loadGroupsFromServerAndDisplay(); 
 	}
+	
+	/**
+     * 서버에서 그룹을 로드하고 인터페이스에 표시.
+     * 모든 그룹에 대한 UI 패널을 생성하고 화면에 추가.
+     */
 	private void loadGroupsFromServerAndDisplay() {
         GroupManager.getRecruitingGroupData(); // 서버에서 데이터를 가져옴
         List<Group> groups = GroupManager.getGroupList(); // 현재 등록된 모든 그룹의 데이터를 가져옴
@@ -113,8 +90,10 @@ public class RecruitGroupMember{
         }
         // 필요한 경우 UI 업데이트 메소드 호출
     }	
+	
 	/**
-     * Initializes and sets up the group recruitment interface.
+     * 그룹 모집 인터페이스를 초기화하고 설정.
+     * 여러 UI 구성 요소를 초기화하고 배치.
      */
 	private JPanel dynamicPanel;
 	private JComboBox<String> comboBox;
@@ -273,9 +252,9 @@ public class RecruitGroupMember{
             }
         });
 	}
-	 /**
-     * Adds a panel to the group recruitment interface.
-     * @param panel The panel to be added to the group recruitment interface.
+	/**
+     * 그룹 모집 인터페이스에 패널을 추가.
+     * @param panel 그룹 모집 인터페이스에 추가될 패널.
      */
 	public void addToGroupRecruitment(JPanel panel) {
 		allPanels.add(panel);

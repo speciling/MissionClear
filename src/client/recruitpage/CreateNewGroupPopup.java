@@ -17,18 +17,17 @@ import java.util.*;
 
 // 모서리가 둥근 JPanel을 생성하는 클래스
 /**
- * Class representing the popup window for creating a new group.
- * This class provides a user interface for users to enter details and create a new group.
+ * 새로운 그룹을 생성하기 위한 팝업 창을 나타내는 클래스.
+ * 이 클래스는 사용자가 새로운 그룹을 생성하기 위한 세부사항을 입력하고 생성할 수 있는 사용자 인터페이스를 제공한다.
  */
 public class CreateNewGroupPopup {
 	private RecruitGroupMember recruitGroupMember; // RecruitGroupMember 참조 추가
 	Font nanumGothicFont = new Font("나눔고딕", Font.PLAIN, 14); // 폰트 크기는 필요에 따라 조정
 
-    // 생성자 수정
+    // 생성자
 	/**
-     * @wbp.parser.constructor
-     * Constructor for CreateNewGroupPopup with a reference to RecruitGroupMember.
-     * @param recruitGroupMember A reference to the RecruitGroupMember.
+     * RecruitGroupMember에 대한 참조를 포함하는 CreateNewGroupPopup 생성자.
+     * @param recruitGroupMember RecruitGroupMember에 대한 참조
      */
     public CreateNewGroupPopup(RecruitGroupMember recruitGroupMember) {
         this.recruitGroupMember = recruitGroupMember;
@@ -51,16 +50,23 @@ public class CreateNewGroupPopup {
     private JRadioButton secretRoom;
     private JRadioButton openRoom;
 
+
     /**
-     * Default constructor for CreateNewGroupPopup.
+     * 기본 생성자. 팝업 창의 기본 설정을 초기화한다.
      */
     public CreateNewGroupPopup() {
         initialize();
     }
 
+
     /**
-     * Initializes the contents of the frame.
-     * This method sets up the layout and UI components of the popup.
+     * 팝업 창의 내용을 초기화한다.
+     * 이 메소드는 팝업의 레이아웃과 UI 컴포넌트를 설정한다.
+     * - JFrame 설정: 크기, 닫기 오퍼레이션, 레이아웃, 위치, 테두리 없음.
+     * - 모서리가 둥근 패널을 생성하고 설정한다.
+     * - 각종 레이블, 텍스트 필드, 콤보 박스, 라디오 버튼 등을 추가하고 설정한다.
+     * - 각 UI 요소는 특정 위치에 배치되며, 글꼴과 배경색 등이 설정된다.
+     * - 액션 리스너가 버튼에 추가되어 특정 이벤트 발생 시 동작을 정의한다.
      */
     
     public void initialize() {
@@ -432,10 +438,25 @@ public class CreateNewGroupPopup {
             }
         });   
     	}
+    
+    /**
+     * 유효한 비밀번호인지 확인한다.
+     * 비밀번호는 정확히 4자리 숫자여야 한다.
+     * @param password 확인할 비밀번호
+     * @return 유효한 비밀번호인 경우 true, 그렇지 않으면 false
+     */
     private boolean isValidPassword(String password) {
         return password.matches("\\d{4}"); // Regex to check for exactly 4 digits
     }
 
+    /**
+     * 입력된 날짜가 유효한지 확인한다.
+     * 유효한 날짜는 현재 날짜 이후여야 하며, 월과 일이 적절한 범위 내에 있어야 한다.
+     * @param year 입력된 년도
+     * @param month 입력된 월
+     * @param day 입력된 일
+     * @return 유효한 날짜인 경우 true, 그렇지 않으면 false
+     */
     private boolean isValidDateInput(String year, String month, String day) {
         try {
             int yearValue = Integer.parseInt(year);
@@ -463,6 +484,15 @@ public class CreateNewGroupPopup {
             return false; // 파싱 실패
         }
     }
+    
+    /**
+     * 입력된 활동 기간이 유효한지 확인한다.
+     * 유효한 활동 기간은 현재 날짜 이후여야 하며, 월과 일이 적절한 범위 내에 있어야 한다.
+     * @param year 입력된 년도
+     * @param month 입력된 월
+     * @param day 입력된 일
+     * @return 유효한 활동 기간인 경우 true, 그렇지 않으면 false
+     */
     private boolean isValidActivityPeriod(String year, String month, String day) {
         try {
             int yearValue = Integer.parseInt(year);
@@ -491,12 +521,23 @@ public class CreateNewGroupPopup {
         }
     }
 
+    /**
+     * 주어진 연도와 월에 해당하는 최대 일수를 반환한다.
+     * @param year 연도
+     * @param month 월
+     * @return 해당 월의 최대 일수
+     */
     private int getDaysInMonth(int year, int month) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, 1);
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
+    
+    /**
+     * 컴포넌트의 경계를 둥글게 하는 사용자 정의 테두리 클래스.
+     * 이 클래스는 테두리의 색상, 두께, 반경을 지정하여 둥근 모양의 테두리를 생성한다.
+     */
     class RoundedBorder extends AbstractBorder {
         private final Color color;
         private final int thickness;
@@ -504,6 +545,15 @@ public class CreateNewGroupPopup {
         private final Insets insets;
         private final BasicStroke stroke;
 
+        /**
+         * 지정된 컴포넌트에 둥근 테두리를 그린다.
+         * @param c 테두리를 적용할 컴포넌트
+         * @param g 그래픽스 객체
+         * @param x 테두리의 x 좌표
+         * @param y 테두리의 y 좌표
+         * @param width 테두리의 너비
+         * @param height 테두리의 높이
+         */
         public RoundedBorder(Color color, int thickness, int radius) {
             this.color = color;
             this.thickness = thickness;
@@ -554,7 +604,10 @@ public class CreateNewGroupPopup {
         }
     }
     
- 
+    /**
+     * JComboBox에 사용될 사용자 정의 렌더러 클래스.
+     * 콤보 박스 내의 각 항목의 표시 방식을 제어한다.
+     */
     class CustomComboBoxRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -570,15 +623,16 @@ public class CreateNewGroupPopup {
     }
 
     /**
-     * Gets the frame of the popup window.
-     * @return The JFrame object of this popup.
+     * 팝업 창의 프레임을 가져온다.
+     * @return 현재 팝업의 JFrame 객체
      */
 	public JFrame getFrame() {
 		return frame;
 	}
+
 	/**
-     * Sets the frame of the popup window.
-     * @param frame The JFrame object to set for this popup.
+     * 팝업 창의 프레임을 설정한다.
+     * @param frame 설정할 JFrame 객체
      */
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
