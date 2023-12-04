@@ -185,16 +185,16 @@ public class ClientDBManager extends DBManager {
         String startDate = (String) group.get("startDate");
         String endDate = (String) group.get("endDate");
         Integer uid = Integer.parseInt(group.get("uid").toString());
+        Integer gid = Integer.parseInt(group.get("gid").toString());
 
         String sql = String.format("""
                 INSERT INTO GROUPS 
-                (title, description, mission, capacity, category, deadline, startDate, endDate, users)
-                VALUES ('%s', '%s', '%s', %d, %d, '%s', '%s', '%s', '%s')""",
-                title, description, mission, capacity, category, deadline, startDate, endDate, uid+",");
+                (gid, title, description, mission, capacity, category, deadline, startDate, endDate, users)
+                VALUES (%d, '%s', '%s', '%s', %d, %d, '%s', '%s', '%s', '%s')""",
+                gid, title, description, mission, capacity, category, deadline, startDate, endDate, uid+",");
 
         executeSQL(sql).getCode();
 
-        Integer gid = Integer.parseInt(group.get("gid").toString());
         // user의 groups에 group 추가
         sql = String.format("""
                 SELECT groups FROM USER WHERE (uid=%d)""", uid);
@@ -232,6 +232,9 @@ public class ClientDBManager extends DBManager {
         String users = data.get("users").toString();
         String sql = String.format("""
                     INSERT INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
+        System.out.println(String.format("""
+                    INSERT INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users)
+        );
         createTable("G"+gid+"CHAT", sql);
 
         sql = String.format("SELECT groups FROM USER WHERE uid=%d", uid);
