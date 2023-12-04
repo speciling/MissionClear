@@ -212,7 +212,7 @@ public class Mypage {
       nicknameField.setColumns(10);
         
       JButton enterButton = new JButton("");
-      enterButton.setIcon(new ImageIcon("./resource/mypage/changeButton.png"));
+      enterButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("/mypage/changeButton.png"));
       enterButton.setBounds(115, 150, 110, 38);
       enterButton.setContentAreaFilled(false);
       enterButton.setBorderPainted(false);
