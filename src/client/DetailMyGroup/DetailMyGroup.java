@@ -357,9 +357,7 @@ public class DetailMyGroup extends JFrame {
 			});
 
 			JPanel chatMoreBox = new JPanel();
-			//chatMoreBox.setPreferredSize(new Dimension(900, 15250));
 			chatMoreBox.setLayout(null);
-
 			Thread chatPopupThread = new Thread(() -> {
 				while (true) {
 					picnum = 0;
@@ -371,11 +369,11 @@ public class DetailMyGroup extends JFrame {
 					int num = 0;
 					for (idx = idx - 1; idx >= 0; idx--) {
 						int cid = chatids.get(idx);
-						chatMoreBox.add(chatBox(900, num, cid));
+						chatMoreBoxBox.add(chatBox(900, num, cid));
 						num++;
 					}
 
-					chatMoreBoxBox.setPreferredSize(new Dimension(900, 95 * num + 305 * picnum));
+					chatMoreBoxBox.setBounds(0,0,900, 95 * num + 305 * picnum);
 					chatMoreBox.setPreferredSize(new Dimension(900, 95 * num + 305 * picnum));
 
 					chatMoreBox.add(chatMoreBoxBox);
@@ -399,9 +397,13 @@ public class DetailMyGroup extends JFrame {
 			});
 			chatPopupThread.start();
 
+			
 			JScrollPane p = new JScrollPane(chatMoreBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			p.setViewportView(chatMoreBox);
+			JPanel attachP = new JPanel();
+			attachP.setBounds(0,0,900,580);
+			attachP.setLayout(null);
 			p.setBounds(0, 0, 900, 580);
 			
 			showMoreF.add(p, BorderLayout.CENTER);
