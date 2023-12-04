@@ -55,9 +55,6 @@ public class MakeUserData {
 			String nickname = user.get("nickname").toString();
 			nicknames.put(uid, nickname);
 			String pfp = user.get("pfp").toString();
-			if (pfp.equals("")) {
-				pfp = "./resource/MainPage/defaultPic.png";
-			}
 			pfps.put(uid, pfp);
 		}
 	}

@@ -35,20 +35,22 @@ import server.service.RequestType;
  */
 class RoundedPanel2 extends JPanel {
 	private int radius;
+
 	/**
-     * 둥근 패널을 생성합니다.
-     *
-     * @param radius 패널의 둥근 부분의 반지름
-     */
+	 * 둥근 패널을 생성합니다.
+	 *
+	 * @param radius 패널의 둥근 부분의 반지름
+	 */
 	public RoundedPanel2(int radius) {
 		this.radius = radius;
 		setOpaque(false);
 	}
+
 	/**
-     * 패널을 그릴 때 호출되는 메서드로, 둥근 모양의 사각형을 그립니다.
-     *
-     * @param g 그래픽스 컨텍스트
-     */
+	 * 패널을 그릴 때 호출되는 메서드로, 둥근 모양의 사각형을 그립니다.
+	 *
+	 * @param g 그래픽스 컨텍스트
+	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -88,15 +90,16 @@ public class DetailMyGroup extends JFrame {
 	String endDay;
 	Calendar today = Calendar.getInstance();
 	MakeProgressData proData;
-	
+
 	public Vector<Vector<Integer>> progresses;
+
 	/**
-     * 두 날짜 사이의 일 수를 계산하는 메서드입니다.
-     *
-     * @param start 시작 날짜
-     * @param end   종료 날짜
-     * @return      시작과 종료 날짜 사이의 일 수
-     */
+	 * 두 날짜 사이의 일 수를 계산하는 메서드입니다.
+	 *
+	 * @param start 시작 날짜
+	 * @param end   종료 날짜
+	 * @return 시작과 종료 날짜 사이의 일 수
+	 */
 	public int calculateDayCount(Calendar start, Calendar end) {
 		start.set(Calendar.HOUR_OF_DAY, 0);
 		start.set(Calendar.MINUTE, 0);
@@ -112,6 +115,7 @@ public class DetailMyGroup extends JFrame {
 		long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
 		return ((int) diffInDays) + 1;
 	}
+
 	/**
 	 * 그룹의 날짜 정보를 저장하는 필드 입니다.
 	 */
@@ -142,20 +146,22 @@ public class DetailMyGroup extends JFrame {
 	 */
 	JPanel ff = new JPanel();
 	public JPanel detailMyGroupP;
+
 	/**
-     * 패널 객체를 반환합니다.
-     *
-     * @return 생성된 패널 객체
-     */
+	 * 패널 객체를 반환합니다.
+	 *
+	 * @return 생성된 패널 객체
+	 */
 	public JPanel get() {
 		return detailMyGroupP;
 	}
+
 	/**
-     * 세부 진행 팝업을 생성하고 표시합니다.
-     *
-     * @param i   그룹 내에서의 인덱스
-     * @param pan 세부 정보를 담은 패널
-     */
+	 * 세부 진행 팝업을 생성하고 표시합니다.
+	 *
+	 * @param i   그룹 내에서의 인덱스
+	 * @param pan 세부 정보를 담은 패널
+	 */
 	public void createProgressDetailPopup(int i, JPanel pan) {
 		JFrame popupF = new JFrame();
 		popupF.setSize(434, 307);
@@ -203,27 +209,29 @@ public class DetailMyGroup extends JFrame {
 		popup.add(detailProgressP);
 
 	}
+
 	/**
-     * 사용자 미션진행상황을 생성하고 반환합니다.
-     *
-     * @param name 사용자 이름
-     * @param path 프로필 사진 경로
-     * @param rage 진행률
-     * @return 생성된 사용자 프로그레스 패널
-     */
+	 * 사용자 미션진행상황을 생성하고 반환합니다.
+	 *
+	 * @param name 사용자 이름
+	 * @param path 프로필 사진 경로
+	 * @param rage 진행률
+	 * @return 생성된 사용자 프로그레스 패널
+	 */
 	public JPanel tempPanel(String name, String path, int rage) {
 		JPanel p = makeUserProgress(name, path, rage, 1);
 		return p;
 	}
-    /**
-     * 사용자 미션진행상황 패널을 생성하고 반환합니다.
-     *
-     * @param name 사용자 이름
-     * @param path 프로필 사진 경로
-     * @param rage 진행률
-     * @param i    인덱스
-     * @return 생성된 사용자 프로그레스 패널
-     */
+
+	/**
+	 * 사용자 미션진행상황 패널을 생성하고 반환합니다.
+	 *
+	 * @param name 사용자 이름
+	 * @param path 프로필 사진 경로
+	 * @param rage 진행률
+	 * @param i    인덱스
+	 * @return 생성된 사용자 프로그레스 패널
+	 */
 	public JPanel makeUserProgress(String name, String path, int rage, int i) {
 		JPanel make = new JPanel();
 		make.setBackground(Color.white);
@@ -268,9 +276,10 @@ public class DetailMyGroup extends JFrame {
 
 		return make;
 	}
+
 	/**
-     * 미션 진행률을 표시하는 패널을 생성하고 화면에 표시합니다.
-     */
+	 * 미션 진행률을 표시하는 패널을 생성하고 화면에 표시합니다.
+	 */
 	public void showProgressRate() {
 		RoundedPanel2 missionProgressPanel = new RoundedPanel2(60);
 		missionProgressPanel.setLayout(null);
@@ -300,14 +309,15 @@ public class DetailMyGroup extends JFrame {
 	}
 
 	public int picnum = 0;
+
 	/**
-     * 채팅 박스를 생성하고 반환합니다.
-     *
-     * @param x   폭
-     * @param num 인덱스
-     * @param cid 채팅 아이디
-     * @return 생성된 채팅 박스 패널
-     */
+	 * 채팅 박스를 생성하고 반환합니다.
+	 *
+	 * @param x   폭
+	 * @param num 인덱스
+	 * @param cid 채팅 아이디
+	 * @return 생성된 채팅 박스 패널
+	 */
 	public JPanel chatBox(int x, int num, int cid) {
 		JPanel chatBox = new JPanel();
 		chatBox.setBackground(Color.white);
@@ -318,7 +328,11 @@ public class DetailMyGroup extends JFrame {
 		String userNicknameChat = nicknames.get(userID).toString();
 		String messageChat = chatMessage.get(cid).toString();
 
-		ImageIcon chatUserPic = new ImageIcon(userPicPathChat);
+		ImageIcon chatUserPic;
+		if(userPicPathChat.equals(""))
+			chatUserPic = new ImageIcon(getClass().getClassLoader().getResource("MainPage/defaultPic.png"));
+		else
+			chatUserPic = new ImageIcon(userPicPathChat);
 		JLabel chatUserPicL = new JLabel(chatUserPic);
 		chatUserPicL.setBounds(10, 10, 60, 60);
 		chatBox.add(chatUserPicL);
@@ -336,22 +350,19 @@ public class DetailMyGroup extends JFrame {
 			chatBox.setBounds(0, 95 * num, x, 95);
 		}
 		// 채팅일때
-		if (isPic == 0)
-		{
+		if (isPic == 0) {
 			JLabel chattingL = new JLabel(messageChat);
 			chattingL.setBounds(90, 21, x - 100, 60);
 			chattingL.setFont(customFont.deriveFont(Font.PLAIN, 18));
 			chatBox.add(chattingL);
-		// 인증일때
-		} else if (isPic == 1)
-		{
+			// 인증일때
+		} else if (isPic == 1) {
 			JLabel chattingL = new JLabel(userNicknameChat + "님이 오늘의 미션을 인증하였습니다.");
 			chattingL.setBounds(90, 21, x - 100, 60);
 			chattingL.setFont(customFont.deriveFont(Font.BOLD, 14));
 			chatBox.add(chattingL);
 			// 큰 사이즈일 때
-			if (x == 900)
-			{
+			if (x == 900) {
 				ImageIcon authPic900 = new ImageIcon(messageChat);
 				JLabel authPicShow900 = new JLabel(authPic900);
 				authPicShow900.setBounds(100, 100, 700, 250);
@@ -361,9 +372,10 @@ public class DetailMyGroup extends JFrame {
 		}
 		return chatBox;
 	}
+
 	/**
-     * 채팅 화면을 구성하는 메서드입니다.
-     */
+	 * 채팅 화면을 구성하는 메서드입니다.
+	 */
 	public void chatting() {
 		// 채팅 JPanel
 		RoundedPanel2 chatPan = new RoundedPanel2(32);
@@ -423,7 +435,7 @@ public class DetailMyGroup extends JFrame {
 
 			JPanel chatMoreBox = new JPanel();
 			chatMoreBox.setLayout(null);
-			//채팅스레드
+			// 채팅스레드
 			Thread chatPopupThread = new Thread(() -> {
 				while (true) {
 					picnum = 0;
@@ -473,14 +485,14 @@ public class DetailMyGroup extends JFrame {
 
 			showMoreF.add(p, BorderLayout.CENTER);
 			JScrollBar verticalBar = p.getVerticalScrollBar();
-			verticalBar.setPreferredSize(new Dimension(15, 0)); 
+			verticalBar.setPreferredSize(new Dimension(15, 0));
 			verticalBar.setUnitIncrement(16);
 
 			verticalBar.setUI(new BasicScrollBarUI() {
 				@Override
 				protected void configureScrollBarColors() {
-					this.thumbColor = new Color(180, 180, 180); 
-					this.trackColor = new Color(246, 246, 246); 
+					this.thumbColor = new Color(180, 180, 180);
+					this.trackColor = new Color(246, 246, 246);
 				}
 
 				@Override
@@ -544,7 +556,7 @@ public class DetailMyGroup extends JFrame {
 			Request r = new Request(RequestType.CHAT, j);
 			ClientSocket.send(r);
 		});
-		//채팅스레드
+		// 채팅스레드
 		Thread chatThread = new Thread(() -> {
 			while (true) {
 
@@ -584,12 +596,13 @@ public class DetailMyGroup extends JFrame {
 		});
 		chatThread.start();
 	}
+
 	/**
-     * DetailMyGroup 클래스의 생성자입니다.
-     *
-     * @param g   그룹 정보를 담고 있는 Group 객체
-     * @param vis 창의 가시성 여부
-     */
+	 * DetailMyGroup 클래스의 생성자입니다.
+	 *
+	 * @param g   그룹 정보를 담고 있는 Group 객체
+	 * @param vis 창의 가시성 여부
+	 */
 	public DetailMyGroup(Group g, boolean vis) {
 		// 그룹 정보를 포함하는 배너를 만들기 위한 정보
 		groupData = g;
@@ -725,9 +738,10 @@ public class DetailMyGroup extends JFrame {
 
 		chatting();
 	}
+
 	/**
-     * 미션 수행 사진을 업로드하는 메서드입니다.
-     */
+	 * 미션 수행 사진을 업로드하는 메서드입니다.
+	 */
 	public void missionPic() {
 		JFileChooser fileChooser = new JFileChooser();
 
