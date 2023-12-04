@@ -183,7 +183,7 @@ public class AddMissionRoom {
 	    addMissionRoomPanel.add(activityPeriod);
 	    
 	    JLabel lockLabel = new JLabel("");
-	    lockLabel.setIcon(new ImageIcon("./resource/RecruitGroupMember/lock.png"));
+	    lockLabel.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/lock.png")));
 	    lockLabel.setBounds(297, 26, 24, 24);
 	    if (group.isSecretRoom()) {
             addMissionRoomPanel.add(lockLabel);

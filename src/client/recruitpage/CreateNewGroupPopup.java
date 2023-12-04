@@ -289,9 +289,9 @@ public class CreateNewGroupPopup {
     	createPopup.add(setPasswordLabel);
     	
     	JButton creationComplete = new JButton("");
-    	creationComplete.setSelectedIcon(new ImageIcon("./resource/RecruitGroupMember/생성완료.png"));
+    	creationComplete.setSelectedIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/생성완료.png")));
     	creationComplete.setBackground(new Color(255, 255, 255));
-    	creationComplete.setIcon(new ImageIcon("./resource/RecruitGroupMember/생성완료.png"));
+    	creationComplete.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/생성완료.png")));
     	creationComplete.setBounds(279, 658, 133, 51);
     	creationComplete.setBorderPainted(false);
     	createPopup.add(creationComplete);
@@ -323,7 +323,7 @@ public class CreateNewGroupPopup {
     	createPopup.add(roomPassword);
     	
     	JButton exitButton = new JButton("");
-    	exitButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/exit.png"));
+    	exitButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/exit.png")));
 	    exitButton.setBounds(620, 10, 50, 50);
 	    exitButton.setOpaque(false);
 	    exitButton.setContentAreaFilled(false);

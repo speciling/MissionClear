@@ -114,7 +114,7 @@ public class RecruitGroupMember{
         JButton missionRoomCreate = new JButton("");
         missionRoomCreate.setBounds(707, 84, 189, 40);
         missionRoomCreate.setBackground(new Color(246, 246, 246));
-        missionRoomCreate.setIcon(new ImageIcon("./resource/RecruitGroupMember/미션방생성.png"));
+        missionRoomCreate.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/미션방생성.png")));
         missionRoomCreate.setToolTipText("");
         missionRoomCreate.setBorderPainted(false);
         missionRoomCreate.addActionListener(new ActionListener() {
@@ -128,7 +128,7 @@ public class RecruitGroupMember{
         JButton searchButton = new JButton("");
         searchButton.setBackground(new Color(255, 255, 255));
         searchButton.setBorderPainted(false);
-        searchButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/search.png"));
+        searchButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/search.png")));
         searchButton.setBounds(56, 26, 30, 30);
         groupRecruitment.add(searchButton);
         searchButton.addActionListener(new ActionListener() {
@@ -227,7 +227,7 @@ public class RecruitGroupMember{
         JButton backButton = new JButton("");
         backButton.setBackground(new Color(246, 246, 246));
         backButton.setBorderPainted(false);
-        backButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/backButton.png"));
+        backButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/backButton.png")));
         backButton.setBounds(875, 725, 30, 40);
         groupRecruitment.add(backButton);
         backButton.addActionListener(new ActionListener() {
@@ -242,7 +242,7 @@ public class RecruitGroupMember{
         JButton nextButton = new JButton("");
         nextButton.setBackground(new Color(246, 246, 246));
         nextButton.setBorderPainted(false);
-        nextButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/nextButton.png"));
+        nextButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/nextButton.png")));
         nextButton.setBounds(905, 725, 30, 40);
         groupRecruitment.add(nextButton);
         nextButton.addActionListener(new ActionListener() {

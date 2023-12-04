@@ -94,7 +94,7 @@ public class InputPasswordPopup {
          * 버튼에는 'miniExit' 아이콘이 사용되며, 투명 배경, 테두리 없음, 포커스 테두리 제거 설정이 적용되어 있다.
          */
         JButton exitButton = new JButton("");
-    	exitButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/miniExit.png"));
+    	exitButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/miniExit.png")));
 	    exitButton.setBounds(303, 5, 30, 30);
 	    exitButton.setOpaque(false);
 	    exitButton.setContentAreaFilled(false);
@@ -113,7 +113,7 @@ public class InputPasswordPopup {
          * 버튼에는 '참여하기' 아이콘이 사용되며, 배경색 및 테두리 없음 설정이 적용되어 있다.
          */
     	JButton enterButton = new JButton("");
-        enterButton.setIcon(new ImageIcon("./resource/RecruitGroupMember/참여하기.png"));
+        enterButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("RecruitGroupMember/참여하기.png")));
         enterButton.setBounds(115, 150, 110, 38);
         enterButton.setBackground(new Color(255, 255, 255));
         enterButton.setBorderPainted(false);
