@@ -236,8 +236,12 @@ public class DetailMyGroup extends JFrame {
 		JPanel make = new JPanel();
 		make.setBackground(Color.white);
 		make.setLayout(null);
-
-		ImageIcon userPicIcon = new ImageIcon(path);
+		
+		ImageIcon userPicIcon;
+		if(path.equals(""))
+			userPicIcon = new ImageIcon(getClass().getClassLoader().getResource("MainPage/defaultPic.png"));
+		else
+			userPicIcon = new ImageIcon(path);
 		JButton userPic = new JButton(userPicIcon);
 		userPic.setContentAreaFilled(false);
 		userPic.setBorderPainted(false);
