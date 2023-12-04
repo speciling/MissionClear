@@ -133,10 +133,9 @@ public class ServerDBManager extends DBManager{
      * 초기 데이터는 해당 유저가 속한 그룹, 그 그룹들에 속한 유저의 정보, 채팅정보, 미션인증 정보를 의미합니다.
      *
      * @param groups     사용자가 속한 그룹 리스트
-     * @param writeQueue 데이터를 쓰기 위한 큐
      * @return 초기 데이터를 담은 JSON 객체
      */
-    public static JSONObject getInitData(List<Integer> groups, Queue<ByteBuffer> writeQueue) {
+    public static JSONObject getInitData(List<Integer> groups) {
         JSONObject result = new JSONObject();
         JSONArray myGroups = new JSONArray();
         Set<Integer> userSet = new HashSet<>();

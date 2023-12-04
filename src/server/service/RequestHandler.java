@@ -72,7 +72,7 @@ public class RequestHandler implements Handler{
                             sendData(request);
                             break;
                         case GETRECRUITINGGROUPDATA:
-                            getRecruitingGroupData(request);
+                            getRecruitingGroupData();
                             break;
                         case CREATENEWGROUP:
                             createNewGroup(request);
@@ -240,7 +240,7 @@ public class RequestHandler implements Handler{
                 }
             }
 
-            JSONObject initData = ServerDBManager.getInitData(gidList, this.writeQueue);
+            JSONObject initData = ServerDBManager.getInitData(gidList);
             addTask(Request.toByteBuffer(RequestType.SENDDATA, initData));
 
             this.user = new User((Integer)result.get("uid"), gidList, this);
@@ -276,10 +276,8 @@ public class RequestHandler implements Handler{
 
     /**
      * 모집 중인 그룹 데이터 요청을 처리하는 메서드입니다.
-     *
-     * @param request 클라이언트로부터 받은 {@code Request} 객체입니다.
      */
-    private void getRecruitingGroupData(Request request) {
+    private void getRecruitingGroupData() {
         JSONObject result = ServerDBManager.getRecruitingGroupData();
         addTask(Request.toByteBuffer(RequestType.GETRECRUITINGGROUPDATA, result));
     }

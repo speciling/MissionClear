@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
  */
 public class Request {
     public RequestType type;
-    public String bodyString;
     public byte[] file = null;
     private JSONObject data;
 

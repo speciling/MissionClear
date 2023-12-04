@@ -56,7 +56,7 @@ public class Reactor {
      *
      * @param selectionKey 선택된 이벤트를 나타내는 {@code SelectionKey} 객체
      */
-    void dispatch(SelectionKey selectionKey) {
+    private void dispatch(SelectionKey selectionKey) {
         Handler handler = (Handler) selectionKey.attachment();
         handler.handle();
     }
