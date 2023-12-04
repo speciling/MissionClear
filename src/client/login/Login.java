@@ -27,14 +27,6 @@ import server.service.RequestType;
  */
 
 public class Login extends JFrame{
-	
-	public static void main(String [] args) {
-		ClientSocket socket = new ClientSocket(8080);
-		socket.start();
-		ClientDBManager.init();
-		Login login = new Login();
-		login.loginpage();
-	   }
 	   
 	private RoundCornerTextField idTextField;
 	private RoundCornerPasswordField passwordField;
@@ -42,6 +34,7 @@ public class Login extends JFrame{
 	private JLabel loginMatchWarning;
 	private JPanel panel;
 	private JFrame frame;
+	CustomFont customFont = new CustomFont();
 	
 	  /**
      * loginpage 띄우는 메소드
@@ -76,11 +69,11 @@ public class Login extends JFrame{
 		/**
 		 text setting
 		 */
-		//CustomFont customFont = new CustomFont();
+
 		JLabel textLabel=new JLabel("다같이 재밌게 하는 목표달성!");
 		textLabel.setBounds(405,298,420,90);
-		textLabel.setFont(new Font("나눔고딕",Font.BOLD,32));
-		//textLabel.setFont(customFont.deriveFont(32));
+		//textLabel.setFont(new Font("나눔고딕",Font.BOLD,32));
+		textLabel.setFont(customFont.deriveFont(Font.BOLD,32));
 		textLabel.setForeground(Color.white);
 		textLabel.setOpaque(false);
 		panel.add(textLabel);
@@ -88,7 +81,8 @@ public class Login extends JFrame{
 		
 		JLabel login=new JLabel("로그인");
 		login.setBounds(553,360,120,100);
-		login.setFont(new Font("나눔고딕", Font.BOLD,36));
+		login.setFont(customFont.deriveFont(Font.BOLD,36));
+		//login.setFont(new Font("나눔고딕", Font.BOLD,36));
 		login.setForeground(Color.white);
 		login.setOpaque(false);
 		panel.add(login);
@@ -99,7 +93,7 @@ public class Login extends JFrame{
 		
 		JLabel idLabel = new JLabel("ID");
 		idLabel.setBounds(392,445,30,35);
-		idLabel.setFont(new Font("나눔고딕", Font.BOLD,24));
+		idLabel.setFont(customFont.deriveFont(Font.BOLD,24));
 		idLabel.setForeground(Color.white);
 		panel.add(idLabel);
 		
@@ -107,24 +101,24 @@ public class Login extends JFrame{
 		idTextField = new RoundCornerTextField(20);
         idTextField.setBackground(new Color(255, 255, 255));
         idTextField.setBounds(385, 489, 428, 54); 
-        idTextField.setFont(new Font("나눔고딕", Font.PLAIN, 16));
+        idTextField.setFont(customFont.deriveFont(Font.PLAIN, 16));
         panel.add(idTextField);
 
         /** password field text setting*/
         JLabel passwordLabel = new JLabel("PW");
         passwordLabel.setBounds(392, 556, 40, 35); 
-        passwordLabel.setFont(new Font("나눔고딕", Font.BOLD,24));
+        passwordLabel.setFont(customFont.deriveFont( Font.BOLD,24));
 		passwordLabel.setForeground(Color.white);
         panel.add(passwordLabel);
 
         
         passwordField = new RoundCornerPasswordField(20);
         passwordField.setBounds(385, 600, 428, 54); /** password input text setting*/
-        passwordField.setFont(new Font("나눔고딕",Font.PLAIN,16));
+        passwordField.setFont(customFont.deriveFont(Font.PLAIN,16));
         panel.add(passwordField);
         
         JButton signUpButton = new JButton("회원가입");
-        signUpButton.setFont(new Font("나눔고딕", Font.BOLD, 16));
+        signUpButton.setFont(customFont.deriveFont( Font.BOLD, 16));
         signUpButton.setBounds(572, 665, 70, 30); /** signup button*/
         signUpButton.setMargin(new Insets(0, 0, 0, 0));
         signUpButton.setContentAreaFilled(false);
@@ -146,14 +140,14 @@ public class Login extends JFrame{
          */
         loginWarning = new JLabel("아이디 또는 비밀번호를 입력해주세요");
         loginWarning.setBounds(460,683,300,50);
-        loginWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+        loginWarning.setFont(customFont.deriveFont(Font.PLAIN, 18));
         loginWarning.setForeground(Color.red);
         loginWarning.setVisible(false);
         panel.add(loginWarning);
         
         loginMatchWarning = new JLabel("아이디 또는 비밀번호가 틀렸습니다");
         loginMatchWarning.setBounds(470,683,300,50);
-        loginMatchWarning.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+        loginMatchWarning.setFont(customFont.deriveFont( Font.PLAIN, 18));
         loginMatchWarning.setForeground(Color.red);
         loginMatchWarning.setVisible(false);
         panel.add(loginMatchWarning);
