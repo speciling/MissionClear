@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -220,6 +221,7 @@ public class ClientDBManager extends DBManager {
     public static void enterGroup(JSONObject data) {
         int uid = Integer.parseInt(data.get("uid").toString());
         int gid = Integer.parseInt(data.get("gid").toString());
+
         String title = data.get("title").toString();
         String description = data.get("description").toString();
         String mission = data.get("mission").toString();
@@ -230,12 +232,32 @@ public class ClientDBManager extends DBManager {
         String startDate = data.get("startDate").toString();
         String endDate = data.get("endDate").toString();
         String users = data.get("users").toString();
+        JSONArray userData = (JSONArray) data.get("userData");
+
+        for (Object o : userData) {
+            JSONObject user = (JSONObject) o;
+            int userId = Integer.parseInt(user.get("uid").toString());
+            String nickname = user.get("nickname").toString();
+            String pfp = user.get("pfp").toString();
+            if (!pfp.isEmpty()){
+                String fileName = Path.of(pfp).getFileName().toString();
+                pfp = path.toString() + "\\" + fileName;
+                if (!Files.exists(Path.of(pfp))){
+                    JSONObject object = new JSONObject();
+                    object.put("fileName", Path.of(pfp).getFileName());
+                    ClientSocket.send(new Request(RequestType.GETFILE, object));
+                }
+            }
+            String groups = user.get("groups").toString();
+
+            String sql = String.format("INSERT OR REPLACE INTO USER VALUES (%d, '%s', '%s', '%s')",userId,nickname,pfp,groups);
+            executeSQL(sql);
+        }
+
         String sql = String.format("""
-                    INSERT INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
-        System.out.println(String.format("""
-                    INSERT INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users)
-        );
-        createTable("G"+gid+"CHAT", sql);
+                    INSERT OR REPLCAE INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
+
+        executeSQL(sql);
 
         sql = String.format("SELECT groups FROM USER WHERE uid=%d", uid);
         String groups = (executeQuery(sql).get("groups").toString()) + gid + ",";

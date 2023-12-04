@@ -359,6 +359,13 @@ public class ServerDBManager extends DBManager{
                 sql = String.format("""
                         UPDATE USER SET groups='%s' WHERE uid=%d""", groups, uid);
                 executeSQL(sql);
+
+                JSONArray userData = new JSONArray();
+                for (int user : Arrays.stream(users.split(",")).map(Integer::parseInt).toList()) {
+                    JSONObject data = getUser(user);
+                    userData.add(data);
+                }
+                result.put("userData", userData);
                 return result;
             }
         }

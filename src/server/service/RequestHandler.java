@@ -308,8 +308,11 @@ public class RequestHandler implements Handler{
         JSONObject result = ServerDBManager.enterGroup(uid, gid, pw);
         if (Integer.parseInt(result.get("resultType").toString()) == ResultType.SUCCESS.getCode()) {
             this.user.enterGroup(gid);
+            for (User user: Group.get(gid).getConnectedUserList())
+                user.send(Request.toByteBuffer(RequestType.ENTERGROUP, result));
+        } else{
+            addTask(Request.toByteBuffer(RequestType.ENTERGROUP, result));
         }
-        addTask(Request.toByteBuffer(RequestType.ENTERGROUP, result));
     }
 
     /**
@@ -322,6 +325,7 @@ public class RequestHandler implements Handler{
         int chatId = DBManager.saveChatMessage(request.getData());
         int gid = Integer.parseInt(request.getData().get("gid").toString());
         request.getData().put("chatId", chatId);
+        System.out.println("채팅 데이터 - %s" + request.getData().toJSONString());
         for (User user: Group.get(gid).getConnectedUserList())
             user.send(Request.toByteBuffer(request));
     }
