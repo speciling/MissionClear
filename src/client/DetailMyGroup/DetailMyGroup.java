@@ -149,11 +149,11 @@ public class DetailMyGroup extends JFrame {
 			count++;
 			String path = null;
 			if (detailProgress[i][j] == 0) {
-				path = "Default.png";
+				path = "DetailMyGroup/Default.png";
 			} else if (detailProgress[i][j] == 1) {
-				path = "clear.png";
+				path = "DetailMyGroup/clear.png";
 			} else if (detailProgress[i][j] == 2) {
-				path = "fail.png";
+				path = "DetailMyGroup/fail.png";
 			}
 			ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
 			JLabel detail = new JLabel(icon);
@@ -333,7 +333,7 @@ public class DetailMyGroup extends JFrame {
 			sendMessage.setForeground(new Color(239, 239, 239));
 			showMoreF.add(sendMessage);
 
-			ImageIcon sendIcon = new ImageIcon(getClass().getClassLoader().getResource("sendButton.png"));
+			ImageIcon sendIcon = new ImageIcon(getClass().getClassLoader().getResource("DetailMyGroup/sendButton.png"));
 			JButton sendButton900 = new JButton(sendIcon);
 
 			sendMessage.add(sendButton900);
@@ -457,7 +457,7 @@ public class DetailMyGroup extends JFrame {
 		sendMessage.setForeground(new Color(239, 239, 239));
 		chatPan.add(sendMessage);
 
-		ImageIcon sendIcon = new ImageIcon(getClass().getClassLoader().getResource("sendButton.png"));
+		ImageIcon sendIcon = new ImageIcon(getClass().getClassLoader().getResource("DetailMyGroup/sendButton.png"));
 		JButton sendButton = new JButton(sendIcon);
 
 		sendMessage.add(sendButton);
@@ -643,7 +643,7 @@ public class DetailMyGroup extends JFrame {
 		detailMyGroupP.add(ff);
 
 		JPanel authMissionP = new JPanel();
-		ImageIcon authMissionIcon = new ImageIcon(getClass().getClassLoader().getResource("Frame 12.png"));
+		ImageIcon authMissionIcon = new ImageIcon(getClass().getClassLoader().getResource("DetailMyGroup/Frame 12.png"));
 		JButton authMission = new JButton(authMissionIcon);
 		authMission.setBackground(new Color(246, 246, 246));
 		authMission.setBorderPainted(false);

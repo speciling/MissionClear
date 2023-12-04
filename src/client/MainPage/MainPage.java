@@ -90,7 +90,7 @@ public class MainPage extends JFrame {
 		JPanel loc = new JPanel();
 		JLabel userNameInfo = new JLabel(userName + " 님");
 		userNameInfo.setFont(customFont.deriveFont(Font.BOLD, 20));
-		ImageIcon userPicIcon = new ImageIcon(getClass().getClassLoader().getResource("defaultPic.png"));
+		ImageIcon userPicIcon = new ImageIcon(getClass().getClassLoader().getResource("MainPage/defaultPic.png"));
 		Image img = userPicIcon.getImage();
 		Image updateImg = img.getScaledInstance(58, 58, Image.SCALE_SMOOTH);
 		ImageIcon updateIcon = new ImageIcon(updateImg);
@@ -120,7 +120,7 @@ public class MainPage extends JFrame {
 		JPanel logoP = new JPanel();
 		logoP.setBackground(mainColor);
 		JLabel logo = new JLabel();
-		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("logo.png"));
+		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("MainPage/logo.png"));
 		logo.setIcon(icon);
 		logoP.add(logo);
 		logoP.setBounds(13, 23, 227, 139);
@@ -130,7 +130,7 @@ public class MainPage extends JFrame {
 		JPanel bpRecruit = new JPanel();
 		bpRecruit.setBounds(0, 242, 257, 59);
 		bpRecruit.setBackground(mainColor);
-		ImageIcon iconRecruit = new ImageIcon(getClass().getClassLoader().getResource("group.png"));
+		ImageIcon iconRecruit = new ImageIcon(getClass().getClassLoader().getResource("MainPage/group.png"));
 		JButton bRecruit = new JButton(iconRecruit);
 		bRecruit.setBackground(mainColor);
 		bRecruit.setBorderPainted(false); // 버튼 그림자 없애기
@@ -140,7 +140,7 @@ public class MainPage extends JFrame {
 		JPanel bpMyGroup = new JPanel();
 		bpMyGroup.setBounds(0, 242 + 59, 257, 59);
 		bpMyGroup.setBackground(mainColor);
-		ImageIcon iconMyGroup = new ImageIcon(getClass().getClassLoader().getResource("mygroup.png"));
+		ImageIcon iconMyGroup = new ImageIcon(getClass().getClassLoader().getResource("MainPage/mygroup.png"));
 		JButton bMyGroup = new JButton(iconMyGroup);
 		bMyGroup.setBackground(mainColor);
 		bMyGroup.setBorderPainted(false); // 버튼 그림자 없애기
@@ -151,7 +151,7 @@ public class MainPage extends JFrame {
 		JPanel bpMyPage = new JPanel();
 		bpMyPage.setBounds(0, 242 + 59 * 2, 257, 59);
 		bpMyPage.setBackground(mainColor);
-		ImageIcon iconMyPage = new ImageIcon(getClass().getClassLoader().getResource("mypage.png"));
+		ImageIcon iconMyPage = new ImageIcon(getClass().getClassLoader().getResource("MainPage/mypage.png"));
 		JButton bMyPage = new JButton(iconMyPage);
 		bMyPage.setBackground(mainColor);
 		bMyPage.setBorderPainted(false); // 버튼 그림자 없애기
@@ -166,11 +166,11 @@ public class MainPage extends JFrame {
 		JPanel logout_panel = new JPanel();
 		logout_panel.setBackground(mainColor);
 
-		ImageIcon line_icon = new ImageIcon(getClass().getClassLoader().getResource("Line 1.png"));
+		ImageIcon line_icon = new ImageIcon(getClass().getClassLoader().getResource("MainPage/Line 1.png"));
 		JLabel line = new JLabel(line_icon);
 		logout_panel.add(line);
 
-		ImageIcon logout_icon = new ImageIcon(getClass().getClassLoader().getResource("logout.png"));
+		ImageIcon logout_icon = new ImageIcon(getClass().getClassLoader().getResource("MainPage/logout.png"));
 		JButton logout = new JButton(logout_icon);
 		logout.setBorderPainted(false);
 		logout.setPreferredSize(new Dimension(257, 59));
