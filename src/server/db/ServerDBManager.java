@@ -351,6 +351,7 @@ public class ServerDBManager extends DBManager{
                 sql = String.format("""
                         UPDATE GROUPS SET users='%s' WHERE gid=%d""", users, gid);
                 executeSQL(sql);
+                result.replace("users", users);
 
                 sql = String.format("""
                         UPDATE GROUPS SET usercnt=usercnt+1 WHERE gid='%s'""", gid);
