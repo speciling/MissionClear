@@ -346,9 +346,6 @@ public class DetailMyGroup extends JFrame {
              ClientSocket.send(r);    
             });
          
-         
-         
-         
          int idx = chatids.size();//50
          
          JPanel chatMoreBox = new JPanel();
@@ -369,6 +366,50 @@ public class DetailMyGroup extends JFrame {
          JScrollPane p = new JScrollPane(chatMoreBox,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
          p.setViewportView(chatMoreBox);
          p.setBounds(0,0,900,580);
+         
+         
+         /*
+         Thread chatPopupThread = new Thread(()->{
+       	  while (true) {
+
+                 JPanel chatMoreBoxBox = new JPanel();
+                 chatMoreBoxBox.setBackground(Color.white);
+                 chatMoreBoxBox.setLayout(null);
+                 chatMoreBoxBox..setPreferredSize(new Dimension(900,95*num+305*picnum+400));
+                 
+                 int idx = chatids.size();
+                 int num = 0;
+         
+         for(idx=idx-1;idx>=0;idx--) 
+         {
+        	 int cid = chatids.get(idx);
+        	 chatMoreBox.add(chatBox(900,num,cid));
+        	 //chatMoreBox.add(chatBox(900,num,cid), BorderLayout.SOUTH);        	 
+        	 //chatMoreBox.add(chatBox(900,num,cid), BorderLayout.CENTER);
+        	 num++;
+         }
+                 
+                 chatMoreBox.add(chatMoreBoxBox);
+                 chatMoreBox.repaint();
+                 chatMoreBox.revalidate();
+                 
+                 try {
+               	  Thread.sleep(100);
+                 } catch (Exception e) {
+               	  e.printStackTrace();
+                 }
+
+                 chatData = new MakeChatData(gid);
+                 chatUid = chatData.uid;
+                 chatMessage = chatData.message;
+                 chatIsPic = chatData.isPic;
+                 chatids = chatData.chatids;
+                 
+                 chatPart.remove(chatMoreBoxBox);
+       	  }
+         }); 
+         chatPopupThread.start();
+*/
          
          
          
