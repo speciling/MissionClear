@@ -3,14 +3,16 @@ package client;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class CustomFont {
-/*
-    private static final String FONT_PATH = "/NanumGothic.ttf";
+
+    //private static final String FONT_PATH = "NanumGothic.ttf";
     private Font font;
 
     public CustomFont() {
-        try (InputStream fontStream = getClass().getClassLoader().getResourceAsStream(FONT_PATH)) {
+        try (InputStream fontStream = Files.newInputStream(Path.of("./resource/NanumGothic.ttf"))) {
             // InputStream으로부터 Font 객체 생성
             font = Font.createFont(Font.TRUETYPE_FONT, fontStream);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -24,9 +26,8 @@ public class CustomFont {
         return font;
     }
 
-    public Font deriveFont(float size) {
-        return font.deriveFont(size);
+    public Font deriveFont(int style, float size) {
+        return font.deriveFont(style, size);
     }
 
-*/
 }
