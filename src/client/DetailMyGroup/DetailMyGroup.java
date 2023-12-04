@@ -60,15 +60,18 @@ class RoundedPanel2 extends JPanel {
 
 /**
  * 특정 그룹에 입장 했을 때 보여주는 창 클래스입니다.
+ *
+ * @author choyeonwoo
+ * 
  */
 public class DetailMyGroup extends JFrame {
-    /**
-     * DetailMyGroup 클래스의 생성자입니다.
-     *
-     * @param g   그룹 정보를 담고 있는 Group 객체
-     * @param vis 창의 가시성 여부
-     */
+	/**
+	 * 사용자 정의 폰트를 사용하기 위한 CustomFont 객체입니다.
+	 */
 	CustomFont customFont = new CustomFont();
+	/**
+	 * 그룹의 정보를 저장합니다.
+	 */
 	String authPicPath;
 	Group groupData;
 	int gid;
@@ -84,9 +87,8 @@ public class DetailMyGroup extends JFrame {
 	String endMonth;
 	String endDay;
 	Calendar today = Calendar.getInstance();
-
-	
 	MakeProgressData proData;
+	
 	public Vector<Vector<Integer>> progresses;
 	/**
      * 두 날짜 사이의 일 수를 계산하는 메서드입니다.
@@ -110,24 +112,34 @@ public class DetailMyGroup extends JFrame {
 		long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
 		return ((int) diffInDays) + 1;
 	}
-
+	/**
+	 * 그룹의 날짜 정보를 저장하는 필드 입니다.
+	 */
 	int dayCount;
 	int todayCount;
-
+	/**
+	 * 사용자 미션 진행도 정보를 저장하는 필드 입니다.
+	 */
 	int[][] detailProgress;
 	int[] missionProgRage;
-
+	/**
+	 * 사용자의 정보를 저장하는 필드입니다.
+	 */
 	MakeUserData userData;
 	HashMap nicknames;
 	HashMap pfps;
 	List<Integer> uids;
-
+	/**
+	 * 채팅정보를 저장하는 필드입니다.
+	 */
 	MakeChatData chatData;
 	HashMap chatUid;
 	HashMap chatMessage;
 	HashMap chatIsPic;
 	List<Integer> chatids;
-
+	/**
+	 * 화면을 구성하는 객체입니다.
+	 */
 	JPanel ff = new JPanel();
 	public JPanel detailMyGroupP;
 	/**
