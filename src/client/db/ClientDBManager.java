@@ -151,8 +151,9 @@ public class ClientDBManager extends DBManager {
                 String message = chatting.get("message").toString();
                 Integer isPic = Integer.parseInt(chatting.get("isPic").toString());
                 if (isPic == 1){
-                    String filePath = path.toString()  + "\\" + message;
-                    if (!Files.exists(Path.of(filePath))){
+                    message = path.toString()  + "\\" + Path.of(message).getFileName();
+                    Path filePath = Path.of(message);
+                    if (!Files.exists(filePath)){
                         JSONObject object = new JSONObject();
                         object.put("fileName", message);
                         ClientSocket.send(new Request(RequestType.GETFILE, object));
