@@ -255,7 +255,7 @@ public class ClientDBManager extends DBManager {
         }
 
         String sql = String.format("""
-                    INSERT OR REPLCAE INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
+                    INSERT OR REPLACE INTO GROUPS VALUES (%d, '%s', '%s', '%s', %d, %d, %d, '%s', '%s', '%s', '%s')""", gid, title, description, mission, capacity, category, usercnt, deadline, startDate, endDate, users);
 
         executeSQL(sql);
 
