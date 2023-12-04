@@ -36,6 +36,7 @@ public class InputPasswordPopup {
     private JPasswordField passwordField; // 비밀번호 필드
     private JLabel warningLabel; // 경고 메시지 레이블
     CustomFont customFont = new CustomFont();
+    
     /**
      * 그룹 참여를 위한 비밀번호 입력 팝업의 생성자.
      * @param group 참여하려는 그룹 객체

@@ -52,9 +52,6 @@ public class GroupDetailPopup {
      * 팝업 창의 내용을 초기화하는 메서드.
      * 프레임과 레이아웃을 설정하고, 레이블, 버튼 및 기타 UI 요소를 구성한다.
      */
-	/**
-	 * @wbp.parser.entryPoint
-	 */
 	void initialize() {
 		frame = new JFrame();
 		frame.setSize(406, 387);
