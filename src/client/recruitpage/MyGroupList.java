@@ -146,6 +146,4 @@ public class MyGroupList {
         myGroup.revalidate();
         myGroup.repaint();
     }
-
-
 }

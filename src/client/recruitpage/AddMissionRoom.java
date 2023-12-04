@@ -188,9 +188,7 @@ public class AddMissionRoom {
 	    if (group.isSecretRoom()) {
             addMissionRoomPanel.add(lockLabel);
         }
-
 	}
-	
 	
 	/**
      * 이 클래스의 JPanel 객체를 반환하는 메소드.
@@ -199,5 +197,4 @@ public class AddMissionRoom {
 	public JPanel getPanel() {
 		return addMissionRoomPanel;
 	}
-
 }

@@ -430,5 +430,4 @@ public class RecruitGroupMember{
 	            return this;
 	        }
 	    }
-	
 }
