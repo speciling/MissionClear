@@ -86,14 +86,18 @@ public class Mypage {
     private JScrollPane scrollMissionInProgress;
     private JScrollPane scrollEndMissionInProgress;
 
+    /**
+     * 마이페이지에 해당하는 부분만 반환해주는 메소드
+     * @return box 마이페이지 패널
+     */
     public JPanel get() {
        return box;
     }
    
     /**
-     * @param nickname
-     * @param uid
-     * @param picPath
+     * @param nickname 변경할 닉네임
+     * @param uid 사용자의 아이디
+     * @param picPath 사진 경로
      * 화면에 보이게 하기 위한 생성자
      *
      */
@@ -103,39 +107,40 @@ public class Mypage {
         box.setBackground(new Color(246, 246, 246));
         box.setBounds(0,0,943,781);
         box.setLayout(null);
-        
+
         missionInProgress = new RoundedPanel2(32);
-        missionInProgress.setForeground(new Color(255, 255, 255));
+        missionInProgress.setBackground(new Color(255,255,255));
+        missionInProgress.setForeground(new Color(255,255,255));
+        missionInProgress.setLayout(new BoxLayout(missionInProgress, BoxLayout.Y_AXIS));
         scrollMissionInProgress = new JScrollPane(missionInProgress);
-        scrollMissionInProgress.setBounds(29, 249, 420, 462);
+        scrollMissionInProgress.setBounds(29, 300, 420, 410);
         scrollMissionInProgress.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollMissionInProgress.setBorder(null);
 
         box.add(scrollMissionInProgress);
-        missionInProgress.setLayout(null);
-
         
         JLabel lblNewLabel_2_1 = new JLabel("진행중인 미션");
+        box.add(lblNewLabel_2_1);
         lblNewLabel_2_1.setFont(customFont.deriveFont(Font.BOLD, 20));
-        lblNewLabel_2_1.setBounds(135, 10, 121, 24);
-        missionInProgress.add(lblNewLabel_2_1);
-       
+        lblNewLabel_2_1.setBounds(166, 249, 121, 24);
+        
         showOngoingMission();
 
         endMissionInProgress = new RoundedPanel2(32);
+        endMissionInProgress.setBackground(new Color(255,255,255));
         endMissionInProgress.setForeground(new Color(255, 255, 255));
+        endMissionInProgress.setLayout(new BoxLayout(endMissionInProgress, BoxLayout.Y_AXIS));
         scrollEndMissionInProgress = new JScrollPane(endMissionInProgress);
-        scrollEndMissionInProgress.setBounds(476, 249, 420, 462);
+        scrollEndMissionInProgress.setBounds(476, 300, 420, 410);
         scrollEndMissionInProgress.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollEndMissionInProgress.setBorder(null);
 
         box.add(scrollEndMissionInProgress);
-        endMissionInProgress.setLayout(null);
         
         JLabel lblNewLabel_2 = new JLabel("종료된 미션");
         lblNewLabel_2.setFont(customFont.deriveFont(Font.BOLD, 20));
-        lblNewLabel_2.setBounds(158, 10, 102, 35);
-        endMissionInProgress.add(lblNewLabel_2);
+        lblNewLabel_2.setBounds(611, 244, 121, 35);
+        box.add(lblNewLabel_2);
 
         showFinishedMission();
 
@@ -170,10 +175,12 @@ public class Mypage {
            }
         });
         btnNewButton.setBounds(517, 176, 25, 25);
-        btnNewButton.setIcon(new ImageIcon(Mypage.class.getResource("/mypage/pencil.png")));
+        btnNewButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("mypage/pencil.png")));
         btnNewButton.setContentAreaFilled(false);
         btnNewButton.setBorderPainted(false);
         box.add(btnNewButton);
+        
+
 
    }
 
@@ -276,7 +283,7 @@ public class Mypage {
      */
     public void showOngoingMission() {
        missionInProgress.removeAll();
-       int y = 0;
+       int y = 5;
        int panelHeight = 107;
        int verticalGap = 0;
        
@@ -291,7 +298,7 @@ public class Mypage {
             missionProgressPanel.setMaximumSize(new Dimension(374, 107));
 
             JLabel ongoingGroupName = new JLabel();
-            ongoingGroupName.setFont(customFont.deriveFont( Font.PLAIN, 25));
+            ongoingGroupName.setFont(customFont.deriveFont( Font.BOLD, 20));
             ongoingGroupName.setText(group.getTitle());
             ongoingGroupName.setBounds(12, 10, 350, 25); 
             missionProgressPanel.add(ongoingGroupName);
@@ -323,32 +330,33 @@ public class Mypage {
             y += panelHeight + verticalGap;
         }
 
-        if(missionEndProgressPanel!=null){
+        if(missionProgressPanel!=null){
            missionInProgress.setPreferredSize(new Dimension(374, y));
-            missionEndProgressPanel.revalidate();
-            missionEndProgressPanel.repaint();
+            missionProgressPanel.revalidate();
+            missionProgressPanel.repaint();
         }
     
 
     }
-
-
 
     /**
      * 완료된 미션의 미션방 명과 진행도를 보여주는 메소드
      * */
     public void showFinishedMission() {
         //완료된 미션을 보여주는 함수
-        int x=470, y=56;
+        endMissionInProgress.removeAll();
+        int y = 5;
+        int panelHeight = 107;
+        int verticalGap = 0;
+
         List<Group> groupList = ClientDBManager.getMyEndedGroupList();
         for(Group group: groupList){
             missionEndProgressPanel = new CustomPanel();
             missionEndProgressPanel.setBackground(new Color(255, 255, 255));
 
-
-            missionEndProgressPanel.setBounds(x, y, 374, 107);
-            endMissionInProgress.add(missionEndProgressPanel);
-            missionEndProgressPanel.setLayout(null);
+            missionEndProgressPanel.setPreferredSize(new Dimension(374, 107));
+            missionEndProgressPanel.setMinimumSize(new Dimension(374, 107));
+            missionEndProgressPanel.setMaximumSize(new Dimension(374, 107));
 
             JLabel endedGroupName = new JLabel();
             endedGroupName.setFont(customFont.deriveFont( Font.PLAIN, 25));
@@ -367,6 +375,7 @@ public class Mypage {
                     cnt++;
                 }
             }
+            
             String startDate = group.getStartDateYear()+"-"+group.getStartDateMonth()+"-"+group.getStartDateDay();
             String endDate = group.getEndDateYear()+"-"+group.getEndDateMonth()+"-"+group.getEndDateDay();
             int gid=group.getGid();
@@ -379,12 +388,16 @@ public class Mypage {
             progressBar.setBounds(12, 55, 304, 30);
 
             missionEndProgressPanel.add(progressBar);
+            endMissionInProgress.add(Box.createRigidArea(new Dimension(0, verticalGap)));
 
-            y+=110;
+            y += panelHeight + verticalGap;
         }
+        /*
         if(missionEndProgressPanel!=null){
+            endMissionInProgress.setPreferredSize(new Dimension(374, y));
             missionEndProgressPanel.revalidate();
             missionEndProgressPanel.repaint();
         }
+        */
     }
 }

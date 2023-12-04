@@ -52,7 +52,7 @@ public class Login extends JFrame{
 		panel.setBackground(backgroundColor);
 		
 		frame.add(panel);
-		ImageIcon image = new ImageIcon("./resource/login/로고.png");
+		ImageIcon image = new ImageIcon(getClass().getClassLoader().getResource("login/로고.png"));
 		
 		JLabel imageLabel = new JLabel(image);
 		imageLabel.setBounds(374,45,450,275);
@@ -90,7 +90,7 @@ public class Login extends JFrame{
         panel.add(idTextField);
 
         JLabel passwordLabel = new JLabel("PW");
-        passwordLabel.setBounds(392, 556, 40, 35); 
+        passwordLabel.setBounds(392, 556, 50, 50); 
         passwordLabel.setFont(customFont.deriveFont( Font.BOLD,24));
 		passwordLabel.setForeground(Color.white);
         panel.add(passwordLabel);
@@ -130,7 +130,7 @@ public class Login extends JFrame{
         loginMatchWarning.setVisible(false);
         panel.add(loginMatchWarning);
 
-        ImageIcon loginButtonImage = new ImageIcon("./resource/login/로그인하기.png");
+        ImageIcon loginButtonImage = new ImageIcon(getClass().getClassLoader().getResource("login/로그인하기.png"));
         JButton loginButton = new JButton(loginButtonImage);
         loginButton.setContentAreaFilled(false);
         loginButton.setBorderPainted(false);

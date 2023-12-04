@@ -251,7 +251,7 @@ public class signUpPopUp {
                 
 			}
 		});
-		signUpButton.setIcon(new ImageIcon(signUpPopUp.class.getResource("/signup/SignUpButton.png")));
+		signUpButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("signup/SignUpButton.png")));
 		signUpButton.setBounds(208, 513, 133, 51);
 		signUpButton.setContentAreaFilled(false);
         signUpButton.setBorderPainted(false);
@@ -260,7 +260,7 @@ public class signUpPopUp {
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		
 		JButton closeButton = new JButton("");
-		closeButton.setIcon(new ImageIcon(signUpPopUp.class.getResource("/signup/close button.png")));
+		closeButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("signup/close button.png")));
 		closeButton.setBounds(474, 10, 50, 50);
 		closeButton.setContentAreaFilled(false);
         closeButton.setBorderPainted(false);
