@@ -476,7 +476,7 @@ public class DetailMyGroup extends JFrame {
 		sendButton.addActionListener(event -> {
 			JSONObject j = new JSONObject();
 			String message = inputText.getText();
-			j.put("message", message); // j.put("FilePath", message);
+			j.put("message", message); 
 			j.put("isPic", 0);
 			j.put("gid", gid);
 			Request r = new Request(RequestType.CHAT, j);

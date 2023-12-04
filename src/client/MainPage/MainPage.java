@@ -90,7 +90,7 @@ public class MainPage extends JFrame {
 		JPanel loc = new JPanel();
 		JLabel userNameInfo = new JLabel(userName + " 님");
 		userNameInfo.setFont(customFont.deriveFont(Font.BOLD, 20));
-		ImageIcon userPicIcon = new ImageIcon(getClass().getClassLoader().getResource("MainPage/defaultPic.png"));
+		ImageIcon userPicIcon = new ImageIcon(userPic);
 		Image img = userPicIcon.getImage();
 		Image updateImg = img.getScaledInstance(58, 58, Image.SCALE_SMOOTH);
 		ImageIcon updateIcon = new ImageIcon(updateImg);
