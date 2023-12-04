@@ -207,7 +207,7 @@ public class DBManager {
             return ResultType.WARNING;
         }
 
-        Path pfpPath = Path.of(path.toString() + '\\' + uid + "pfp." + extension);
+        Path pfpPath = Path.of(path.toString() + '\\' + uid + "pfp" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "." + extension);
         try {
             Files.write(pfpPath, fileData);
         } catch (IOException e ) {

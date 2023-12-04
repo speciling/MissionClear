@@ -106,6 +106,11 @@ public class ClientDBManager extends DBManager {
             if (!pfp.isEmpty()){
                 String fileName = Path.of(pfp).getFileName().toString();
                 pfp = path.toString() + "\\" + fileName;
+                if (!Files.exists(Path.of(pfp))){
+                    JSONObject object = new JSONObject();
+                    object.put("fileName", Path.of(pfp).getFileName().toString());
+                    ClientSocket.send(new Request(RequestType.GETFILE, object));
+                }
             }
             String groups = user.get("groups").toString();
             String sql = String.format("""
@@ -145,11 +150,13 @@ public class ClientDBManager extends DBManager {
                 Integer uid = Integer.parseInt(chatting.get("uid").toString());
                 String message = chatting.get("message").toString();
                 Integer isPic = Integer.parseInt(chatting.get("isPic").toString());
-                if (isPic == 1) {
-                    JSONObject object = new JSONObject();
-                    object.put("fileName", message);
-                    message = path.toString() + "\\" + message;
-                    ClientSocket.send(new Request(RequestType.GETFILE, object));
+                if (isPic == 1){
+                    String filePath = path.toString()  + "\\" + message;
+                    if (!Files.exists(Path.of(filePath))){
+                        JSONObject object = new JSONObject();
+                        object.put("fileName", message);
+                        ClientSocket.send(new Request(RequestType.GETFILE, object));
+                    }
                 }
                 sql = String.format("""
                         INSERT INTO G%dCHAT (chatId, uid, message, isPic) VALUES (%d, %d, '%s', %d)""", gid, chatId, uid, message, isPic);
