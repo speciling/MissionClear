@@ -146,13 +146,13 @@ public class DetailMyGroup extends JFrame {
 			count++;
 			String path = null;
 			if (detailProgress[i][j] == 0) {
-				path = "./resource/RecruitGroupMember/Default.png";
+				path = "Default.png";
 			} else if (detailProgress[i][j] == 1) {
-				path = "./resource/RecruitGroupMember/clear.png";
+				path = "clear.png";
 			} else if (detailProgress[i][j] == 2) {
-				path = "./resource/RecruitGroupMember/fail.png";
+				path = "fail.png";
 			}
-			ImageIcon icon = new ImageIcon(path);
+			ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(path));
 			JLabel detail = new JLabel(icon);
 			detail.setSize(50, 50);
 			detailProgressP.add(detail);
@@ -330,7 +330,7 @@ public class DetailMyGroup extends JFrame {
 			sendMessage.setForeground(new Color(239, 239, 239));
 			showMoreF.add(sendMessage);
 
-			ImageIcon sendIcon = new ImageIcon("./resource/DetailMyGroup/sendButton.png");
+			ImageIcon sendIcon = new ImageIcon(getClass().getClassLoader().getResource("sendButton.png"));
 			JButton sendButton900 = new JButton(sendIcon);
 
 			sendMessage.add(sendButton900);
@@ -364,7 +364,7 @@ public class DetailMyGroup extends JFrame {
 					JPanel chatMoreBoxBox = new JPanel();
 					chatMoreBoxBox.setBackground(Color.white);
 					chatMoreBoxBox.setLayout(null);
-					
+
 					int idx = chatids.size();
 					int num = 0;
 					for (idx = idx - 1; idx >= 0; idx--) {
@@ -373,7 +373,7 @@ public class DetailMyGroup extends JFrame {
 						num++;
 					}
 
-					chatMoreBoxBox.setBounds(0,0,900, 95 * num + 305 * picnum);
+					chatMoreBoxBox.setBounds(0, 0, 900, 95 * num + 305 * picnum);
 					chatMoreBox.setPreferredSize(new Dimension(900, 95 * num + 305 * picnum));
 
 					chatMoreBox.add(chatMoreBoxBox);
@@ -385,7 +385,7 @@ public class DetailMyGroup extends JFrame {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 					chatMoreBox.remove(chatMoreBoxBox);
 					chatData = new MakeChatData(gid);
 					chatUid = chatData.uid;
@@ -397,15 +397,14 @@ public class DetailMyGroup extends JFrame {
 			});
 			chatPopupThread.start();
 
-			
 			JScrollPane p = new JScrollPane(chatMoreBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			p.setViewportView(chatMoreBox);
 			JPanel attachP = new JPanel();
-			attachP.setBounds(0,0,900,580);
+			attachP.setBounds(0, 0, 900, 580);
 			attachP.setLayout(null);
 			p.setBounds(0, 0, 900, 580);
-			
+
 			showMoreF.add(p, BorderLayout.CENTER);
 			JScrollBar verticalBar = p.getVerticalScrollBar();
 			verticalBar.setPreferredSize(new Dimension(15, 0)); // 스크롤바의 너비 설정
@@ -455,7 +454,7 @@ public class DetailMyGroup extends JFrame {
 		sendMessage.setForeground(new Color(239, 239, 239));
 		chatPan.add(sendMessage);
 
-		ImageIcon sendIcon = new ImageIcon("./resource/DetailMyGroup/sendButton.png");
+		ImageIcon sendIcon = new ImageIcon(getClass().getClassLoader().getResource("sendButton.png"));
 		JButton sendButton = new JButton(sendIcon);
 
 		sendMessage.add(sendButton);
@@ -641,7 +640,7 @@ public class DetailMyGroup extends JFrame {
 		detailMyGroupP.add(ff);
 
 		JPanel authMissionP = new JPanel();
-		ImageIcon authMissionIcon = new ImageIcon("./resource/DetailMyGroup/Frame 12.png");
+		ImageIcon authMissionIcon = new ImageIcon(getClass().getClassLoader().getResource("Frame 12.png"));
 		JButton authMission = new JButton(authMissionIcon);
 		authMission.setBackground(new Color(246, 246, 246));
 		authMission.setBorderPainted(false);
