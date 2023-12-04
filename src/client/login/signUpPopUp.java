@@ -53,10 +53,9 @@ public class signUpPopUp {
 	private char[] passwordChar;
 	private JButton signUpButton;
 	CustomFont customFont = new CustomFont();
+
 	/**
-	 * 
-	 * 회원가입 팝업 띄우는 함수
-	 * @wbp.parser.entryPoint
+	 * 회원가입 팝업 띄우는 메소드
 	 */
 	public void createSignPopUp() {
 		frame = new JFrame();
@@ -226,9 +225,6 @@ public class signUpPopUp {
 		 */
 		
 		JButton signUpButton = new JButton("");
-		/**
-		 * 회원가입 버튼 클릭했을 때 값 검사와 회원가입 시도하는 메소드
-		 */
 		signUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				id = idTextField.getText();

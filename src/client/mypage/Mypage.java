@@ -27,9 +27,7 @@ import org.json.simple.JSONObject;
 
 /**
  * @author 최지원
- * 
  * 사각형의 바텀부분에만 검정색 선을 더하기 위해 JPanel을 커스텀한 클래스
- *
  */
 class CustomPanel extends JPanel {
 
@@ -93,6 +91,9 @@ public class Mypage {
     }
    
     /**
+     * @param nickname
+     * @param uid
+     * @param picPath
      * 화면에 보이게 하기 위한 생성자
      *
      */
@@ -176,7 +177,9 @@ public class Mypage {
 
    }
 
-    /**서버에 닉네임 변경을 요청하는 함수*/
+    /**
+     * 서버에 닉네임 변경을 요청하고 닉네임 변경 팝업을 구성하는 함수
+     */
     public void changeNickName() {
         //서버에 닉네임 변경을 요청하는 함수
       JFrame changeNickNamePopUp = new JFrame();
@@ -202,8 +205,6 @@ public class Mypage {
       nicknameField.setBorder(null);
       inputNickNamePanel.add(nicknameField);
       nicknameField.setColumns(10);
-       
-       
         
       JButton enterButton = new JButton("");
       enterButton.setIcon(new ImageIcon("./resource/mypage/changeButton.png"));
@@ -235,7 +236,9 @@ public class Mypage {
     }
 
     
-    /**서버에 프로필 사진 변경을 요청하는 함수*/
+    /**
+     * 서버에 프로필 사진 변경을 요청하는 함수
+     */
     public void changePFP() {
         JFileChooser fileChooser = new JFileChooser();
 
@@ -268,7 +271,9 @@ public class Mypage {
         ClientSocket.send(request);
     }
     
-    /**진행중인 미션을 보여주는 함수*/
+    /**
+     * 진행중인 미션의 미션방 이름과 현재 진행도를 보여주는 메소드
+     */
     public void showOngoingMission() {
        missionInProgress.removeAll();
        int y = 0;
@@ -329,7 +334,9 @@ public class Mypage {
 
 
 
-    /** 완료된 미션을 보여주는 함수*/
+    /**
+     * 완료된 미션의 미션방 명과 진행도를 보여주는 메소드
+     * */
     public void showFinishedMission() {
         //완료된 미션을 보여주는 함수
         int x=470, y=56;

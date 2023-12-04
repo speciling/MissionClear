@@ -23,7 +23,7 @@ import server.service.Request;
 import server.service.RequestType;
 /**
  * 
-  This class represents the login screen where users can log in by entering their username and password.
+  로그인 화면 클래스
  */
 
 public class Login extends JFrame{
@@ -41,9 +41,7 @@ public class Login extends JFrame{
      * Initializes GUI components and sets up the screen.
      */
 	public void loginpage() {
-		/**
-		 frame setting
-		 */
+
 		frame=new JFrame("전체화면");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1200,850);
@@ -54,10 +52,6 @@ public class Login extends JFrame{
 		panel.setBackground(backgroundColor);
 		
 		frame.add(panel);
-		
-		/**
-		 image append
-		 */
 		ImageIcon image = new ImageIcon("./resource/login/로고.png");
 		
 		JLabel imageLabel = new JLabel(image);
@@ -65,10 +59,6 @@ public class Login extends JFrame{
 		panel.setLayout(null);
 		
 		panel.add(imageLabel);
-		
-		/**
-		 text setting
-		 */
 
 		JLabel textLabel=new JLabel("다같이 재밌게 하는 목표달성!");
 		textLabel.setBounds(405,298,420,90);
@@ -87,31 +77,24 @@ public class Login extends JFrame{
 		login.setOpaque(false);
 		panel.add(login);
 		
-		/**
-		 login
-		 */
-		
 		JLabel idLabel = new JLabel("ID");
 		idLabel.setBounds(392,445,30,35);
 		idLabel.setFont(customFont.deriveFont(Font.BOLD,24));
 		idLabel.setForeground(Color.white);
 		panel.add(idLabel);
 		
-		/** id field text setting*/
 		idTextField = new RoundCornerTextField(20);
         idTextField.setBackground(new Color(255, 255, 255));
         idTextField.setBounds(385, 489, 428, 54); 
         idTextField.setFont(customFont.deriveFont(Font.PLAIN, 16));
         panel.add(idTextField);
 
-        /** password field text setting*/
         JLabel passwordLabel = new JLabel("PW");
         passwordLabel.setBounds(392, 556, 40, 35); 
         passwordLabel.setFont(customFont.deriveFont( Font.BOLD,24));
 		passwordLabel.setForeground(Color.white);
         panel.add(passwordLabel);
 
-        
         passwordField = new RoundCornerPasswordField(20);
         passwordField.setBounds(385, 600, 428, 54); /** password input text setting*/
         passwordField.setFont(customFont.deriveFont(Font.PLAIN,16));
@@ -123,21 +106,16 @@ public class Login extends JFrame{
         signUpButton.setMargin(new Insets(0, 0, 0, 0));
         signUpButton.setContentAreaFilled(false);
         signUpButton.setBorderPainted(false);
-        /** 회원가입 버튼을 눌렀을 때 효과 */
         signUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	/** 회원가입 팝업 띄우는 메소드 */
-                signUpPopUp su = new signUpPopUp(); 
+                signUpPopUp su = new signUpPopUp();
                 su.createSignPopUp();
             }
         });
         
         panel.add(signUpButton);
         
-        /**
-         id, pw warning
-         */
         loginWarning = new JLabel("아이디 또는 비밀번호를 입력해주세요");
         loginWarning.setBounds(460,683,300,50);
         loginWarning.setFont(customFont.deriveFont(Font.PLAIN, 18));
@@ -151,19 +129,12 @@ public class Login extends JFrame{
         loginMatchWarning.setForeground(Color.red);
         loginMatchWarning.setVisible(false);
         panel.add(loginMatchWarning);
-        
-        
-        
-        /**
-         login button
-         */
+
         ImageIcon loginButtonImage = new ImageIcon("./resource/login/로그인하기.png");
         JButton loginButton = new JButton(loginButtonImage);
         loginButton.setContentAreaFilled(false);
         loginButton.setBorderPainted(false);
-        /** login button size*/
-        loginButton.setBounds(386, 730, 428, 60); 
-        /** login button click event*/
+        loginButton.setBounds(386, 730, 428, 60);
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -172,10 +143,6 @@ public class Login extends JFrame{
         });
 
         panel.add(loginButton);
-
-		/**
-		 * 엔터만 쳐도 로그인이 되도록 하는 효과
-		 */
 		idTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -198,12 +165,14 @@ public class Login extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
-	
+
 	/**
-     * id, pw valid check method
+	 * @param id
+	 * @param password
+     * 아이디와 비밀번호가 입력칸에 입력이 되어있으면 true를 반환하고
+	 * 아무것도 입력되어 있지 않는다면 false를 반환하는 메소드
      */
 	private boolean checkValid(String id,String password) {
-		/**id, pw check*/
 		if(id.trim().length()==0||password.length()==0) {
 			loginWarning.setVisible(true); 
 			return false;
@@ -214,7 +183,9 @@ public class Login extends JFrame{
 		}
 	}
 	/**
-     * try login and return success
+	 * @param id
+	 * @param pw
+     * 서버와 연결하여 로그인 성공 정보를 받아오는 메소드
      */
 	public boolean login(String id, String pw) {
         JSONObject jsonObject = new JSONObject();
