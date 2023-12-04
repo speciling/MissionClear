@@ -106,6 +106,11 @@ public class ClientDBManager extends DBManager {
             if (!pfp.isEmpty()){
                 String fileName = Path.of(pfp).getFileName().toString();
                 pfp = path.toString() + "\\" + fileName;
+                if (!Files.exists(Path.of(pfp))){
+                    JSONObject object = new JSONObject();
+                    object.put("fileName", Path.of(pfp).getFileName().toString());
+                    ClientSocket.send(new Request(RequestType.GETFILE, object));
+                }
             }
             String groups = user.get("groups").toString();
             String sql = String.format("""
