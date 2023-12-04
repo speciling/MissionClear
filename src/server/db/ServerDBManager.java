@@ -131,7 +131,6 @@ public class ServerDBManager extends DBManager{
     /**
      * 초기 데이터를 조회합니다.
      * 초기 데이터는 해당 유저가 속한 그룹, 그 그룹들에 속한 유저의 정보, 채팅정보, 미션인증 정보를 의미합니다.
-     * 사용자들의 프로필 사진 전송 요청 또한 이 함수에서 수행합니다.
      *
      * @param groups     사용자가 속한 그룹 리스트
      * @param writeQueue 데이터를 쓰기 위한 큐
@@ -161,15 +160,6 @@ public class ServerDBManager extends DBManager{
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("fileName", fileName);
                 fileName =  path.toString() + "\\" + fileName;
-                Request request = new Request(RequestType.GETFILE, jsonObject);
-                try {
-                    byte[] file = Files.readAllBytes(Path.of(fileName));
-                    request.file = file;
-                    request.getData().put("resultType", ResultType.SUCCESS.getCode());
-                } catch (IOException e) {
-                    request.getData().put("resultType", ResultType.WARNING.getCode());
-                }
-                writeQueue.add(Request.toByteBuffer(request));
             }
             users.add(user);
         }
