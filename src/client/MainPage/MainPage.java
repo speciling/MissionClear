@@ -41,7 +41,7 @@ public class MainPage extends JFrame {
 	/**
 	 * 사용자의 프로필 사진 경로를 나타내는 문자열입니다. 초기값은 기본 이미지의 경로입니다.
 	 */
-	public String userPic = "./resource/MainPage/defaultPic.png";
+	public String userPic;
 	
 	public Container main;
 	public static MainPage instance;
@@ -98,6 +98,8 @@ public class MainPage extends JFrame {
 		String pfp = myInfo.get("pfp").toString();
 		if (!pfp.equals(""))
 			this.userPic = myInfo.get("pfp").toString();
+		else
+			this.userPic = null;
 		uid = Integer.parseInt(myInfo.get("uid").toString());
 		// 메인 페이지의 배경색과 로고 경로 설정
 		Color mainColor = new Color(56, 183, 255);
@@ -119,7 +121,11 @@ public class MainPage extends JFrame {
 		JPanel loc = new JPanel();
 		JLabel userNameInfo = new JLabel(userName + " 님");
 		userNameInfo.setFont(customFont.deriveFont(Font.BOLD, 20));
-		ImageIcon userPicIcon = new ImageIcon(userPic);
+		ImageIcon userPicIcon;
+		if(userPic!=null)
+			userPicIcon = new ImageIcon(userPic);
+		else
+			userPicIcon = new ImageIcon(getClass().getClassLoader().getResource("MainPage/defaultPic.png"));
 		Image img = userPicIcon.getImage();
 		Image updateImg = img.getScaledInstance(58, 58, Image.SCALE_SMOOTH);
 		ImageIcon updateIcon = new ImageIcon(updateImg);
