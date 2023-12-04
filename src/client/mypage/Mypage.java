@@ -150,9 +150,15 @@ public class Mypage {
            }
         });
         ImageIcon icon = new ImageIcon(picPath);
+        if(picPath!=null)
+            icon = new ImageIcon(picPath);
+        else
+            icon = new ImageIcon(getClass().getClassLoader().getResource("MainPage/defaultPic.png"));
+
         Image img = icon.getImage();
         Image updateImg = img.getScaledInstance(149,149,Image.SCALE_SMOOTH);
         ImageIcon updateIcon = new ImageIcon(updateImg);
+
 
         PFPButton.setIcon(updateIcon);
         PFPButton.setBounds(388, 10, 149, 149);
@@ -212,7 +218,7 @@ public class Mypage {
       nicknameField.setColumns(10);
         
       JButton enterButton = new JButton("");
-      enterButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("/mypage/changeButton.png"));
+      enterButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource("/mypage/changeButton.png")));
       enterButton.setBounds(115, 150, 110, 38);
       enterButton.setContentAreaFilled(false);
       enterButton.setBorderPainted(false);
