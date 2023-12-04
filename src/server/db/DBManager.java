@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -163,7 +164,7 @@ public class DBManager {
             return -1;
         }
 
-        Path filePath = Path.of(path.toString() + '\\' + "G" + gid + "U" + uid + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + "certify." + extension);
+        Path filePath = Path.of(path.toString() + '\\' + "G" + gid + "U" + uid + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "certify." + extension);
         try {
             Files.write(filePath, request.file);
         } catch (IOException e ) {
