@@ -64,20 +64,35 @@ public class AddMyGroup {
 		missionTitleLabel.setBounds(26, 12, 232, 35);
 		addGroupPanel.add(missionTitleLabel);
 		
-		JLabel activityPeriodLabel = new JLabel("<html><b>활동기간</b>: " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + " ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "</html>");
+		JLabel activityPeriod = new JLabel("활동기간: ");
+		activityPeriod.setFont(customFont.deriveFont(Font.BOLD,15));
+		activityPeriod.setBounds(26, 53, 70, 25);
+		addGroupPanel.add(activityPeriod);
+		
+		JLabel activityPeriodLabel = new JLabel(group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + " ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay());
 		activityPeriodLabel.setFont(customFont.deriveFont(Font.PLAIN,15));
-		activityPeriodLabel.setBounds(26, 53, 352, 25);
+		activityPeriodLabel.setBounds(94, 53, 352, 25);
 		addGroupPanel.add(activityPeriodLabel);
 		
-		JLabel missionLabel = new JLabel("<html><b>활동내용</b>: " + group.getMission() + "</html>");
+		JLabel activitycontents = new JLabel("활동내용: ");
+		activitycontents.setFont(customFont.deriveFont(Font.BOLD,15));
+		activitycontents.setBounds(26, 83, 70, 25);
+		addGroupPanel.add(activitycontents);
+		
+		JLabel missionLabel = new JLabel(group.getMission());
 		missionLabel.setFont(customFont.deriveFont(Font.PLAIN,15));
-		missionLabel.setBounds(26, 83, 352, 25);
+		missionLabel.setBounds(94, 83, 352, 25);
 		addGroupPanel.add(missionLabel);
 		
-		JLabel personnelPanel = new JLabel("<html><b>참여인원</b>: " + group.getUserCount() + "명");
-		personnelPanel.setFont(customFont.deriveFont(Font.PLAIN,15));
-		personnelPanel.setBounds(26, 113, 352, 25);
-		addGroupPanel.add(personnelPanel);
+		JLabel Personnel = new JLabel("참여인원: ");
+		Personnel.setFont(customFont.deriveFont(Font.BOLD,15));
+		Personnel.setBounds(26, 113, 70, 25);
+		addGroupPanel.add(Personnel);
+		
+		JLabel personnelLabel = new JLabel(group.getUserCount() + "명");
+		personnelLabel.setFont(customFont.deriveFont(Font.PLAIN,15));
+		personnelLabel.setBounds(94, 113, 352, 25);
+		addGroupPanel.add(personnelLabel);
 		
 		JLabel category = new JLabel(group.getCategory());
 	    category.setForeground(new Color(56, 183, 255));

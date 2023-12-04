@@ -116,7 +116,7 @@ public class AddMissionRoom {
 	    title.setFont(customFont.deriveFont(Font.BOLD,20));
 	    addMissionRoomPanel.add(title);
 	    
-	    this.description = new JLabel("<html>" + group.getDescription() + "</html>");
+	    this.description = new JLabel(group.getDescription());
 	    this.description.setBounds(22, 73, 357, 42);
 	    this.description.setFont(customFont.deriveFont(Font.PLAIN,18));
 	    addMissionRoomPanel.add(this.description);
@@ -126,9 +126,14 @@ public class AddMissionRoom {
 	    separator.setBounds(17, 162, 374, 1); // 위치와 크기 설정
 	    addMissionRoomPanel.add(separator);
 	    
-	    JLabel recruitDeadline = new JLabel("<html><b>모집기한:</b> " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + " 까지<br></html>");
+	    JLabel recruitDeadlineLabel = new JLabel("모집기한: ");
+	    recruitDeadlineLabel.setBounds(23, 180, 68, 21);
+	    recruitDeadlineLabel.setFont(customFont.deriveFont(Font.BOLD,15));
+	    addMissionRoomPanel.add(recruitDeadlineLabel);
+	    
+	    JLabel recruitDeadline = new JLabel(group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + " 까지");
 	    recruitDeadline.setFont(customFont.deriveFont(Font.PLAIN,15));
-	    recruitDeadline.setBounds(23, 180, 357, 21);
+	    recruitDeadline.setBounds(90, 180, 298, 21);
 	    addMissionRoomPanel.add(recruitDeadline);
 	    
 	    JLabel category = new JLabel(group.getCategory());
@@ -157,14 +162,24 @@ public class AddMissionRoom {
 
 	    addMissionRoomPanel.add(detailPopup);
 	    
-	    JLabel recruitmentCapacity = new JLabel("<html><b>모집인원:</b> " + group.getCapacity() + "명<br></html>");
+	    JLabel recruitmentCapacityLabel = new JLabel("모집인원: ");
+	    recruitmentCapacityLabel.setBounds(23, 201, 68, 21);
+	    recruitmentCapacityLabel.setFont(customFont.deriveFont(Font.BOLD,15));
+	    addMissionRoomPanel.add(recruitmentCapacityLabel);
+	    
+	    JLabel recruitmentCapacity = new JLabel(group.getCapacity() + " 명");
 	    recruitmentCapacity.setFont(customFont.deriveFont(Font.PLAIN,15));
-	    recruitmentCapacity.setBounds(23, 201, 357, 21);
+	    recruitmentCapacity.setBounds(90, 201, 357, 21);
 	    addMissionRoomPanel.add(recruitmentCapacity);
 
-	    JLabel activityPeriod = new JLabel("<html><b>활동기간:</b> " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + ". ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "</html>");
+	    JLabel activityPeriodLabel = new JLabel("활동기간: ");
+	    activityPeriodLabel.setBounds(23, 222, 68, 21);
+	    activityPeriodLabel.setFont(customFont.deriveFont(Font.BOLD,15));
+	    addMissionRoomPanel.add(activityPeriodLabel);
+	    
+	    JLabel activityPeriod = new JLabel(group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + ". ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay());
 	    activityPeriod.setFont(customFont.deriveFont(Font.PLAIN,15));
-	    activityPeriod.setBounds(23, 222, 357, 21);
+	    activityPeriod.setBounds(90, 222, 357, 21);
 	    addMissionRoomPanel.add(activityPeriod);
 	    
 	    JLabel lockLabel = new JLabel("");

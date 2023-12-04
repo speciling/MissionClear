@@ -52,6 +52,9 @@ public class GroupDetailPopup {
      * 팝업 창의 내용을 초기화하는 메서드.
      * 프레임과 레이아웃을 설정하고, 레이블, 버튼 및 기타 UI 요소를 구성한다.
      */
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	void initialize() {
 		frame = new JFrame();
 		frame.setSize(406, 387);
@@ -117,11 +120,45 @@ public class GroupDetailPopup {
 	    groupDetailPopupPanel.add(exitButton);
 	    
 	    // 그룹 상세 정보 레이블 설정
-	    JLabel missionInfo = new JLabel("<html><b>모집기한</b>: " + group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + "까지<br>\r\n<b>모집인원</b>: " + group.getCapacity() + "명<br>\r\n<b>활동기간</b>: " + group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + " ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay() + "<br>\r\n<b>활동내용</b>: " + group.getMission() + "</html>");
-	    missionInfo.setFont(customFont.deriveFont(Font.PLAIN,18));
-	    missionInfo.setBounds(19, 220, 357, 113);
-	    groupDetailPopupPanel.add(missionInfo);
+	    JLabel recruitDeadlineLabel = new JLabel("모집기한: ");
+	    recruitDeadlineLabel.setBounds(19, 245, 100, 21);
+	    recruitDeadlineLabel.setFont(customFont.deriveFont(Font.BOLD,18));
+	    groupDetailPopupPanel.add(recruitDeadlineLabel);
 	    
+	    JLabel recruitDeadline = new JLabel(group.getDeadlineYear() + ". " + group.getDeadlineMonth() + ". " + group.getDeadlineDay() + " 까지");
+	    recruitDeadline.setFont(customFont.deriveFont(Font.PLAIN,18));
+	    recruitDeadline.setBounds(100, 245, 298, 21);
+	    groupDetailPopupPanel.add(recruitDeadline);
+
+	    JLabel recruitmentCapacityLabel = new JLabel("모집인원: ");
+	    recruitmentCapacityLabel.setBounds(19, 268, 100, 21);
+	    recruitmentCapacityLabel.setFont(customFont.deriveFont(Font.BOLD,18));
+	    groupDetailPopupPanel.add(recruitmentCapacityLabel);
+	    
+	    JLabel recruitmentCapacity = new JLabel(group.getCapacity() + "명");
+	    recruitmentCapacity.setFont(customFont.deriveFont(Font.PLAIN,18));
+	    recruitmentCapacity.setBounds(100, 268, 50, 21);
+	    groupDetailPopupPanel.add(recruitmentCapacity);
+	    
+	    JLabel activityPeriodLabel = new JLabel("활동기간: ");
+	    activityPeriodLabel.setBounds(19, 291, 100, 21);
+	    activityPeriodLabel.setFont(customFont.deriveFont(Font.BOLD,18));
+	    groupDetailPopupPanel.add(activityPeriodLabel);
+	    
+	    JLabel activityPeriod = new JLabel(group.getStartDateYear() + ". " + group.getStartDateMonth() + ". " + group.getStartDateDay() + ". ~ " + group.getEndDateYear() + ". " + group.getEndDateMonth() + ". " + group.getEndDateDay());
+	    activityPeriod.setFont(customFont.deriveFont(Font.PLAIN,18));
+	    activityPeriod.setBounds(100, 291, 357, 21);
+	    groupDetailPopupPanel.add(activityPeriod);
+
+	    JLabel activitycontents = new JLabel("활동내용: ");
+		activitycontents.setFont(customFont.deriveFont(Font.BOLD,18));
+		activitycontents.setBounds(19, 314, 100, 21);
+		groupDetailPopupPanel.add(activitycontents);
+		
+		JLabel missionLabel = new JLabel(group.getMission());
+		missionLabel.setFont(customFont.deriveFont(Font.PLAIN,18));
+		missionLabel.setBounds(100, 314, 352, 21);
+		groupDetailPopupPanel.add(missionLabel);
 	    // 그룹 참여 버튼 설정
 	    JButton enterButton = new JButton("");
 	    enterButton.setBackground(new Color(255, 255, 255));
