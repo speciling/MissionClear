@@ -20,7 +20,7 @@ import client.recruitpage.RecruitGroupMember;
 
 public class Client {
 	  public static void main(String [] args) {
-          ClientSocket socket = new ClientSocket("172.31.99.182",8080);
+          ClientSocket socket = new ClientSocket("172.30.1.79",8080);
           socket.start();
           ClientDBManager.init();
           Login login = new Login();
