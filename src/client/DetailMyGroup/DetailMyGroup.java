@@ -23,6 +23,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import org.json.simple.JSONObject;
 
+import client.CustomFont;
 import client.MainPage.MainPage;
 import client.net.ClientSocket;
 import client.recruitpage.Group;
@@ -30,6 +31,7 @@ import server.service.Request;
 import server.service.RequestType;
 
 class RoundedPanel2 extends JPanel {
+	
 	private int radius;
 
 	public RoundedPanel2(int radius) {
@@ -48,6 +50,7 @@ class RoundedPanel2 extends JPanel {
 }
 
 public class DetailMyGroup extends JFrame {
+	CustomFont customFont = new CustomFont();
 	String authPicPath;
 	Group groupData;
 	int gid;
@@ -130,7 +133,7 @@ public class DetailMyGroup extends JFrame {
 		JLabel title = new JLabel("진행상황");
 		title.setHorizontalAlignment(JLabel.CENTER);
 		title.setVerticalAlignment(JLabel.CENTER);
-		title.setFont(new Font("나눔고딕", Font.BOLD, 30));
+		title.setFont(customFont.deriveFont(Font.BOLD, 30));
 		title.setBounds(0, 0, 434, 70);
 		popup.add(title);
 		pan.setBounds(0, 70, 434, 72);
@@ -188,10 +191,10 @@ public class DetailMyGroup extends JFrame {
 		up.setBounds(100, 0, 260, 36);
 		up.setLayout(new BorderLayout());
 		JLabel userName = new JLabel(name);
-		userName.setFont(new Font("나눔고딕", Font.BOLD, 20));
+		userName.setFont(customFont.deriveFont(Font.BOLD, 20));
 		up.add(userName, BorderLayout.WEST);
 		JLabel userRage = new JLabel(rage + "%");
-		userRage.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		userRage.setFont(customFont.deriveFont(Font.PLAIN, 15));
 		up.add(userRage, BorderLayout.EAST);
 
 		JPanel down = new JPanel();
@@ -224,7 +227,7 @@ public class DetailMyGroup extends JFrame {
 		ff.add(missionProgressPanel);
 
 		JLabel progressL = new JLabel("진행도 보기");
-		progressL.setFont(new Font("나눔고딕", Font.BOLD, 28));
+		progressL.setFont(customFont.deriveFont(Font.BOLD, 28));
 		missionProgressPanel.add(progressL);
 		progressL.setBounds(125, 20, 147, 35);
 
@@ -261,7 +264,7 @@ public class DetailMyGroup extends JFrame {
 		chatBox.add(chatUserPicL);
 		JLabel chatUserName = new JLabel(userNicknameChat);
 		chatUserName.setBounds(80, 10, 300, 20);
-		chatUserName.setFont(new Font("나눔고딕", Font.BOLD, 16));
+		chatUserName.setFont(customFont.deriveFont(Font.BOLD, 16));
 		chatBox.add(chatUserName);
 
 		int isPic = (int) chatIsPic.get(cid);
@@ -277,14 +280,14 @@ public class DetailMyGroup extends JFrame {
 		{
 			JLabel chattingL = new JLabel(messageChat);
 			chattingL.setBounds(90, 21, x - 100, 60);
-			chattingL.setFont(new Font("나눔고딕", Font.PLAIN, 18));
+			chattingL.setFont(customFont.deriveFont(Font.PLAIN, 18));
 			chatBox.add(chattingL);
 
 		} else if (isPic == 1)// 인증일때
 		{
 			JLabel chattingL = new JLabel(userNicknameChat + "님이 오늘의 미션을 인증하였습니다.");
 			chattingL.setBounds(90, 21, x - 100, 60);
-			chattingL.setFont(new Font("나눔고딕", Font.BOLD, 14));
+			chattingL.setFont(customFont.deriveFont(Font.BOLD, 14));
 			chatBox.add(chattingL);
 			if (x == 900)// 큰 사이즈일 때
 			{
@@ -309,7 +312,7 @@ public class DetailMyGroup extends JFrame {
 
 		// 자세히보기 버튼
 		JButton showMore = new JButton("자세히 보기 >");
-		showMore.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		showMore.setFont(customFont.deriveFont(Font.PLAIN, 15));
 		showMore.setContentAreaFilled(false);
 		showMore.setBorderPainted(false);
 		showMore.setBounds(325, 5, 130, 35);
@@ -343,7 +346,7 @@ public class DetailMyGroup extends JFrame {
 				}
 			};
 			inputText.setBounds(10, 0, 780, 50);
-			inputText.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+			inputText.setFont(customFont.deriveFont(Font.PLAIN, 15));
 			inputText.setOpaque(false);
 			sendMessage.add(inputText);
 			sendButton900.addActionListener(event900 -> {
@@ -467,7 +470,7 @@ public class DetailMyGroup extends JFrame {
 			}
 		};
 		inputText.setBounds(10, 0, 360, 50);
-		inputText.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		inputText.setFont(customFont.deriveFont(Font.PLAIN, 15));
 		inputText.setOpaque(false);
 		sendMessage.add(inputText);
 		sendButton.addActionListener(event -> {
@@ -614,7 +617,7 @@ public class DetailMyGroup extends JFrame {
 		missionNameP.setBackground(new Color(220, 243, 255));
 		missionNameP.setLayout(new BorderLayout());
 		JLabel missionNameL = new JLabel(missionName);
-		missionNameL.setFont(new Font("나눔고딕", Font.BOLD, 35));
+		missionNameL.setFont(customFont.deriveFont(Font.BOLD, 35));
 		missionNameP.add(missionNameL);
 		missionNameP.setBounds(30, 30, 870, 60);
 		banner.add(missionNameP);
@@ -627,7 +630,7 @@ public class DetailMyGroup extends JFrame {
 				+ missionEnd.get(Calendar.DAY_OF_MONTH) + " <br>" + "활동내용: " + missionInfo + "</html>";
 		JLabel missionInfoL = new JLabel(missionInfoT);
 		missionInfoP.setLayout(new BorderLayout());
-		missionInfoL.setFont(new Font("나눔고딕", Font.BOLD, 20));
+		missionInfoL.setFont(customFont.deriveFont(Font.BOLD, 20));
 		missionInfoP.add(missionInfoL);
 		missionInfoP.setBounds(30, 100, 870, 70);
 		banner.add(missionInfoP);

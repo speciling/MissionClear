@@ -3,6 +3,7 @@ package client.MainPage;
 import javax.swing.*;
 import java.awt.*;
 import client.detailMyGroup.DetailMyGroup;
+import client.CustomFont;
 import client.db.ClientDBManager;
 import client.detailMyGroup.DetailMyGroup;
 import client.login.Login;
@@ -20,7 +21,7 @@ import org.json.simple.JSONObject;
  */
 
 public class MainPage extends JFrame {
-
+	CustomFont customFont = new CustomFont();
 	public JPanel globPan;
 	public String userName = "이름을 입력해주세요";
 	public int uid;
@@ -88,7 +89,7 @@ public class MainPage extends JFrame {
 		mainInfo.setLayout(new BorderLayout());
 		JPanel loc = new JPanel();
 		JLabel userNameInfo = new JLabel(userName + " 님");
-		userNameInfo.setFont(new Font("나눔고딕", Font.BOLD, 20));
+		userNameInfo.setFont(customFont.deriveFont(Font.BOLD, 20));
 		ImageIcon userPicIcon = new ImageIcon(getClass().getClassLoader().getResource("defaultPic.png"));
 		Image img = userPicIcon.getImage();
 		Image updateImg = img.getScaledInstance(58, 58, Image.SCALE_SMOOTH);
