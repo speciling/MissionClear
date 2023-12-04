@@ -326,7 +326,7 @@ public class DetailMyGroup extends JFrame {
          JButton sendButton900 = new JButton(sendIcon);
          
          sendMessage.add(sendButton900);
-         sendButton900.setBounds(800,8,33,33); //
+         sendButton900.setBounds(800,8,33,33); 
          sendButton900.setContentAreaFilled(false);
          sendButton900.setBorderPainted(false);
          JTextField inputText = new JTextField(){
@@ -339,7 +339,7 @@ public class DetailMyGroup extends JFrame {
          sendButton900.addActionListener(event900 -> {
              JSONObject j = new JSONObject();
              String message = inputText.getText();
-             j.put("message", message);  // j.put("FilePath", message);
+             j.put("message", message); 
              j.put("isPic",0);
              j.put("gid",gid);
              Request r = new Request(RequestType.CHAT,j);
@@ -352,13 +352,17 @@ public class DetailMyGroup extends JFrame {
          int idx = chatids.size();//50
          
          JPanel chatMoreBox = new JPanel();
-         chatMoreBox.setLayout(new BorderLayout());
+         //chatMoreBox.setLayout(new BorderLayout());
+         chatMoreBox.setLayout(null);
+         //레이아웃을 바꿔보기
          int num = 0;
          
          for(idx=idx-1;idx>=0;idx--) 
          {
         	 int cid = chatids.get(idx);
-        	 chatMoreBox.add(chatBox(900,num,cid), BorderLayout.CENTER);
+        	 chatMoreBox.add(chatBox(900,num,cid));
+        	 //chatMoreBox.add(chatBox(900,num,cid), BorderLayout.SOUTH);        	 
+        	 //chatMoreBox.add(chatBox(900,num,cid), BorderLayout.CENTER);
         	 num++;
          }
          chatMoreBox.setPreferredSize(new Dimension(900,95*num+305*picnum+400)); //패딩추가
